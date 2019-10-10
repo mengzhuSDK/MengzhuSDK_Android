@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fl_video_box"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    android:clipChildren="false"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <com.mengzhu.live.sdk.business.view.widgets.MZVideoView
+        android:id="@+id/video_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></com.mengzhu.live.sdk.business.view.widgets.MZVideoView>
+
+    <ImageView
+        android:id="@+id/iv_thumb"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@android:color/black" />
+
+    <master.flame.danmaku.ui.widget.DanmakuView
+        android:id="@+id/sv_danmaku"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <include
+        layout="@layout/layout_watch_sound_top"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></include>
+
+    <LinearLayout
+        android:id="@+id/pb_loading_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/pb_loading"
+            style="@style/mProgress_circle"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:indeterminateDuration="700" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/buffer_loading_hint"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <include
+        layout="@layout/layout_touch_gestures"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+    <!--上面工具-->
+    <include
+        layout="@layout/layout_top_bar"
+        android:visibility="gone" />
+    <!--下面工具-->
+    <FrameLayout
+        android:id="@+id/layout_bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom">
+
+        <include
+            layout="@layout/layout_bottom_bar_live"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/layout_bottom_video_contioner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:visibility="gone" />
+
+            <include
+                layout="@layout/layout_bottom_bar_video"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/iv_player_lock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="40dp"
+        android:layout_marginLeft="8dp"
+        android:src="@drawable/sel_player_lock"
+        android:visibility="gone" />
+
+    <include layout="@layout/layout_skip_tip" />
+
+    <LinearLayout
+        android:id="@+id/layout_play_fullscreen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_video_view"
+        android:clickable="true"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/iv_play_fullscreen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@mipmap/ic_play_fullscreen" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_reload_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="视频异常中断"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_reload"
+            android:layout_width="100dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/bg_common_rounded_orgin"
+            android:gravity="center"
+            android:text="重新连接"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <include layout="@layout/layout_media_quality" />
+
+    <include layout="@layout/layout_send_danmaku" />
+
+
+</FrameLayout>

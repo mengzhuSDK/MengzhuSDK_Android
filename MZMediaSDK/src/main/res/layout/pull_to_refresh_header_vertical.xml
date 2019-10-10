@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <FrameLayout
+        android:id="@+id/ll_head_content"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/ll_layout_content"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="@dimen/header_footer_top_bottom_padding">
+
+            <RelativeLayout
+                android:id="@+id/rl_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_inner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/icon_pull_to_refresh" />
+
+                <ImageView
+                    android:id="@+id/iv_wrapper"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/icon_loading_wraper"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/pull_to_refresh_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_toRightOf="@+id/iv_inner"
+                    android:singleLine="true"
+                    android:textAppearance="?android:attr/textAppearance"
+                    android:textColor="#9b9b9b"
+                    android:textSize="13dp" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/pull_to_refresh_sub_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="#cdcdcf"
+                    android:textSize="13dp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/pull_to_refresh_date_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:singleLine="true"
+                    android:textColor="#9b9b9b"
+                    android:textSize="13dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_no_more_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="#9b9b9b"
+            android:visibility="gone"
+            android:gravity="center"
+            android:text="没有更多" />
+    </FrameLayout>
+</merge>

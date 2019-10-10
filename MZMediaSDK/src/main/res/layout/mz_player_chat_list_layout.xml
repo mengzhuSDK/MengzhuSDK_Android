@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent"
+    android:gravity="bottom"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:id="@+id/mz_payer_scroll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <com.mzmedia.widgets.PlayerChatLayout
+            android:id="@+id/mz_player_chat_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/transparent"
+            android:fadingEdge="none"
+            android:focusable="false"
+            android:gravity="bottom" />
+    </ScrollView>
+
+    <ImageView
+        android:id="@+id/voice_chat_top_bg"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignLeft="@+id/mz_payer_scroll"
+        android:layout_alignTop="@+id/mz_payer_scroll"
+        android:layout_alignRight="@+id/mz_payer_scroll"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/fill_screen_gift_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.mzmedia.widgets.CircleImageView
+            android:id="@+id/reward_head_icon"
+            android:layout_width="@dimen/dimen_40"
+            android:layout_height="@dimen/dimen_40"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dimen_4"
+            android:src="@mipmap/icon_default_avatar"
+            app:border_color="@color/white"
+            app:border_width="1dp" />
+
+        <TextView
+            android:id="@+id/play_chat_list_reward_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/reward_head_icon"
+            android:layout_marginLeft="@dimen/dimen_6"
+            android:layout_toRightOf="@+id/reward_head_icon"
+            android:ellipsize="end"
+            android:maxEms="6"
+            android:maxLines="1"
+            android:text="1111111111111"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/reward_head_icon"
+            android:layout_toRightOf="@+id/play_chat_list_reward_name"
+            android:text="打赏了"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_12sp" />
+
+        <TextView
+            android:id="@+id/reward_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/reward_head_icon"
+            android:layout_marginLeft="@dimen/dimen_6"
+            android:layout_toRightOf="@+id/reward_head_icon"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+</RelativeLayout>

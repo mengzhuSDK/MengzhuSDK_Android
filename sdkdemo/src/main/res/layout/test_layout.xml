@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onLiveClick"
+        android:id="@+id/live_push"
+        android:text="直播" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onPlayClick"
+        android:id="@+id/player_click"
+        android:text="播放"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="TicketId"
+        android:id="@+id/live_url"
+        />
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/live_back_switch"
+
+        />
+    <com.mengzhu.live.sdk.business.view.widgets.MZVideoView
+        android:id="@+id/video_view"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"></com.mengzhu.live.sdk.business.view.widgets.MZVideoView>
+
+
+</LinearLayout>

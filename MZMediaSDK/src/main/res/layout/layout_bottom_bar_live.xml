@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/layout_bottom_bar_live_content"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/control_bar_height"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/shape_video_bottom_bg"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:visibility="gone">
+
+        <!--<TextView-->
+        <!--android:id="@+id/tv_bottom_bar_live_nums"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:background="@drawable/bg_rounded_border"-->
+        <!--android:drawableLeft="@mipmap/ic_view_nums"-->
+        <!--android:drawablePadding="3dp"-->
+        <!--android:minWidth="50dp"-->
+        <!--android:paddingBottom="3dp"-->
+        <!--android:paddingLeft="10dp"-->
+        <!--android:paddingRight="10dp"-->
+        <!--android:paddingTop="3dp"-->
+        <!--android:text="0"-->
+        <!--android:textColor="@android:color/white"-->
+        <!--android:textSize="14sp" />-->
+        <RelativeLayout
+            android:id="@+id/layout_bottom_Contioner_live"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/iv_bottom_bar_live_full"
+            android:gravity="center_vertical">
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_bottom_bar_live_full"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="5dp"
+            android:src="@drawable/sel_btn_fullscreen" />
+    </RelativeLayout>
+</merge>

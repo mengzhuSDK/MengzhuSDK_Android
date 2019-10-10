@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:paddingLeft="@dimen/dimen_18"
+    android:paddingRight="@dimen/dimen_18"
+    android:paddingTop="3dp"
+    android:paddingBottom="3dp">
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <com.mzmedia.widgets.CircleImageView
+            android:id="@+id/player_chat_right_icon"
+            android:layout_width="@dimen/dimen_17"
+            android:layout_height="@dimen/dimen_17"
+            android:background="@mipmap/icon_default_avatar"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:id="@+id/player_chat_right_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autoLink="web"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginLeft="@dimen/dimen_5"
+            android:maxWidth="225.0dip"
+            android:text="name"
+            android:textColor="#0091ff"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/player_chat_right_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:maxEms="20"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:focusable="true"
+        android:lineSpacingExtra="2dp"
+        android:maxWidth="200dp"
+        android:text="content"
+        android:textColor="@color/white"
+        android:textSize="13sp" />
+
+</LinearLayout>

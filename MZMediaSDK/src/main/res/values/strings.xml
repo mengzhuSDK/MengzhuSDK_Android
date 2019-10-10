@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">LibWSLive</string>
+    <string name="app_error">应用程序错误</string>
+    <string name="submit_report">确定</string>
+    <string name="mz_not_network">当前网络不可用，请检查你的网络设置</string>
+    <string name="china_mobile">中国移动</string>
+    <string name="china_unicom">中国联通</string>
+    <string name="china_telecom">中国电信</string>
+    <string name="save_ing">正在保存...</string>
+    <string name="save_success">保存成功</string>
+    <string name="save_error">保存失败，请重试...</string>
+    <string name="app_error_message">尊敬的用户你好，由于程序内部出现错误导致强行退出程序，请您点击确定后重新开启程序。为您带来的不变请您谅解，我们会第一时间处理此问题并发表版本进行修复。</string>
+    <string name="chat_is_empty">消息内容不能为空</string>
+
+    <string name="mz_banned_to_post">亲，你已被管理员禁言了...</string>
+    <string name="mz_recover_chat">亲，你已被管理员恢复聊天功能...</string>
+    <string name="forbid_public_hint">本次直播管理员已开启禁言功能</string>
+    <string name="video_record">记忆上次播放到</string>
+    <string name="video_skip">继续播放</string>
+    <string name="buffer_loading_hint">正在缓冲中，请稍后…</string>
+    <string-array name="media_quality">
+        <item>流畅</item>
+        <item>清晰</item>
+        <item>高清</item>
+        <item>超清</item>
+        <item>1080P</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
+
+</resources>

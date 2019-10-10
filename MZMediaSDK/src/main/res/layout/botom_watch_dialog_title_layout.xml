@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dimen_44"
+    android:id="@+id/rl_dialog_goods_title"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/tv_dialog_goods_title"
+        style="@style/bottom_watch_dialog_title_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:text="全部商品" />
+
+    <ImageView
+        android:id="@+id/iv_dialog_goods_close"
+        style="@style/bottom_watch_dialog_close_style"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true" />
+
+    <TextView
+        style="@style/mz_public_bg_line_style"
+        android:layout_alignParentBottom="true" />
+</RelativeLayout>

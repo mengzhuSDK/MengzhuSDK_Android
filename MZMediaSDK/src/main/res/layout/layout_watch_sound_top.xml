@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/vs_watch_sound_top"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    android:clipChildren="false">
+
+    <com.mengzhu.live.sdk.business.view.widgets.SoundRippleView
+        android:id="@+id/srv_watch_sound_top"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_centerInParent="true"
+        app:circle_color="@android:color/white"
+        app:circle_num="15"
+        app:max_radius_multiple="5"
+        app:ripple_duration="5000"
+        app:stroke_width="1dp" />
+</RelativeLayout>

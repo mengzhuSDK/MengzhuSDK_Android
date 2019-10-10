@@ -1,0 +1,315 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.mengzhu.live.sdk.business.view.widgets.MZVideoView
+        android:id="@+id/video_playerfragment_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/sv_activity_content_appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#00000000"
+        android:fitsSystemWindows="true"
+        app:elevation="0dp">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:statusBarScrim="#00000000">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/layout_activity_set_channel_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="24dp"
+                android:background="@color/transparent"
+                android:fitsSystemWindows="true"
+                app:contentInsetStart="0dp"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/Theme.AppCompat">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.constraint.ConstraintLayout
+                        android:layout_width="172dp"
+                        android:layout_height="@dimen/dimen_40"
+                        android:layout_marginLeft="@dimen/dimen_12"
+                        android:background="@drawable/bg_live_ground_icon"
+>
+
+                        <com.mzmedia.widgets.CircleImageView
+                            android:id="@+id/civ_playerfragment_avatar"
+                            android:layout_width="@dimen/dimen_30"
+                            android:layout_height="@dimen/dimen_30"
+                            android:layout_margin="@dimen/dimen_5"
+                            android:src="@mipmap/icon_default_avatar"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_playerfragment_nickname"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/dimen_5"
+                            android:ellipsize="end"
+                            android:maxEms="10"
+                            android:maxLines="1"
+                            android:text="快乐的咖啡"
+                            android:textColor="@color/white"
+                            android:textSize="13sp"
+                            app:layout_constraintLeft_toRightOf="@id/civ_playerfragment_avatar"
+                            app:layout_constraintTop_toTopOf="@id/civ_playerfragment_avatar" />
+
+                        <TextView
+                            android:id="@+id/tv_playerfragment_popularity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxEms="5"
+                            android:maxLines="1"
+                            android:text="人气1.7万"
+                            android:textColor="@color/white"
+                            android:textSize="10sp"
+                            app:layout_constraintLeft_toLeftOf="@id/tv_playerfragment_nickname"
+                            app:layout_constraintTop_toBottomOf="@id/tv_playerfragment_nickname" />
+
+                        <TextView
+                            android:id="@+id/tv_playerfragment_attention"
+                            android:layout_width="40dp"
+                            android:layout_height="22dp"
+                            android:layout_marginRight="9dp"
+                            android:background="@drawable/gm_attention_shape"
+                            android:gravity="center"
+                            android:text="关注"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </android.support.constraint.ConstraintLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_activity_live_broadcast_top_group"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <android.support.constraint.ConstraintLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <com.mzmedia.widgets.CircleImageView
+                                android:id="@+id/civ_activity_live_online_person3"
+                                android:layout_width="@dimen/dimen_28"
+                                android:layout_height="@dimen/dimen_28"
+                                android:layout_marginLeft="@dimen/dimen_44"
+                                android:src="@mipmap/icon_default_avatar"
+                                android:visibility="gone"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <com.mzmedia.widgets.CircleImageView
+                                android:id="@+id/civ_activity_live_online_person2"
+                                android:layout_width="@dimen/dimen_28"
+                                android:layout_height="@dimen/dimen_28"
+                                android:layout_marginLeft="@dimen/dimen_22"
+                                android:src="@mipmap/icon_default_avatar"
+                                android:visibility="gone"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+
+                            <com.mzmedia.widgets.CircleImageView
+                                android:id="@+id/civ_activity_live_online_person1"
+                                android:layout_width="@dimen/dimen_28"
+                                android:layout_height="@dimen/dimen_28"
+                                android:src="@mipmap/icon_default_avatar"
+                                android:visibility="gone"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </android.support.constraint.ConstraintLayout>
+
+                        <TextView
+                            android:id="@+id/tv_playerfragment_person"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/dimen_3"
+                            android:layout_marginRight="@dimen/dimen_5"
+                            android:background="@drawable/bg_live_ground_icon"
+                            android:gravity="center"
+                            android:paddingLeft="@dimen/dimen_10"
+                            android:paddingTop="@dimen/dimen_6"
+                            android:paddingRight="@dimen/dimen_10"
+                            android:paddingBottom="@dimen/dimen_6"
+                            android:text="0"
+                            android:textColor="@color/white"
+                            android:textSize="12sp" />
+
+                        <ImageView
+                            android:id="@+id/iv_playerfragment_close"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentRight="true"
+                            android:src="@mipmap/icon_gm__closed_black" />
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="50dp"
+            android:orientation="vertical">
+
+            <!--聊天信息-->
+            <FrameLayout
+                android:id="@+id/layout_activity_live_broadcast_chat"
+                android:layout_width="match_parent"
+                android:layout_height="106dp"
+                android:layout_marginBottom="7dp" />
+
+            <com.mzmedia.widgets.player.PlayerGoodsView
+                android:id="@+id/live_broadcast_goods_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dimen_11" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_activity_broadcast_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/white"
+            android:textSize="100dp"
+            tools:text="5" />
+
+        <ImageView
+            android:id="@+id/iv_activity_live_broadcast_push"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:visibility="gone" />
+
+        <!--        <com.mzmedia.widgets.player.ChatOnlineView-->
+        <!--            android:id="@+id/player_chat_list_online_view"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_alignParentBottom="true"-->
+        <!--            android:layout_marginBottom="54dp" />-->
+
+        <RelativeLayout
+            android:id="@+id/rl_activity_live_broadcast_bottom_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/iv_activity_live_broadcast_push"
+            android:layout_toRightOf="@+id/iv_activity_live_broadcast_push"
+            android:orientation="horizontal"
+            android:paddingBottom="12dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp">
+
+            <ImageView
+                android:id="@+id/iv_player_fragment_goods"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/gm_icon_goods" />
+
+            <RelativeLayout
+                android:id="@+id/rl_playerfragment_send_chat"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_44"
+                android:layout_marginLeft="14dp"
+                android:layout_marginRight="16dp"
+                android:orientation="vertical"
+                android:layout_toRightOf="@+id/iv_player_fragment_goods"
+                android:layout_toLeftOf="@+id/iv_playerfragment_config">
+                <TextView
+                    android:id="@+id/tv_playerfragment_chat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="跟主播聊点什么？"
+                    android:textColor="@color/crop_99FFFFFF"
+                    android:textSize="14sp"
+                    android:layout_centerVertical="true"/>
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/bg_gm_live_senf_line"
+                    android:layout_alignParentBottom="true"/>
+            </RelativeLayout>
+
+
+            <ImageView
+                android:id="@+id/iv_playerfragment_config"
+                android:layout_width="@dimen/dimen_44"
+                android:layout_height="@dimen/dimen_44"
+                android:layout_marginRight="12dp"
+                android:src="@mipmap/gm_icon_config"
+                android:layout_toLeftOf="@+id/iv_playerfragment_share"/>
+
+
+            <ImageView
+                android:id="@+id/iv_playerfragment_share"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginRight="12dp"
+                android:src="@mipmap/gm_icon_share"
+                android:layout_toLeftOf="@+id/iv_playerfragment_zan"/>
+
+            <ImageView
+                android:id="@+id/iv_playerfragment_zan"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/gm_icon_zan"/>
+
+
+        </RelativeLayout>
+
+        <com.mzmedia.widgets.LoveLayout
+            android:id="@+id/love_playerfragment_layout"
+            android:layout_width="80dp"
+            android:layout_height="200dp"
+            android:layout_alignParentRight="true"
+            android:layout_above="@+id/rl_activity_live_broadcast_bottom_group"/>
+        <ImageView
+            android:id="@+id/iv_playerfragment_report"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/gm_icon_report"
+            android:layout_above="@+id/rl_activity_live_broadcast_bottom_group"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="95dp"
+            android:visibility="gone"/>
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

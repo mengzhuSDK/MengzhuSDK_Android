@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.mengzhu.app.library.widgets.player.MzIjkPlayerView
+        android:id="@+id/player_view"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"></com.mengzhu.app.library.widgets.player.MzIjkPlayerView>
+    <!--竖屏显示界面-->
+    <LinearLayout
+        android:id="@+id/layout_activity_watch_broadcast_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_video_top_bg"
+        android:gravity="center"
+        android:padding="8dp"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="76dp"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_activity_watch_broadcast_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:src="@mipmap/icon_back" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_activity_watch_broadcast_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lines="1"
+            android:text="标题"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
+        <!--顶部用户信息及操作按钮-->
+        <RelativeLayout
+            android:id="@+id/layout_activity_watch_broadcast_user_info"
+            android:layout_width="76dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <LinearLayout
+                android:id="@+id/layout_activity_watch_broadcast_status"
+                android:layout_width="70dp"
+                android:layout_height="32dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/bg_common_rounded_orgin"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:paddingLeft="3dp">
+
+                <TextView
+                    android:id="@+id/tv_activity_watch_broadcast_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:text="直播"
+                    android:textColor="@android:color/white"
+                    android:textSize="12dp" />
+
+                <!--<TextView-->
+                <!--android:id="@+id/tv_activity_watch_broadcast_time"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:paddingLeft="6dp"-->
+                <!--android:text="00.00.00"-->
+                <!--android:textColor="@android:color/white"-->
+                <!--android:textSize="8dp"/>-->
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/civ_activity_watch_broadcast_avatar"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="#ffffff"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/icon_back" />
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>
