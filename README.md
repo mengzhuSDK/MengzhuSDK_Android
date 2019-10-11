@@ -55,9 +55,28 @@
       ...
       implementation project(':MZMediaSDK')
     }
-###  4.3 代码配置
-#### Application类内onCreate调用以下代码：  
+###  4.3 代码实现
+
+#### Application类内onCreate调用以下代码：
       MZSDKInitManager.getInstance().initApplication(this);
 
-#### 播放直播间fragment实现
-  
+#### 播放直播间activity实现
+    MUIImmerseUtils.setStatusTranslucent(getWindow(),this);//super.onCreate之前调用 设置顶部状态
+    super.onCreate(savedInstanceState);
+    setTheme(R.style.AppCompatTheme);//设置主题
+    setContentView(...);
+    MUIImmerseUtils.setStatusTextColor(false,this);//设置顶部状态栏字体颜色
+    
+#### 播放直播间SDK fragment实现
+    mPlayerFragment = PlayerFragment.newInstance(String Uid,String Appid,String avatar,String nickName, String ticketId)
+    mPlayerFragment.setIPlayerClickListener(IPlayerClickListener);//IPlayerClickListener 是fragmentUI点击回调 具体逻辑需要接入方自行实现。
+    
+#### IPlayerClickListener介绍
+    void onAvatarClick()//点击主播头像
+    void onAttentionClick()//关注
+    void onOnlineClick()//在线人数
+    void onCloseClick()//退出
+    void onReportClick()//举报
+    void onShareClick()//分享
+    void onLikeClick()//点赞
+    void onRecommendGoods()//推荐商品
