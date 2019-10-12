@@ -98,7 +98,6 @@ public class PlayerChatListFragment extends BaseFragement implements MZChatMessa
         mPayerScroll.setOnScrollChangeListener(new WithScrollChangeScrollView.OnScrollChangeListener() {
             @Override
             public void onScroll(int scrollY) {
-                Log.e("max", "onScroll: " + scrollY + "-----" + mAdapter.getPosition());
                 if (scrollY == 0) {
 //                    if (!isNoMore) {
                         MZChatManager.getInstance(mActivity).nextHistory("20");
@@ -135,7 +134,6 @@ public class PlayerChatListFragment extends BaseFragement implements MZChatMessa
 
     @Override
     public void monitorInformResult(String s, Object o) {
-        Log.e("max", "monitorInformResult: " + o);
 
     }
 

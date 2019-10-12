@@ -471,11 +471,11 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
             }
         }
         if (view.getId() == R.id.iv_player_fragment_goods) { //点击商店
-            if (mGoodsListDtos != null && mGoodsListDtos.size() > 0) {
+//            if (mGoodsListDtos != null && mGoodsListDtos.size() > 0) {
                 showGoodsDialog();
-            } else {
-                Toast.makeText(mActivity, "暂无商品", Toast.LENGTH_SHORT).show();
-            }
+//            } else {
+//                Toast.makeText(mActivity, "暂无商品", Toast.LENGTH_SHORT).show();
+//            }
         }
     }
 
@@ -572,7 +572,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
                 if (mGoodsListDtos.size() > 0) {
                     mGoodsIv.setText(mGoodsListDtos.size() + "");
                 }
-                Log.e("max", "onGoodsLoad: " + mGoodsListDtos.size());
             }
         });
         goodsListPopupWindow.setOnGoodsListItemClickListener(new GoodsListPopupWindow.OnGoodsListItemClickListener() {
