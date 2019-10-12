@@ -18,7 +18,6 @@ import android.widget.TextView;
 import com.mengzhu.live.sdk.R;
 import com.mengzhu.live.sdk.business.dto.MZGoodsListDto;
 import com.mengzhu.live.sdk.business.dto.chat.impl.ChatCompleteDto;
-import com.mengzhu.live.sdk.core.utils.ToastUtils;
 import com.mzmedia.utils.String_Utils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -152,7 +151,9 @@ public class PlayerGoodsPushView extends LinearLayout {
         item_player_goods_layout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                ToastUtils.popUpToast("商品");
+                if (mOnGoodsItemClickListener != null) {
+                    mOnGoodsItemClickListener.onGoodsItemClick();
+                }
             }
         });
     }
@@ -192,5 +193,11 @@ public class PlayerGoodsPushView extends LinearLayout {
 
     public void setOnPushGoodsAnimatorListener(OnPushGoodsAnimatorListener onPushGoodsAnimatorListener) {
         mOnPushGoodsAnimatorListener = onPushGoodsAnimatorListener;
+    }
+
+    private PlayerGoodsView.OnGoodsItemClickListener mOnGoodsItemClickListener;
+
+    public void setOnGoodsPushItemClickListener(PlayerGoodsView.OnGoodsItemClickListener listener) {
+        mOnGoodsItemClickListener = listener;
     }
 }

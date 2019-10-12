@@ -102,6 +102,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
     private ArrayList<ChatCompleteDto> mChatCompleteDtos = new ArrayList<>();
     private PlayInfoDto mPlayInfoDto;
     private PlayerChatListFragment mChatFragment;
+    private boolean isLooping;
 
     public static PlayerFragment newInstance(String Uid, String Appid, String avatar, String nickName, String accountNo, String ticketId) {
         PlayerFragment fragment = new PlayerFragment();
@@ -218,6 +219,14 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         mRlSendChat.setOnClickListener(this);
         mGoodsIv.setOnClickListener(this);
 
+        mPlayerGoodsPushLayout.setOnGoodsPushItemClickListener(new PlayerGoodsView.OnGoodsItemClickListener() {
+            @Override
+            public void onGoodsItemClick() {
+                if (mListener != null) {
+                    mListener.onRecommendGoods(mPlayInfoDto);
+                }
+            }
+        });
         mPlayerGoodsLayout.setOnGoodsItemClickListener(new PlayerGoodsView.OnGoodsItemClickListener() {
             @Override
             public void onGoodsItemClick() {
@@ -248,12 +257,11 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
                         ChatOnlineDto mChatOnline = (ChatOnlineDto) mBase;
                         mTotalPerson = mChatOnline.getConcurrent_user();
                         mChatOnlineView.startOnline(mActivity, mChatMessage);
-                        int current = Integer.valueOf(mTotalPerson)+Integer.valueOf(mPlayInfoDto.getUv());
+                        int current = Integer.valueOf(mTotalPerson) + Integer.valueOf(mPlayInfoDto.getUv());
                         try {
-                            mTvOnline.setText(String_Utils.convert2W0_0(current+""));
+                            mTvOnline.setText(String_Utils.convert2W0_0(current + ""));
                             personAvatars.add(mChatText.getAvatar());
                             initOnlineAvatar();
-
                         } catch (Exception e) {
                         }
                         break;
@@ -261,9 +269,9 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
                     case ChatMessageObserver.OFFLINE_TYPE:
                         ChatOnlineDto mChatOnline = (ChatOnlineDto) mBase;
                         mTotalPerson = mChatOnline.getConcurrent_user();
-                        int current = Integer.valueOf(mTotalPerson)+Integer.valueOf(mPlayInfoDto.getUv());
+                        int current = Integer.valueOf(mTotalPerson) + Integer.valueOf(mPlayInfoDto.getUv());
                         try {
-                            mTvOnline.setText(String_Utils.convert2W0_0(current+""));
+                            mTvOnline.setText(String_Utils.convert2W0_0(current + ""));
                             personAvatars.remove(mChatText.getAvatar());
                             initOnlineAvatar();
                         } catch (Exception e) {
@@ -358,6 +366,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
                     mGoodsIv.setText(mzGoodsListExternalDto.getTotal() + "");
                     GoodsCountDown goodsCountDown = new GoodsCountDown(10000 * 5000, 5000);
                     goodsCountDown.start();
+                    isLooping = true;
                 }
             }
 
@@ -385,7 +394,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         mChatFragment.setOnChatAvatarClickListener(new PlayerChatListFragment.OnChatAvatarClickListener() {
             @Override
             public void onChatAvatarClick(ChatTextDto dto) {
-                if(null!=mListener){
+                if (null != mListener) {
                     mListener.onChatAvatar(dto);
                 }
             }
@@ -472,7 +481,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         }
         if (view.getId() == R.id.iv_player_fragment_goods) { //点击商店
 //            if (mGoodsListDtos != null && mGoodsListDtos.size() > 0) {
-                showGoodsDialog();
+            showGoodsDialog();
 //            } else {
 //                Toast.makeText(mActivity, "暂无商品", Toast.LENGTH_SHORT).show();
 //            }
@@ -523,11 +532,14 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         } else if (personAvatars.size() == 2) {
             mOnlinePersonIv1.setVisibility(View.VISIBLE);
             mOnlinePersonIv2.setVisibility(View.VISIBLE);
+            mOnlinePersonIv3.setVisibility(View.GONE);
             ImageLoader.getInstance().displayImage(personAvatars.get(personAvatars.size() - 1) + String_Utils.getPictureSizeAvatar(), mOnlinePersonIv1, avatarOptions);
             ImageLoader.getInstance().displayImage(personAvatars.get(personAvatars.size() - 2) + String_Utils.getPictureSizeAvatar(), mOnlinePersonIv2, avatarOptions);
 
         } else if (personAvatars.size() == 1) {
             mOnlinePersonIv1.setVisibility(View.VISIBLE);
+            mOnlinePersonIv2.setVisibility(View.GONE);
+            mOnlinePersonIv3.setVisibility(View.GONE);
             ImageLoader.getInstance().displayImage(personAvatars.get(personAvatars.size() - 1) + String_Utils.getPictureSizeAvatar(), mOnlinePersonIv1, avatarOptions);
         }
     }
@@ -571,6 +583,10 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
                 mGoodsListDtos = mzGoodsListDtos;
                 if (mGoodsListDtos.size() > 0) {
                     mGoodsIv.setText(mGoodsListDtos.size() + "");
+                    if (!isLooping) {
+                        GoodsCountDown goodsCountDown = new GoodsCountDown(10000 * 5000, 5000);
+                        goodsCountDown.start();
+                    }
                 }
             }
         });
@@ -587,25 +603,31 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
 
     /**
      * 获取观看者昵称
+     *
      * @return
      */
-    public String getUserNickName(){
+    public String getUserNickName() {
         return MyUserInfoPresenter.getInstance().getUserInfo().getNickname();
     }
+
     /**
      * 获取观看者Uid
+     *
      * @return
      */
-    public String getUserUid(){
+    public String getUserUid() {
         return MyUserInfoPresenter.getInstance().getUserInfo().getUid();
     }
+
     /**
      * 获取观看者头像地址
+     *
      * @return
      */
-    public String getUserAvatar(){
+    public String getUserAvatar() {
         return MyUserInfoPresenter.getInstance().getUserInfo().getAvatar();
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
