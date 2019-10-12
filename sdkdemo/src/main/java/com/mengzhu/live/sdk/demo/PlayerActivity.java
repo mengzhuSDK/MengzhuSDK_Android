@@ -4,13 +4,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.widget.FrameLayout;
 import android.widget.Toast;
-
-import com.mengzhu.live.sdk.business.dto.UserDto;
-import com.mengzhu.live.sdk.core.utils.XxteaUtils;
-import com.mengzhu.live.sdk.ui.player.PlayerEventListener;
+import com.mengzhu.live.sdk.business.dto.MZGoodsListDto;
+import com.mengzhu.live.sdk.business.dto.chat.ChatTextDto;
+import com.mengzhu.live.sdk.business.dto.play.PlayInfoDto;
 import com.mzmedia.IPlayerClickListener;
 import com.mzmedia.fragment.PlayerFragment;
 import com.mzmedia.utils.MUIImmerseUtils;
@@ -18,10 +15,7 @@ import com.mzmedia.utils.MUIImmerseUtils;
 /**
  * Created by DELL on 2018/10/12.
  */
-public class PlayerActivity extends AppCompatActivity implements PlayerEventListener, IPlayerClickListener {
-//    private MZPlayerManager mManager;
-//    private MZPlayerView mzPlayerView;
-    private FrameLayout mContainer;
+public class PlayerActivity extends AppCompatActivity implements  IPlayerClickListener {
     private FragmentManager mFragmentManager;
     private PlayerFragment mPlayerFragment;
     @Override
@@ -31,80 +25,25 @@ public class PlayerActivity extends AppCompatActivity implements PlayerEventList
         setTheme(R.style.AppCompatTheme);
         setContentView(R.layout.test_play_layout);
         MUIImmerseUtils.setStatusTextColor(false,this);
-        mContainer=findViewById(R.id.container_activity_watch_broadcast);
-        String videoUrl = "z7ZfqHvzWKRZYv9LXHqshqGKZttR2j+QCuHLsPIvHXEM0J24sqSf7kzNbWyzurtF4BN9U4MPinzaNTL1WXAVRzfGRdwl20YICrdqv86FVGs=";
-        UserDto dto=new UserDto();
-        dto.setUid("2095938");
-        dto.setAppid("2019091711154563239");
-        dto.setAvatar("https://avatars3.githubusercontent.com/u/13464940?s=60&v=4");
-        dto.setNickname("test");
-        String ticketID = getIntent().getStringExtra("live_URL");
-        mPlayerFragment = PlayerFragment.newInstance(XxteaUtils.decryptToString(videoUrl),dto,ticketID);
+        String ticketID = getIntent().getStringExtra("ticketid");
+        //传递用户信息
+        mPlayerFragment = PlayerFragment.newInstance(
+                getIntent().getStringExtra("uid"),
+                getIntent().getStringExtra("appid"),
+                getIntent().getStringExtra("avatar"),
+                getIntent().getStringExtra("nickname"),
+                getIntent().getStringExtra("accountNo"),
+                ticketID);
         mFragmentManager = getSupportFragmentManager();
         mFragmentManager.beginTransaction().replace(R.id.container_activity_watch_broadcast, mPlayerFragment).commitAllowingStateLoss();
         mPlayerFragment.setIPlayerClickListener(this);
-//        mManager=new MZPlayerManager();
-//        Intent intent= getIntent();
-//        int type = 0;
-//        String url = null;
-//        if(intent!=null){
-//            type=intent.getIntExtra("TYPE",1);
-//            Bundle bundle=intent.getExtras();
-//                url = bundle.getString("live_URL");
-//                if(TextUtils.isEmpty(url)){
-//                    url="http://vod.dev.zmengzhu.com/record/base/hls-sd/042dca9d63ae07d300006491.m3u8";
-//                }
-//        }
-//        mManager.init(mzPlayerView).setBroadcastType(type,false).setMediaQuality(IMZPlayerManager.MZ_MEDIA_QUALITY_HIGH);
-//        mManager.setEventListener(this);
-//        mManager.setVideoPath(url);
-//        mManager.showPreviewImage("https://inews.gtimg.com/newsapp_ls/0/9563866905_294195/0");
-//        mManager.start();
-
     }
-
-//    public void onConfigurationChanged(Configuration newConfig) {
-//
-//        super.onConfigurationChanged(newConfig);
-//
-//        //切换为竖屏
-//
-//        if (newConfig.orientation == this.getResources().getConfiguration().ORIENTATION_PORTRAIT) {
-//            mzPlayerView.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, DensityUtil.dip2px(this,200)));
-//        }
-//
-//        //切换为横屏
-//
-//        else if (newConfig.orientation == this.getResources().getConfiguration().ORIENTATION_LANDSCAPE) {
-//            mzPlayerView.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT));
-//        }
-//    }
-
     @Override
     protected void onResume() {
         super.onResume();
 //        mManager.onResume();
     }
 
-    @Override
-    public void hideAllEvent() {
-        Toast.makeText(this,"隐藏上下栏",Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void showAllEvent() {
-        Toast.makeText(this,"显示上下栏",Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onBackClick(boolean isBack) {
-
-    }
-
-    @Override
-    public void onPausePlayer() {
-
-    }
 
     @Override
     protected void onPause() {
@@ -112,15 +51,6 @@ public class PlayerActivity extends AppCompatActivity implements PlayerEventList
 //        mManager.onPause();
     }
 
-    @Override
-    public void onStartPlayer() {
-
-    }
-
-    @Override
-    public void onForbid(boolean isForbid) {
-
-    }
 
     @Override
     protected void onDestroy() {
@@ -128,38 +58,56 @@ public class PlayerActivity extends AppCompatActivity implements PlayerEventList
 //        mManager.onDestroy();
     }
 
+    /**
+     * 播放器上的控件点击回调
+     */
     @Override
-    public void onAvatarClick() {
-        Log.d("gm","点击主播头像");
+    public void onAvatarClick(PlayInfoDto dto) {
+        Toast.makeText(this,"国民实现点击主播头像",Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public void onAttentionClick() {
-        Log.d("gm","关注");
+    public void onAttentionClick(PlayInfoDto dto) {
+        Toast.makeText(this,"国民实现点击关注",Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onOnlineClick() {
-        Log.d("gm","在线人数");
+        Toast.makeText(this,"国民实现点击在线人数",Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public void onCloseClick() {
-        Log.d("gm","退出");
+    public void onCloseClick(PlayInfoDto dto) {
+        Toast.makeText(this,"国民实现点击退出",Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public void onReportClick() {
-        Log.d("gm","举报");
+    public void onReportClick(PlayInfoDto dto) {
+        Toast.makeText(this,"国民实现点击举报",Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public void onShareClick() {
-        Log.d("gm","分享");
+    public void onShareClick(PlayInfoDto dto) {
+        Toast.makeText(this,"国民实现点击分享",Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public void onLikeClick() {
-        Log.d("gm","点赞");
+    public void onLikeClick(PlayInfoDto dto) {
+        Toast.makeText(this,"国民实现点击点赞",Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onRecommendGoods(PlayInfoDto dto) {
+        Toast.makeText(this,"国民实现点击推荐商品",Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onGoodsListItem(MZGoodsListDto dto) {
+        Toast.makeText(this,"国民实现点击商品列表",Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onChatAvatar(ChatTextDto dto) {
+        Toast.makeText(this,"国民实现点击聊天用户头像",Toast.LENGTH_LONG).show();
     }
 }

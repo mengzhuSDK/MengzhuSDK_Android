@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,30 +16,32 @@ import android.widget.ScrollView;
 import com.mengzhu.live.sdk.R;
 import com.mengzhu.live.sdk.business.dto.BaseItemDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatMessageDto;
+import com.mengzhu.live.sdk.business.dto.chat.ChatTextDto;
 import com.mengzhu.live.sdk.business.dto.chat.impl.ChatCompleteDto;
 import com.mengzhu.live.sdk.business.dto.play.PlayInfoDto;
-import com.mengzhu.live.sdk.business.presenter.IBasePresenterLinstener;
 import com.mengzhu.live.sdk.business.presenter.chat.ChatMessageObserver;
-import com.mengzhu.live.sdk.business.presenter.chat.ChatPresenter;
 import com.mengzhu.live.sdk.core.netwock.Page;
+import com.mengzhu.live.sdk.ui.chat.MZChatManager;
+import com.mengzhu.live.sdk.ui.chat.MZChatMessagerListener;
 import com.mzmedia.adapter.base.CommonAdapterType;
 import com.mzmedia.adapter.base.chat.PlayerChatLeltWrap;
 import com.mzmedia.adapter.base.chat.PlayerChatRightWrap;
 import com.mzmedia.widgets.PlayerChatLayout;
+import com.mzmedia.widgets.WithScrollChangeScrollView;
 
 import java.util.List;
 
 /**
  * Created by DELL on 2016/7/8.
  */
-public class PlayerChatListFragment extends BaseFragement implements IBasePresenterLinstener {
+public class PlayerChatListFragment extends BaseFragement implements MZChatMessagerListener {
     private Activity mActivity;
     private PlayerChatLayout mListView;
     private CommonAdapterType mAdapter;
     private PlayerChatLeltWrap mLeltWrap;
     private PlayerChatRightWrap mRightWrap;
-    private ChatPresenter mChatPresenter;
-    private ScrollView mPayerScroll;
+    //    private ChatPresenter mChatPresenter;
+    private WithScrollChangeScrollView mPayerScroll;
     public static final String PLAY_TYPE_KEY = "play_type_key";
     public static final String PLAY_INFO_KEY = "PLAY_INFO_KEY";
     private PlayInfoDto mPlayInfoDto;
@@ -49,6 +52,7 @@ public class PlayerChatListFragment extends BaseFragement implements IBasePresen
     private RelativeLayout player_chat_list_reward_layout;
     private RelativeLayout play_chat_list_gift_layout;
     private LinearLayout mFillScreenGiftLayout;
+    private boolean isNoMore = false;
 
     @Override
     public void onAttach(Context context) {
@@ -71,7 +75,7 @@ public class PlayerChatListFragment extends BaseFragement implements IBasePresen
 
         mListView = (PlayerChatLayout) findViewById(R.id.mz_player_chat_list);
         mVoiceChatTopBg = (ImageView) findViewById(R.id.voice_chat_top_bg);
-        mPayerScroll = (ScrollView) findViewById(R.id.mz_payer_scroll);
+        mPayerScroll = (WithScrollChangeScrollView) findViewById(R.id.mz_payer_scroll);
         mFillScreenGiftLayout = (LinearLayout) findViewById(R.id.fill_screen_gift_layout);
         if (isPush) {
             mFillScreenGiftLayout.setVisibility(View.GONE);
@@ -91,6 +95,53 @@ public class PlayerChatListFragment extends BaseFragement implements IBasePresen
             mVoiceChatTopBg.setVisibility(View.VISIBLE);
         }
         mListView.setConstant(true);
+        mPayerScroll.setOnScrollChangeListener(new WithScrollChangeScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScroll(int scrollY) {
+                Log.e("max", "onScroll: " + scrollY + "-----" + mAdapter.getPosition());
+                if (scrollY == 0) {
+//                    if (!isNoMore) {
+                        MZChatManager.getInstance(mActivity).nextHistory("20");
+//                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    public void dataResult(Object o, Page page, int i) {
+        List<BaseItemDto> list = (List<BaseItemDto>) o;
+        for (int j = 0; j < list.size(); j++) {
+            ChatMessageDto dto = (ChatMessageDto) list.get(j);
+            if (dto.isHistory()) {
+                isNoMore = list.size() < 20;
+            }
+//            if (!dto.isHistory()) {
+//            if (dto.getText().getBaseDto() instanceof ChatCompleteDto) {
+//                    if (((ChatCompleteDto) dto.getText().getBaseDto()).getIs_continuous_msg() == 0) { //礼物连发时不添加adapter
+//                        mListView.addItemView(list.get(j));
+//                    }
+//            } else {
+                mListView.addItemView(list.get(j));
+//            }
+//            }
+        }
+    }
+
+    @Override
+    public void errorResult(int i, String s) {
+
+    }
+
+    @Override
+    public void monitorInformResult(String s, Object o) {
+        Log.e("max", "monitorInformResult: " + o);
+
+    }
+
+    @Override
+    public void monitorInformErrer(String s, int i, String s1) {
+
     }
 
     class MyAddViewListener implements PlayerChatLayout.AddViewListener {
@@ -134,33 +185,48 @@ public class PlayerChatListFragment extends BaseFragement implements IBasePresen
 
     @Override
     public void initData() {
-        mChatPresenter = ChatPresenter.getInstance(getActivity());
-        mChatPresenter.setIsLandscape(isPush);
+//        mChatPresenter = ChatPresenter.getInstance(getActivity());
+//        mChatPresenter.setIsLandscape(isPush);
 //        mChatPresenter.setRoomid("12345");
 //        mChatPresenter.registerCallback(PlayerChatListFragment.class.getSimpleName());
-        if (isPush) {
-            mChatPresenter.initPresenter(getActivity());
-        }
+//        if (isPush) {
+//            mChatPresenter.initPresenter(getActivity());
+//        }
 //        mChatPresenter.registerListener(this);
-        mChatPresenter.registerListener(PlayerChatListFragment.class.getSimpleName(), this);
+//        mChatPresenter.registerListener(PlayerChatListFragment.class.getSimpleName(), this);
     }
 
     @Override
     public void setListener() {
         ChatMessageObserver.getInstance().register(new PlaymMonitorCallback(), PlayerChatListFragment.class.getSimpleName());
+        MZChatManager.getInstance(mActivity).registerListener(PlayerChatListFragment.class.getSimpleName(), this);
+        mLeltWrap.setOnChatIconClickListener(new PlayerChatLeltWrap.OnChatIconClickListener() {
+            @Override
+            public void onChatIconClick(ChatTextDto dto) {
+                if(mOnChatAvatarClickListener!=null){
+                    mOnChatAvatarClickListener.onChatAvatarClick(dto);
+                }
+            }
+        });
+
     }
-
-
-
+    private OnChatAvatarClickListener mOnChatAvatarClickListener;
+    public interface OnChatAvatarClickListener{
+        void onChatAvatarClick(ChatTextDto dto);
+    }
+    public void setOnChatAvatarClickListener(OnChatAvatarClickListener listener){
+        mOnChatAvatarClickListener = listener;
+    }
     @Override
     public void loadData() {
         if (isPush) {
             if (mPlayInfoDto != null) {
 //                mChatPresenter.setChatConfDto(mPlayInfoDto);
-                mChatPresenter.onExecutes();
-                mChatPresenter.destroySocket();
-                mChatPresenter.connectSocket(mPlayInfoDto.getMsg_config().getMsg_srv() + "?token=" + mPlayInfoDto.getMsg_config().getMsg_token() + "&app=smb");
+//                mChatPresenter.onExecutes();
+//                mChatPresenter.destroySocket();
+//                mChatPresenter.connectSocket(mPlayInfoDto.getMsg_config().getMsg_srv() + "?token=" + mPlayInfoDto.getMsg_config().getMsg_token() + "&app=smb");
 //                mChatPresenter.initAffiche(true);
+                MZChatManager.getInstance(mActivity).startHistory(mPlayInfoDto);
             }
         }
     }
@@ -171,35 +237,13 @@ public class PlayerChatListFragment extends BaseFragement implements IBasePresen
     }
 
     @Override
-    public void dataResult(Object obj, Page page, int status) {
-        List<BaseItemDto> list = (List<BaseItemDto>) obj;
-        for (int i = 0; i < list.size(); i++) {
-            ChatMessageDto dto = (ChatMessageDto) list.get(i);
-            if (!dto.isHistory()) {
-                if (dto.getText().getBaseDto() instanceof ChatCompleteDto) {
-                    if (((ChatCompleteDto) dto.getText().getBaseDto()).getIs_continuous_msg() == 0) { //礼物连发时不添加adapter
-                        mListView.addItemView(list.get(i));
-                    }
-                } else {
-                    mListView.addItemView(list.get(i));
-                }
-            }
-        }
-    }
-
-    @Override
-    public void errorResult(int i, String s) {
-
-    }
-
-    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            mChatPresenter.registerListener(PlayerChatListFragment.class.getSimpleName(), this);
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            mChatPresenter.removeListener(PlayerChatListFragment.class.getSimpleName());
-        }
+//        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//            mChatPresenter.registerListener(PlayerChatListFragment.class.getSimpleName(), this);
+//        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+//            mChatPresenter.removeListener(PlayerChatListFragment.class.getSimpleName());
+//        }
     }
 
     @Override

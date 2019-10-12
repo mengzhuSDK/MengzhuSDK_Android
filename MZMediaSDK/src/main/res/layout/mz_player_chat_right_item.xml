@@ -13,12 +13,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <com.mzmedia.widgets.CircleImageView
+        <com.mzmedia.widgets.CircularImage
             android:id="@+id/player_chat_right_icon"
             android:layout_width="@dimen/dimen_17"
             android:layout_height="@dimen/dimen_17"
-            android:background="@mipmap/icon_default_avatar"
-            android:scaleType="fitXY" />
+            android:background="@mipmap/icon_default_avatar" />
 
         <TextView
             android:id="@+id/player_chat_right_username"
@@ -40,7 +39,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:maxEms="20"
         android:ellipsize="end"
         android:maxLines="2"
         android:focusable="true"

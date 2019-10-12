@@ -9,8 +9,10 @@ import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.content.Context;
 import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -21,6 +23,8 @@ import android.widget.RelativeLayout;
 import com.mengzhu.live.sdk.R;
 
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -34,16 +38,16 @@ public class LoveLayout extends RelativeLayout {
 	private Interpolator[] interpolators = new Interpolator[4];
 	private int mWidth;
 	private int mHeight;
-	
+	private Handler handler;
+	private Runnable runnable;
 	public LoveLayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		
 		this.context = context;
 		initView();
 	}
 
-	private void initView() {
-		
+	public void initView() {
+		handler = new Handler();
 		// 图片资源
 		icons = getResources().getDrawable(R.mipmap.gm_icon_redheart);
 
@@ -61,6 +65,9 @@ public class LoveLayout extends RelativeLayout {
 		params.addRule(ALIGN_PARENT_BOTTOM, TRUE);
 	}
 
+	public void removeView(){
+		handler.removeCallbacks(runnable);
+	}
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		// TODO Auto-generated method stub
@@ -68,7 +75,29 @@ public class LoveLayout extends RelativeLayout {
 		mWidth = getMeasuredWidth();
 		mHeight = getMeasuredHeight();
 	}
-	
+
+	@Override
+	protected void onFinishInflate() {
+		super.onFinishInflate();
+		this.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+			@Override
+			public void onGlobalLayout() {
+				LoveLayout.this.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+				mWidth = LoveLayout.this.getMeasuredWidth();
+				mHeight = LoveLayout.this.getMeasuredHeight();
+				Log.e("wzh","h="+mHeight+"w="+mWidth);
+				runnable = new Runnable() {
+					@Override
+					public void run() {
+						addLoveView();
+						handler.postDelayed(runnable,1000);
+					}
+				};
+				handler.post(runnable);
+			}
+		});
+	}
+
 	public void addLoveView() {
 		// TODO Auto-generated method stub
 		final ImageView iv = new ImageView(context);
@@ -89,6 +118,7 @@ public class LoveLayout extends RelativeLayout {
 			}
 		});
 	}
+
 
 	/**
 	 * 获取动画集合

@@ -77,7 +77,7 @@
     <style name="bottom_watch_dialog_title_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginLeft">@dimen/dimen_16</item>
+        <item name="android:layout_marginLeft">@dimen/dimen_12</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/color_999999</item>
@@ -87,7 +87,7 @@
     <style name="bottom_watch_dialog_close_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:layout_marginRight">4dp</item>
         <item name="android:src">@mipmap/icon_channel_detail_close</item>
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:layout_centerVertical">true</item>
@@ -105,6 +105,7 @@
     <style name="PushDialog" parent="android:style/Theme.Light">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:background">@drawable/bg_palyer_goods_dialog</item>
         <item name="android:windowBackground">@color/crop__selector_pressed</item>
     </style>
 

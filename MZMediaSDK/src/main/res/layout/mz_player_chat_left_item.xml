@@ -13,11 +13,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <com.mengzhu.app.library.widgets.CircularImage
+        <com.mzmedia.widgets.CircularImage
             android:id="@+id/player_chat_icon"
             android:layout_width="@dimen/dimen_17"
-            android:layout_height="@dimen/dimen_17"
-            android:scaleType="fitXY" />
+            android:scaleType="fitXY"
+            android:layout_height="@dimen/dimen_17" />
 
         <TextView
             android:id="@+id/player_chat_username"
@@ -43,7 +43,6 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:maxLines="2"
-        android:maxEms="20"
         android:ellipsize="end"
         android:focusable="true"
         android:lineSpacingExtra="2dp"

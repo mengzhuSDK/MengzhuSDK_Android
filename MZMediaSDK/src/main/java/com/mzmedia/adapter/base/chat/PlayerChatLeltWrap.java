@@ -13,7 +13,7 @@ import com.mengzhu.live.sdk.business.dto.chat.impl.ChatMegTxtDto;
 import com.mengzhu.live.sdk.business.presenter.chat.ChatMessageObserver;
 import com.mzmedia.adapter.base.BaseViewObtion;
 import com.mzmedia.utils.String_Utils;
-import com.mzmedia.widgets.CircleImageView;
+import com.mzmedia.widgets.CircularImage;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
@@ -60,7 +60,8 @@ public class PlayerChatLeltWrap extends BaseViewObtion {
                 if (megTxtDto.getImgSrc() != null) {
                     String_Utils.handlerContent("收到一张图片", holder.mPlayerChatContent, R.color.mz_at_name_color);
                 } else {
-                    String_Utils.handlerContent(megTxtDto.getText(), holder.mPlayerChatContent, R.color.mz_at_name_color);
+//                    String_Utils.handlerContent(megTxtDto.getText(), holder.mPlayerChatContent, R.color.mz_at_name_color);
+                  holder.mPlayerChatContent.setText(megTxtDto.getText());
                 }
                 holder.mPlayerChatUsername.setText(textDto.getUser_name() + ": ");
 //                holder.mPlayerChatUsername.setTextColor(mContext.getResources().getColor(mTextColorArray[mContentCount]));
@@ -93,6 +94,13 @@ public class PlayerChatLeltWrap extends BaseViewObtion {
         }
     }
 
+    private OnChatIconClickListener mOnChatIconClickListener;
+    public interface OnChatIconClickListener{
+        void onChatIconClick(ChatTextDto dto);
+    }
+    public void setOnChatIconClickListener(OnChatIconClickListener listener){
+        mOnChatIconClickListener = listener;
+    }
     class ChatLeltItemtListener implements View.OnClickListener {
         private ChatTextDto mDto;
 
@@ -106,6 +114,9 @@ public class PlayerChatLeltWrap extends BaseViewObtion {
 //                return;
 //            }
             if (view.getId() == R.id.player_chat_icon) {
+                if(mOnChatIconClickListener!=null){
+                    mOnChatIconClickListener.onChatIconClick(mDto);
+                }
 //                if ((mPlayInfoDto.getGlobal_right()!=null&&mPlayInfoDto.getGlobal_right().getGlobal_forbiden_check_userinfo()!=1&&!mPlayInfoDto.isForbiden_check_userinfo()) || mPlayInfoDto.getRole_name().equals(PlayInfoDto.ROLE_HOST)||mPlayInfoDto.getRole_name().equals(PlayInfoDto.ROLE_SUB_ACCOUNT)) {
 //                    mDto = (ChatTextDto) view.getTag();
 //                ((WatchBroadcastActivity)mContext).showUserInfoPopup(mDto.getUser_id());
@@ -176,7 +187,7 @@ public class PlayerChatLeltWrap extends BaseViewObtion {
     }
 
     class ViewHolder {
-        CircleImageView mPlayerChatIcon;
+        CircularImage mPlayerChatIcon;
         TextView mPlayerChatContent;
         TextView mPlayerChatUsername;
     }

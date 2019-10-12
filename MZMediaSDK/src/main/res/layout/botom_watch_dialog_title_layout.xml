@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/dimen_44"
     android:id="@+id/rl_dialog_goods_title"
-    android:background="@color/white">
+    android:background="#1a000000">
 
     <TextView
         android:id="@+id/tv_dialog_goods_title"

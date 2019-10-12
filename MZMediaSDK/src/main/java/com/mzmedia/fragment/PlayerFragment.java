@@ -1,5 +1,6 @@
 package com.mzmedia.fragment;
 
+import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -7,7 +8,9 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +20,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mengzhu.live.sdk.R;
+import com.mengzhu.live.sdk.business.dto.AnchorInfoDto;
+import com.mengzhu.live.sdk.business.dto.BaseDto;
+import com.mengzhu.live.sdk.business.dto.MZGoodsListDto;
+import com.mengzhu.live.sdk.business.dto.MZGoodsListExternalDto;
 import com.mengzhu.live.sdk.business.dto.MZOnlineUserListDto;
 import com.mengzhu.live.sdk.business.dto.UserDto;
+import com.mengzhu.live.sdk.business.dto.chat.ChatMessageDto;
+import com.mengzhu.live.sdk.business.dto.chat.ChatTextDto;
+import com.mengzhu.live.sdk.business.dto.chat.impl.ChatCmdDto;
+import com.mengzhu.live.sdk.business.dto.chat.impl.ChatCompleteDto;
+import com.mengzhu.live.sdk.business.dto.chat.impl.ChatOnlineDto;
 import com.mengzhu.live.sdk.business.dto.play.PlayInfoDto;
 import com.mengzhu.live.sdk.business.presenter.MyUserInfoPresenter;
+import com.mengzhu.live.sdk.business.presenter.chat.ChatMessageObserver;
+import com.mengzhu.live.sdk.business.presenter.chat.ChatPresenter;
 import com.mengzhu.live.sdk.business.presenter.player.media.IRenderView;
 import com.mengzhu.live.sdk.business.view.widgets.MZVideoView;
-import com.mengzhu.live.sdk.core.MZSDKInitManager;
-import com.mengzhu.live.sdk.core.SDKInitListener;
 import com.mengzhu.live.sdk.core.netwock.Page;
 import com.mengzhu.live.sdk.ui.api.MZApiDataListener;
 import com.mengzhu.live.sdk.ui.api.MZApiRequest;
@@ -33,8 +45,10 @@ import com.mengzhu.live.sdk.ui.chat.MZChatMessagerListener;
 import com.mzmedia.IPlayerClickListener;
 import com.mzmedia.utils.ActivityUtils;
 import com.mzmedia.utils.String_Utils;
+import com.mzmedia.widgets.ChatOnlineView;
 import com.mzmedia.widgets.CircleImageView;
 import com.mzmedia.widgets.LoveLayout;
+import com.mzmedia.widgets.player.PlayerGoodsPushView;
 import com.mzmedia.widgets.player.PlayerGoodsView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -43,14 +57,13 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerFragment extends Fragment implements View.OnClickListener, SDKInitListener, MZApiDataListener {
+public class PlayerFragment extends Fragment implements View.OnClickListener, MZApiDataListener {
 
-    private static final String VIDEO_URL = "videoUrl";
     private static final String USER_INFO = "userDto";
     private static final String TICKET_ID = "ticket_id";
     private MZVideoView mzVideoView;
     private CircleImageView mIvAvatar; //头像
-    private CircleImageView mOnlinePersonIv1,mOnlinePersonIv2,mOnlinePersonIv3; //在线人数头像
+    private CircleImageView mOnlinePersonIv1, mOnlinePersonIv2, mOnlinePersonIv3; //在线人数头像
     private TextView mTvNickName; //昵称
     private TextView mTvPopular; //人气
     private TextView mTvAttention; //关注
@@ -65,25 +78,39 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, SD
     private LoveLayout mLoveLayout; //飘心
     private boolean isConfig;
     private PlayerGoodsView mPlayerGoodsLayout;
-    private ImageView mGoodsIv; //店铺
+    private PlayerGoodsPushView mPlayerGoodsPushLayout;
+    private TextView mGoodsIv; //店铺
     private String mVideoUrl; //观看地址
     private UserDto mUserDto; //主播信息
+    private String mUid;
+    private String mAppid;
+    private String mAvatr;
+    private String mNickName;
+    private String mAccountNo;
     private Activity mActivity;
     private DisplayImageOptions avatarOptions;
     private MZApiRequest mzApiRequest;
     private MZApiRequest mzApiRequestGoods;
     private MZApiRequest mzApiRequestOnline;
-    private String ticketId;
+    private MZApiRequest mzApiRequestAnchorInfo;
+    private String ticketId; //活动id
+    private ArrayList<MZGoodsListDto> mGoodsListDtos;
+    private int mPosition;
+    private String mTotalPerson;
     private List<String> personAvatars = new ArrayList<>();
-    public PlayerFragment() {
-        // Required empty public constructor
-    }
+    private ChatOnlineView mChatOnlineView;
+    private ArrayList<ChatCompleteDto> mChatCompleteDtos = new ArrayList<>();
+    private PlayInfoDto mPlayInfoDto;
+    private PlayerChatListFragment mChatFragment;
 
-    public static PlayerFragment newInstance(String videoUrl, UserDto userDto, String ticketId) {
+    public static PlayerFragment newInstance(String Uid, String Appid, String avatar, String nickName, String accountNo, String ticketId) {
         PlayerFragment fragment = new PlayerFragment();
         Bundle args = new Bundle();
-        args.putString(VIDEO_URL, videoUrl);
-        args.putSerializable(USER_INFO, userDto);
+        args.putSerializable("uid", Uid);
+        args.putSerializable("appid", Appid);
+        args.putSerializable("avatar", avatar);
+        args.putSerializable("nickName", nickName);
+        args.putSerializable("accountNo", accountNo);
         args.putString(TICKET_ID, ticketId);
         fragment.setArguments(args);
         return fragment;
@@ -93,14 +120,21 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, SD
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mVideoUrl = getArguments().getString(VIDEO_URL);
-            mUserDto = (UserDto) getArguments().getSerializable(USER_INFO);
+            mUid = getArguments().getString("uid");
+            mAppid = getArguments().getString("appid");
+            mAvatr = getArguments().getString("avatar");
+            mNickName = getArguments().getString("nickName");
+            mAccountNo = getArguments().getString("accountNo");
             ticketId = getArguments().getString(TICKET_ID);
         }
-
+        mUserDto = new UserDto();
+        mUserDto.setUid(mUid);
+        mUserDto.setAppid(mAppid);
+        mUserDto.setAvatar(mAvatr);
+        mUserDto.setNickname(mNickName);
+        mUserDto.setAccountNo(mAccountNo);
+        //保存观看用户信息
         MyUserInfoPresenter.getInstance().saveUserinfo(mUserDto);
-        MZSDKInitManager.getInstance().initLive("cae0e5428b5d9f06c077c6784660c6d3_156136291484092_1566964162");
-        MZSDKInitManager.getInstance().registerInitListener(this);
     }
 
     @Override
@@ -126,14 +160,9 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, SD
         mRlSendChat = rootView.findViewById(R.id.rl_playerfragment_send_chat);
         mTvHitChat = rootView.findViewById(R.id.tv_playerfragment_chat);
         mPlayerGoodsLayout = rootView.findViewById(R.id.live_broadcast_goods_view);
+        mPlayerGoodsPushLayout = rootView.findViewById(R.id.live_broadcast_goods_push_view);
         mGoodsIv = rootView.findViewById(R.id.iv_player_fragment_goods);
-
-        PlayerChatListFragment mChatFragment = new PlayerChatListFragment();
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(PlayerChatListFragment.PLAY_TYPE_KEY, true);
-//        bundle.putSerializable(PlayerChatListFragment.PLAY_INFO_KEY, mStartBroadcastInfoDto);
-        mChatFragment.setArguments(bundle);
-        getChildFragmentManager().beginTransaction().replace(R.id.layout_activity_live_broadcast_chat, mChatFragment).commitAllowingStateLoss();
+        mChatOnlineView = rootView.findViewById(R.id.player_chat_list_online_view);
 
         return rootView;
     }
@@ -153,9 +182,9 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, SD
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        //处理播放器黑边问题
         mzVideoView.setAspectRatio(IRenderView.AR_ASPECT_FILL_PARENT);
-        mzVideoView.setVideoPath(mVideoUrl);
+        //头像加载失败默认处理
         avatarOptions = new DisplayImageOptions.Builder()
                 .showStubImage(R.mipmap.icon_default_avatar)
                 .showImageForEmptyUri(R.mipmap.icon_default_avatar)
@@ -163,17 +192,18 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, SD
                 .cacheInMemory(true)
                 .cacheOnDisc(true)
                 .build();
+        //初始化view数据
         initView();
+        //初始化监听
         initListener();
+        //请求api接口数据
         loadData();
     }
 
     @SuppressLint("SetTextI18n")
     private void initView() {
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(getActivity()));
-        ImageLoader.getInstance().displayImage(mUserDto.getAvatar() + String_Utils.getPictureSizeAvatar(), mIvAvatar, avatarOptions);
-        mTvPopular.setText("人气" + String_Utils.convert2W0_0(100) + "人");
-        mTvNickName.setText(mUserDto.getNickname());
+        mChatFragment = new PlayerChatListFragment();
     }
 
     private void initListener() {
@@ -187,44 +217,124 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, SD
         mIvClose.setOnClickListener(this);
         mRlSendChat.setOnClickListener(this);
         mGoodsIv.setOnClickListener(this);
-    }
 
-    private void loadData() {
-        mzApiRequest = new MZApiRequest();
-        mzApiRequestOnline = new MZApiRequest();
-        mzApiRequestGoods = new MZApiRequest();
-        mzApiRequest.createRequest(mActivity, MZApiRequest.API_TYPE_PLAY_INFO);
-        mzApiRequestOnline.createRequest(mActivity, MZApiRequest.API_TYPE_ONLINE_USER_LIST);
-        mzApiRequestGoods.createRequest(mActivity, MZApiRequest.API_TYPE_GOODS_LIST);
-        mzApiRequest.setResultListener(this);
-        //获取观看信息请求
-        mzApiRequest.startData(MZApiRequest.API_TYPE_PLAY_INFO, ticketId);
-        //商店
-        mzApiRequestGoods.startData(MZApiRequest.API_TYPE_GOODS_LIST, true, ticketId);
-        mzApiRequestGoods.setResultListener(new MZApiDataListener() {
+        mPlayerGoodsLayout.setOnGoodsItemClickListener(new PlayerGoodsView.OnGoodsItemClickListener() {
             @Override
-            public void dataResult(String s, Object o) {
-                //循环商品
-                GoodsCountDown goodsCountDown = new GoodsCountDown(10 * 5000, 5000);
-                goodsCountDown.start();
-//                MZGoodsListExternalDto mzGoodsListExternalDto = new MZGoodsListExternalDto();
-//                if (mPlayerGoodsLayout!=null) {
-//                    mPlayerGoodsLayout.setGoodsData(mzGoodsListExternalDto.getList().get(0));
-//                }
+            public void onGoodsItemClick() {
+                if (mListener != null) {
+                    mListener.onRecommendGoods(mPlayInfoDto);
+                }
+            }
+        });
+        //各类型消息回调
+        MZChatManager.getInstance(mActivity).registerListener(PlayerFragment.class.getSimpleName(), new MZChatMessagerListener() {
+            @Override
+            public void dataResult(Object o, Page page, int i) {
+
             }
 
             @Override
-            public void errorResult(String s, int i, String s1) {
+            public void errorResult(int i, String s) {
+
+            }
+
+            @Override
+            public void monitorInformResult(String s, Object o) {
+                ChatMessageDto mChatMessage = (ChatMessageDto) o;
+                ChatTextDto mChatText = mChatMessage.getText();
+                BaseDto mBase = mChatText.getBaseDto();
+                switch (s) {
+                    case ChatMessageObserver.ONLINE_TYPE: {//上下线消息
+                        ChatOnlineDto mChatOnline = (ChatOnlineDto) mBase;
+                        mTotalPerson = mChatOnline.getConcurrent_user();
+                        mChatOnlineView.startOnline(mActivity, mChatMessage);
+                        int current = Integer.valueOf(mTotalPerson)+Integer.valueOf(mPlayInfoDto.getUv());
+                        try {
+                            mTvOnline.setText(String_Utils.convert2W0_0(current+""));
+                            personAvatars.add(mChatText.getAvatar());
+                            initOnlineAvatar();
+
+                        } catch (Exception e) {
+                        }
+                        break;
+                    }
+                    case ChatMessageObserver.OFFLINE_TYPE:
+                        ChatOnlineDto mChatOnline = (ChatOnlineDto) mBase;
+                        mTotalPerson = mChatOnline.getConcurrent_user();
+                        int current = Integer.valueOf(mTotalPerson)+Integer.valueOf(mPlayInfoDto.getUv());
+                        try {
+                            mTvOnline.setText(String_Utils.convert2W0_0(current+""));
+                            personAvatars.remove(mChatText.getAvatar());
+                            initOnlineAvatar();
+                        } catch (Exception e) {
+                        }
+                        break;
+                    case ChatMessageObserver.COMPLETE:
+                        ChatCompleteDto mChatComplete = (ChatCompleteDto) mBase;
+                        mChatCompleteDtos.add(mChatComplete);
+                        if (mChatComplete.getType().equals(ChatPresenter.STORE_GENERALIZE)) {
+//                            if (mPlayerGoodsPushLayout.getVisibility() == View.VISIBLE) {
+//                                return;
+//                            }
+                            if (mPlayerGoodsPushLayout != null) {
+                                if (mChatCompleteDtos.size() > 0) {
+                                    mPlayerGoodsPushLayout.startPlayerGoods();
+                                    mPlayerGoodsPushLayout.setGoodsData(mChatCompleteDtos.get(0));
+                                    mPlayerGoodsPushLayout.setOnPushGoodsAnimatorListener(new PlayerGoodsPushView.OnPushGoodsAnimatorListener() {
+                                        @Override
+                                        public void onAnimationStart(Animator animator) {
+                                            mPlayerGoodsLayout.setVisibility(View.GONE);
+                                        }
+
+                                        @Override
+                                        public void onAnimationEnd(Animator animator) {
+                                            mChatCompleteDtos.remove(0);
+                                            if (mChatCompleteDtos.size() > 0) {
+                                                mPlayerGoodsPushLayout.startPlayerGoods();
+                                                mPlayerGoodsPushLayout.setGoodsData(mChatCompleteDtos.get(0));
+                                            } else {
+                                                mPlayerGoodsLayout.setVisibility(View.VISIBLE);
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                        break;
+
+                    case ChatMessageObserver.CMD_TYPE:
+                        ChatCmdDto mChatCmd = (ChatCmdDto) mBase;
+                        if (mChatCmd.getType().equals(ChatCmdDto.DISABLE_CHAT)) {
+                            //禁言消息
+                            mPlayInfoDto.setUser_status(3);
+                        } else if (mChatCmd.getType().equals(ChatCmdDto.PERMIT_CHAT)) {
+                            //取消禁言消息
+                            mPlayInfoDto.setUser_status(1);
+                        }
+                        break;
+                }
+            }
+
+            @Override
+            public void monitorInformErrer(String s, int i, String s1) {
 
             }
         });
+
+        mzApiRequest = new MZApiRequest();
+        mzApiRequestOnline = new MZApiRequest();
+        mzApiRequestGoods = new MZApiRequest();
+        mzApiRequestAnchorInfo = new MZApiRequest();
+
+        //设置获取观看信息回调监听
+        mzApiRequest.setResultListener(this);
         //在线人数列表回调
         mzApiRequestOnline.setResultListener(new MZApiDataListener() {
             @Override
             public void dataResult(String apiType, Object dto) {
                 List<MZOnlineUserListDto> mzOnlineUserListDto = (List<MZOnlineUserListDto>) dto;
-                mTvOnline.setText(mzOnlineUserListDto.size()+"");
-                for(int i=0;i<mzOnlineUserListDto.size();i++){
+                mTvOnline.setText(mzOnlineUserListDto.size() + "");
+                for (int i = 0; i < mzOnlineUserListDto.size(); i++) {
                     personAvatars.add(mzOnlineUserListDto.get(i).getAvatar());
                 }
                 initOnlineAvatar();
@@ -237,9 +347,69 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, SD
                 Log.d("gm", "errorResult: API_TYPE_ONLINE_USER_LIST");
             }
         });
-        mzApiRequestOnline.startData(MZApiRequest.API_TYPE_ONLINE_USER_LIST,true,ticketId);
+        //商品列表回调
+        mzApiRequestGoods.setResultListener(new MZApiDataListener() {
+            @Override
+            public void dataResult(String s, Object o) {
+                MZGoodsListExternalDto mzGoodsListExternalDto = (MZGoodsListExternalDto) o;
+                mGoodsListDtos = (ArrayList<MZGoodsListDto>) mzGoodsListExternalDto.getList();
+                if (mGoodsListDtos.size() > 0) {
+                    //循环商品
+                    mGoodsIv.setText(mzGoodsListExternalDto.getTotal() + "");
+                    GoodsCountDown goodsCountDown = new GoodsCountDown(10000 * 5000, 5000);
+                    goodsCountDown.start();
+                }
+            }
+
+            @Override
+            public void errorResult(String s, int i, String s1) {
+
+            }
+        });
+        //主播信息回调
+        mzApiRequestAnchorInfo.setResultListener(new MZApiDataListener() {
+            @Override
+            public void dataResult(String s, Object o) {
+                AnchorInfoDto anchorInfoDto = (AnchorInfoDto) o;
+                mTvNickName.setText(anchorInfoDto.getNickname());
+                ImageLoader.getInstance().displayImage(anchorInfoDto.getAvatar() + String_Utils.getPictureSizeAvatar(), mIvAvatar, avatarOptions);
+            }
+
+            @Override
+            public void errorResult(String s, int i, String s1) {
+
+            }
+        });
+
+        //聊天用户头像点击的回调
+        mChatFragment.setOnChatAvatarClickListener(new PlayerChatListFragment.OnChatAvatarClickListener() {
+            @Override
+            public void onChatAvatarClick(ChatTextDto dto) {
+                if(null!=mListener){
+                    mListener.onChatAvatar(dto);
+                }
+            }
+        });
     }
 
+    private void loadData() {
+
+        mzApiRequest.createRequest(mActivity, MZApiRequest.API_TYPE_PLAY_INFO);
+        mzApiRequestOnline.createRequest(mActivity, MZApiRequest.API_TYPE_ONLINE_USER_LIST);
+        mzApiRequestGoods.createRequest(mActivity, MZApiRequest.API_TYPE_GOODS_LIST);
+        mzApiRequestAnchorInfo.createRequest(mActivity, MZApiRequest.API_TYPE_ANCHOR_INFO);
+
+        //请求获取观看信息api
+        mzApiRequest.startData(MZApiRequest.API_TYPE_PLAY_INFO, ticketId);
+        //请求商店列表api
+        mzApiRequestGoods.startData(MZApiRequest.API_TYPE_GOODS_LIST, true, ticketId);
+        //请求在线人数api
+        mzApiRequestOnline.startData(MZApiRequest.API_TYPE_ONLINE_USER_LIST, true, ticketId);
+        //请求主播信息api
+        mzApiRequestAnchorInfo.startData(MZApiRequest.API_TYPE_ANCHOR_INFO, ticketId);
+    }
+
+    //需要加载该fragment的activity实现点击回调接口
     private IPlayerClickListener mListener;
 
     public void setIPlayerClickListener(IPlayerClickListener listener) {
@@ -248,72 +418,65 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, SD
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.civ_playerfragment_avatar) {
+        if (view.getId() == R.id.civ_playerfragment_avatar) { //点击主播头像
             if (mListener != null) {
-                mListener.onAvatarClick();
+                mListener.onAvatarClick(mPlayInfoDto);
             }
 
         }
-        if (view.getId() == R.id.tv_playerfragment_attention) {
+        if (view.getId() == R.id.tv_playerfragment_attention) { //点击关注
             if (mListener != null) {
-                mListener.onAttentionClick();
+                mListener.onAttentionClick(mPlayInfoDto);
             }
 
         }
-        if(view.getId() == R.id.tv_playerfragment_person){
-            if(mListener!=null){
+        if (view.getId() == R.id.tv_playerfragment_person) { //点击在线人数
+            if (mListener != null) {
                 mListener.onOnlineClick();
             }
         }
-        if (view.getId() == R.id.iv_playerfragment_close) {
+        if (view.getId() == R.id.iv_playerfragment_close) { //点击退出
             if (mListener != null) {
-                mListener.onCloseClick();
+                mListener.onCloseClick(mPlayInfoDto);
             }
         }
-        if (view.getId() == R.id.iv_playerfragment_config) {
+        if (view.getId() == R.id.iv_playerfragment_config) { //点击底部三个点显示举报
             isConfig = !isConfig;
             mIvConfig.setImageResource(isConfig ? R.mipmap.gm_icon_config_true : R.mipmap.gm_icon_config);
             mIvReport.setVisibility(isConfig ? View.VISIBLE : View.GONE);
         }
-        if (view.getId() == R.id.iv_playerfragment_report) {
+        if (view.getId() == R.id.iv_playerfragment_report) { //点击举报
             if (mListener != null) {
-                mListener.onReportClick();
+                mListener.onReportClick(mPlayInfoDto);
             }
         }
-        if (view.getId() == R.id.iv_playerfragment_share) {
+        if (view.getId() == R.id.iv_playerfragment_share) { //点击分享
             if (mListener != null) {
-                mListener.onShareClick();
+                mListener.onShareClick(mPlayInfoDto);
             }
         }
-        if (view.getId() == R.id.iv_playerfragment_zan) {
+        if (view.getId() == R.id.iv_playerfragment_zan) { //点击点赞
             if (mListener != null) {
-                mListener.onLikeClick();
+                mListener.onLikeClick(mPlayInfoDto);
             }
+            //飘心
             mLoveLayout.addLoveView();
         }
-        if (view.getId() == R.id.rl_playerfragment_send_chat) {
-//             if (StaticStateDto.getInstance().isBanned()) {
-//                 mDialogManager = new DialogManager(LiveBroadcastActivity.this);
-//                 Toast.makeText(this, R.string.mz_banned_to_post, Toast.LENGTH_SHORT).show();
-//                 return;
-//             }
-//             isChat = true;
-            ActivityUtils.startLandscapeTransActivity(mActivity);
-        }
-        if (view.getId() == R.id.iv_player_fragment_goods) {
-            showGoodsDialog();
-        }
-    }
+        if (view.getId() == R.id.rl_playerfragment_send_chat) { //点击发送消息
+            if (mPlayInfoDto.getUser_status() == 1) {
+                ActivityUtils.startLandscapeTransActivity(mActivity);
+            } else if (mPlayInfoDto.getUser_status() == 3) {
+                Toast.makeText(mActivity, "您已被禁言", Toast.LENGTH_SHORT).show();
 
-    @Override
-    public void dataResult(int i) {
-        mzVideoView.start();
-        Toast.makeText(getActivity(), "初始化成功 ", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void errorResult(int i, String s) {
-        Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
+            }
+        }
+        if (view.getId() == R.id.iv_player_fragment_goods) { //点击商店
+            if (mGoodsListDtos != null && mGoodsListDtos.size() > 0) {
+                showGoodsDialog();
+            } else {
+                Toast.makeText(mActivity, "暂无商品", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     /**
@@ -321,39 +484,31 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, SD
      */
     @Override
     public void dataResult(String s, Object o) {
-        PlayInfoDto mPlayInfoDto = (PlayInfoDto) o;
+        mPlayInfoDto = (PlayInfoDto) o;
+        //获取播放地址
         mVideoUrl = mPlayInfoDto.getVideo().getHttp_url();
-        mzVideoView.setVideoPath(mVideoUrl);
-        MZChatManager.getInstance(mActivity).registerListener("max", new MZChatMessagerListener() {
-            @Override
-            public void dataResult(Object o, Page page, int i) {
-                Log.e("max", "dataResult: " + o);
-            }
+        if (!TextUtils.isEmpty(mVideoUrl)) {
+            //设置播放地址到播放器
+            mzVideoView.setVideoPath(mVideoUrl);
+            //开始观看
+            mzVideoView.start();
+        }
+        //加载人气
+        mTvPopular.setText("人气" + String_Utils.convert2W0_0(mPlayInfoDto.getPopular()) + "人");
+        //添加聊天fragment
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(PlayerChatListFragment.PLAY_TYPE_KEY, true);
+        bundle.putSerializable(PlayerChatListFragment.PLAY_INFO_KEY, mPlayInfoDto);
+        mChatFragment.setArguments(bundle);
+        getChildFragmentManager().beginTransaction().replace(R.id.layout_activity_live_broadcast_chat, mChatFragment).commitAllowingStateLoss();
+        //请求历史消息api
+//        MZChatManager.getInstance(mActivity).startHistory((PlayInfoDto) o);
 
-            @Override
-            public void errorResult(int i, String s) {
-                Log.e("max", "dataResult: " + s);
-            }
-
-            @Override
-            public void monitorInformResult(String s, Object o) {
-                Log.e("max", "dataResult: " + o);
-
-            }
-
-            @Override
-            public void monitorInformErrer(String s, int i, String s1) {
-                Log.e("max", "dataResult: " + s);
-
-            }
-        });
-        MZChatManager.getInstance(mActivity).startHistory((PlayInfoDto) o);
-//        MZChatManager.getInstance(mActivity).setPlayinfo((PlayInfoDto) o);
     }
 
     @Override
     public void errorResult(String s, int i, String s1) {
-        Log.e("max", "errorResult: "+s);
+        Log.e("gm", "errorResult: " + s);
     }
 
     //初始化右侧观看用户的头像
@@ -376,6 +531,8 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, SD
             ImageLoader.getInstance().displayImage(personAvatars.get(personAvatars.size() - 1) + String_Utils.getPictureSizeAvatar(), mOnlinePersonIv1, avatarOptions);
         }
     }
+
+    //商品循环显示倒计时
     private class GoodsCountDown extends CountDownTimer {
 
         public GoodsCountDown(long millisInFuture, long countDownInterval) {
@@ -384,31 +541,83 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, SD
 
         @Override
         public void onTick(long l) {
-            Log.e("max", "onTick: " + l);
+            if (mPosition < mGoodsListDtos.size() - 1) {
+                mPosition++;
+            } else {
+                mPosition = 0;
+            }
             if (mPlayerGoodsLayout != null) {
                 mPlayerGoodsLayout.startPlayerGoods();
+                mPlayerGoodsLayout.setGoodsData(mGoodsListDtos.get(mPosition));
             }
         }
 
         @Override
         public void onFinish() {
-
+            if (mPlayerGoodsLayout != null) {
+                mPlayerGoodsLayout.setVisibility(View.GONE);
+            }
         }
+
     }
 
-
     /**
-     * 底面商店
+     * 底面商店弹窗
      */
     public void showGoodsDialog() {
-        try {
-//         GoodsListFragment   goodsListFragment = (GoodsListFragment) mActivity.getSupportFragmentManager().findFragmentByTag("VOTEDIALOGFRAGMENT");
-//            if (null == goodsListFragment) {
-            GoodsListFragment goodsListFragment = GoodsListFragment.newInstance(1);
-//            }
-            goodsListFragment.show(getChildFragmentManager(), "GOODSFRAGMENT");
-        } catch (Exception e) {
-            e.printStackTrace();
+        GoodsListPopupWindow goodsListPopupWindow = new GoodsListPopupWindow(mActivity, 1, ticketId, new GoodsListPopupWindow.OnGoodsLoadListener() {
+            @Override
+            public void onGoodsLoad(ArrayList<MZGoodsListDto> mzGoodsListDtos) {
+                mGoodsListDtos = mzGoodsListDtos;
+                if (mGoodsListDtos.size() > 0) {
+                    mGoodsIv.setText(mGoodsListDtos.size() + "");
+                }
+                Log.e("max", "onGoodsLoad: " + mGoodsListDtos.size());
+            }
+        });
+        goodsListPopupWindow.setOnGoodsListItemClickListener(new GoodsListPopupWindow.OnGoodsListItemClickListener() {
+            @Override
+            public void onGoodsListItemClick(MZGoodsListDto dto) {
+                if (mListener != null) {
+                    mListener.onGoodsListItem(dto);
+                }
+            }
+        });
+        goodsListPopupWindow.showAtLocation(mzVideoView, Gravity.BOTTOM, 0, 0);
+    }
+
+    /**
+     * 获取观看者昵称
+     * @return
+     */
+    public String getUserNickName(){
+        return MyUserInfoPresenter.getInstance().getUserInfo().getNickname();
+    }
+    /**
+     * 获取观看者Uid
+     * @return
+     */
+    public String getUserUid(){
+        return MyUserInfoPresenter.getInstance().getUserInfo().getUid();
+    }
+    /**
+     * 获取观看者头像地址
+     * @return
+     */
+    public String getUserAvatar(){
+        return MyUserInfoPresenter.getInstance().getUserInfo().getAvatar();
+    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        MZChatManager.getInstance(mActivity).destroyChat();
+        //释放飘心资源
+        if (null != mLoveLayout) {
+            mLoveLayout.removeView();
+        }
+        //关闭播放器
+        if (null != mzVideoView) {
+            mzVideoView.destroy();
         }
     }
 }

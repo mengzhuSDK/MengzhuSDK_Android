@@ -1,24 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ptr="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_goodlist_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/bg_palyer_goods_dialog"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="#1a000000"
     android:orientation="vertical">
 
-    <include layout="@layout/botom_watch_dialog_title_layout" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="413dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bg_palyer_goods_dialog"
+        android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/fragment_goodlist_rv"
-        android:name="com.mzmedia.fragment.GoodsListFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        app:layoutManager="LinearLayoutManager"
-        tools:context="com.mzmedia.fragment.GoodsListFragment"
-        tools:listitem="@layout/fragment_goodslist">
+        <RelativeLayout
+            android:id="@+id/rl_dialog_goods_title"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_44">
 
-    </android.support.v7.widget.RecyclerView>
-</LinearLayout>
+            <TextView
+                android:id="@+id/tv_dialog_goods_title"
+                style="@style/bottom_watch_dialog_title_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="全部商品" />
+
+            <ImageView
+                android:id="@+id/iv_dialog_goods_close"
+                style="@style/bottom_watch_dialog_close_style"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true" />
+
+            <TextView
+                style="@style/mz_public_bg_line_style"
+                android:layout_alignParentBottom="true" />
+        </RelativeLayout>
+
+
+        <com.mzmedia.pullrefresh.PullToRefreshRecyclerView
+            android:id="@+id/fragment_goodlist_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            ptr:ptrMode="both">
+
+        </com.mzmedia.pullrefresh.PullToRefreshRecyclerView>
+    </LinearLayout>
+</RelativeLayout>

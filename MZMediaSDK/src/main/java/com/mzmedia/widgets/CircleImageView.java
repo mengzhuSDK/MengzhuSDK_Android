@@ -22,7 +22,7 @@ import com.mengzhu.live.sdk.R;
 
 
 /**
- * @author sunjiale
+ * @author max
  * @description 圆形图片
  */
 public class CircleImageView extends ImageView {

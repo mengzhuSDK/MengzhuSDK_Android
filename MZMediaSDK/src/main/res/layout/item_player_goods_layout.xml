@@ -5,6 +5,7 @@
     android:id="@+id/item_player_goods_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:visibility="gone"
     app:cardCornerRadius="@dimen/dimen_4">
 
     <android.support.v7.widget.CardView
@@ -29,6 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dimen_8"
+                android:maxEms="6"
                 android:layout_marginTop="@dimen/dimen_8"
                 android:ellipsize="end"
                 android:maxLines="1"
@@ -42,7 +44,6 @@
                 android:id="@+id/item_player_goods_price_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dimen_8"
                 android:textColor="@color/color_ff4141"
                 android:textSize="@dimen/dimen_14sp"
                 app:layout_constraintLeft_toLeftOf="@id/item_player_goods_name_tv"

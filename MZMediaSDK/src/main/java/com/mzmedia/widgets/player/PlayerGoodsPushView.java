@@ -17,6 +17,8 @@ import android.widget.TextView;
 
 import com.mengzhu.live.sdk.R;
 import com.mengzhu.live.sdk.business.dto.MZGoodsListDto;
+import com.mengzhu.live.sdk.business.dto.chat.impl.ChatCompleteDto;
+import com.mengzhu.live.sdk.core.utils.ToastUtils;
 import com.mzmedia.utils.String_Utils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -25,7 +27,7 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class PlayerGoodsView extends LinearLayout {
+public class PlayerGoodsPushView extends LinearLayout {
     private ImageView item_player_goods_avatar_iv;
     private TextView item_player_goods_name_tv;
     private TextView item_player_goods_price_tv;
@@ -55,12 +57,12 @@ public class PlayerGoodsView extends LinearLayout {
         }
     };
 
-    public PlayerGoodsView(Context context) {
+    public PlayerGoodsPushView(Context context) {
         super(context);
         initView(context);
     }
 
-    public PlayerGoodsView(Context context, @Nullable AttributeSet attrs) {
+    public PlayerGoodsPushView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         initView(context);
     }
@@ -74,9 +76,9 @@ public class PlayerGoodsView extends LinearLayout {
         mTimer = new Timer();
     }
 
-    public void setGoodsData(MZGoodsListDto mzGoodsListDto) {
+    public void setGoodsData(ChatCompleteDto mzGoodsListDto) {
         item_player_goods_name_tv.setText(mzGoodsListDto.getName());
-        item_player_goods_price_tv.setText("¥" + mzGoodsListDto.getPrice());
+        item_player_goods_price_tv.setText("¥"+mzGoodsListDto.getPrice());
         ImageLoader.getInstance().displayImage(mzGoodsListDto.getPic() + String_Utils.getPictureSizeAvatar(), item_player_goods_avatar_iv, new DisplayImageOptions.Builder()
                 .showStubImage(R.mipmap.icon_default_avatar)
                 .showImageForEmptyUri(R.mipmap.icon_default_avatar)
@@ -107,6 +109,9 @@ public class PlayerGoodsView extends LinearLayout {
         public void onAnimationStart(Animator animator) {
             item_player_goods_layout.setVisibility(View.VISIBLE);
             isEndAnimation = true;
+            if (mOnPushGoodsAnimatorListener != null) {
+                mOnPushGoodsAnimatorListener.onAnimationStart(animator);
+            }
         }
 
         @Override
@@ -147,9 +152,7 @@ public class PlayerGoodsView extends LinearLayout {
         item_player_goods_layout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mOnGoodsItemClickListener != null) {
-                    mOnGoodsItemClickListener.onGoodsItemClick();
-                }
+                ToastUtils.popUpToast("商品");
             }
         });
     }
@@ -164,6 +167,9 @@ public class PlayerGoodsView extends LinearLayout {
         public void onAnimationEnd(Animator animator) {
             item_player_goods_layout.setVisibility(View.INVISIBLE);
             isEndAnimation = false;
+            if (mOnPushGoodsAnimatorListener != null) {
+                mOnPushGoodsAnimatorListener.onAnimationEnd(animator);
+            }
         }
 
         @Override
@@ -176,13 +182,15 @@ public class PlayerGoodsView extends LinearLayout {
         }
     }
 
-    private OnGoodsItemClickListener mOnGoodsItemClickListener;
+    public interface OnPushGoodsAnimatorListener {
+        void onAnimationStart(Animator animator);
 
-    public interface OnGoodsItemClickListener {
-        void onGoodsItemClick();
+        void onAnimationEnd(Animator animator);
     }
 
-    public void setOnGoodsItemClickListener(OnGoodsItemClickListener listener) {
-        mOnGoodsItemClickListener = listener;
+    private OnPushGoodsAnimatorListener mOnPushGoodsAnimatorListener;
+
+    public void setOnPushGoodsAnimatorListener(OnPushGoodsAnimatorListener onPushGoodsAnimatorListener) {
+        mOnPushGoodsAnimatorListener = onPushGoodsAnimatorListener;
     }
 }

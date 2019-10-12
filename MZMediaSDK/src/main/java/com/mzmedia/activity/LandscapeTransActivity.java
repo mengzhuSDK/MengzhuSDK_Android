@@ -12,7 +12,6 @@ import android.text.Selection;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -255,19 +254,18 @@ public class LandscapeTransActivity extends Activity implements View.OnClickList
 
             if (manager != null) {
                 ChatMegTxtDto dto = new ChatMegTxtDto();
-                dto.setText("test......");
+                dto.setText(msg);
                 String avatar = MyUserInfoPresenter.getInstance().getUserInfo().getAvatar();
                 dto.setAvatar(avatar);
+                dto.setAccountNo(MyUserInfoPresenter.getInstance().getUserInfo().getAccountNo());
                 String name = MyUserInfoPresenter.getInstance().getUserInfo().getNickname();
                 manager.registerAtPushListener(new IBasePresenterLinstener() {
                     @Override
                     public void dataResult(Object obj, Page page, int status) {
-                        Log.e("max", "dataResult: "+obj );
                     }
 
                     @Override
                     public void errorResult(int code, String msg) {
-                        Log.e("max", "dataResult: "+msg );
 
                     }
                 });
@@ -318,7 +316,7 @@ public class LandscapeTransActivity extends Activity implements View.OnClickList
 //                mPresenter.atPushExecute(mAtUid, mAt, mAtTicketId);
 //            }
 //            et_input.setText("");
-//            finish();
+            finish();
 //            overridePendingTransition(R.anim.dialog_in_no_anim, R.anim.dialog_out_no_anim);
         }
     }

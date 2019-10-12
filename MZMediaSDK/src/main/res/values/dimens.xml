@@ -46,6 +46,7 @@
     <dimen name="dimen_60">60dp</dimen>
     <dimen name="dimen_32">32dp</dimen>
     <dimen name="dimen_15">15dp</dimen>
+    <dimen name="dimen_26">26dp</dimen>
 
     <dimen name="indicator_right_padding">10dp</dimen>
     <dimen name="indicator_corner_radius">12dp</dimen>

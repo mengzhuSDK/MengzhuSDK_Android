@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/plat_chat_list_online_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/dimen_26"
+    android:layout_marginLeft="@dimen/dimen_18"
+    android:background="@drawable/play_chat_get_into_bg"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingLeft="@dimen/dimen_10"
+    android:paddingRight="@dimen/dimen_8">
+
+    <TextView
+        android:id="@+id/play_chat_list_online_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dimen_5"
+        android:drawableLeft="@mipmap/icon_play_chat_list_online"
+        android:drawablePadding="@dimen/dimen_8"
+        android:ellipsize="end"
+        android:maxEms="6"
+        android:singleLine="true"
+        tools:text="1111111111111"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="来了"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+</LinearLayout>

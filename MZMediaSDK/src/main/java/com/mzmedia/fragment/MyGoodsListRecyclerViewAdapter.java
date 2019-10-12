@@ -27,6 +27,7 @@ public class MyGoodsListRecyclerViewAdapter extends RecyclerView.Adapter<MyGoods
 
     private ArrayList<MZGoodsListDto> mValues;
     private OnListFragmentInteractionListener mListener;
+    private int labelPosition;
 
     public MyGoodsListRecyclerViewAdapter(ArrayList<MZGoodsListDto> items, OnListFragmentInteractionListener listener) {
         mValues = items;
@@ -35,6 +36,7 @@ public class MyGoodsListRecyclerViewAdapter extends RecyclerView.Adapter<MyGoods
 
     public void setData(ArrayList<MZGoodsListDto> items) {
         mValues = items;
+        labelPosition = mValues.size();
     }
 
     @Override
@@ -47,9 +49,12 @@ public class MyGoodsListRecyclerViewAdapter extends RecyclerView.Adapter<MyGoods
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final MZGoodsListDto listBean = mValues.get(position);
-
         holder.tv_item_goods_name.setText(listBean.getName());
-        holder.tv_item_goods_price.setText(listBean.getPrice());
+        holder.tv_item_goods_icon_label.setText("" + labelPosition);
+        if (labelPosition > 1) {
+            labelPosition--;
+        }
+        holder.tv_item_goods_price.setText("¥"+listBean.getPrice());
         ImageLoader.getInstance().displayImage(listBean.getPic() + String_Utils.getPictureSizeAvatar(), holder.iv_item_goods_icon, new DisplayImageOptions.Builder()
                 .showStubImage(R.mipmap.icon_default_avatar)
                 .showImageForEmptyUri(R.mipmap.icon_default_avatar)
@@ -79,10 +84,12 @@ public class MyGoodsListRecyclerViewAdapter extends RecyclerView.Adapter<MyGoods
         private TextView tv_item_goods_name;
         private ImageView iv_item_goods_icon;
         private TextView tv_item_goods_price;
+        private TextView tv_item_goods_icon_label;
 
         private ViewHolder(View view) {
             super(view);
             layout_item_goods = view.findViewById(R.id.layout_item_goods);
+            tv_item_goods_icon_label = view.findViewById(R.id.tv_item_goods_icon_label);
             tv_item_goods_name = view.findViewById(R.id.tv_item_goods_name);
             iv_item_goods_icon = view.findViewById(R.id.iv_item_goods_icon);
             tv_item_goods_price = view.findViewById(R.id.tv_item_goods_price);

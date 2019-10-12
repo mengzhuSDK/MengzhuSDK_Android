@@ -7,7 +7,7 @@
     android:gravity="bottom"
     android:orientation="vertical">
 
-    <ScrollView
+    <com.mzmedia.widgets.WithScrollChangeScrollView
         android:id="@+id/mz_payer_scroll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
             android:fadingEdge="none"
             android:focusable="false"
             android:gravity="bottom" />
-    </ScrollView>
+    </com.mzmedia.widgets.WithScrollChangeScrollView>
 
     <ImageView
         android:id="@+id/voice_chat_top_bg"
