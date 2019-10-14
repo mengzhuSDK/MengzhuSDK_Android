@@ -35,9 +35,9 @@ public class TestActivity extends Activity {
         } else {
             intent.putExtra("uid", UId.getText().toString());
         }
-        intent.putExtra("accountNo", "GM20181202092708000827");
-        intent.putExtra("nickname", "我是用户");
-        intent.putExtra("avatar", "https://avatars3.githubusercontent.com/u/13464940?s=60&v=4");
+        intent.putExtra("accountNo", "GM20181202092729000830");
+        intent.putExtra("nickname", "我是@#$%^&*%^&*(!@#$%~!@#$%^&用户");
+        intent.putExtra("avatar", "http://img3.duitang.com/uploads/item/201507/23/20150723115018_ma428.thumb.700_0.jpeg");
         intent.putExtra("appid", "2019101019585068343");
         startActivity(intent);
     }

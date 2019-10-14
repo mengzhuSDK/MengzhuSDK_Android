@@ -8,7 +8,26 @@
         android:id="@+id/video_playerfragment_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
+    <RelativeLayout
+        android:id="@+id/rl_activity_broadcast_live_over"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+        <ImageView
+            android:id="@+id/iv_activity_broadcast_live_over"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#80000000"/>
+        <TextView
+            android:id="@+id/tv_activity_broadcast_live_over"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:text="主播暂时离开，\n稍等一下马上回来"
+            android:gravity="center_horizontal"/>
+    </RelativeLayout>
     <android.support.design.widget.AppBarLayout
         android:id="@+id/sv_activity_content_appbar"
         android:layout_width="match_parent"
@@ -177,6 +196,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -215,14 +235,8 @@
             </FrameLayout>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_activity_broadcast_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textColor="@color/white"
-            android:textSize="100dp"
-            tools:text="5" />
+
+
 
         <ImageView
             android:id="@+id/iv_activity_live_broadcast_push"

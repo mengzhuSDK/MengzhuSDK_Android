@@ -54,6 +54,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,6 +74,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
     private ImageView mIvShare; //分享
     private ImageView mIvLike; //点赞
     private ImageView mIvReport; //举报
+    private RelativeLayout mRlLiveOver; //主播离开
     private RelativeLayout mRlSendChat; //发消息
     private TextView mTvHitChat; //发消息提示文字
     private LoveLayout mLoveLayout; //飘心
@@ -103,6 +105,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
     private PlayInfoDto mPlayInfoDto;
     private PlayerChatListFragment mChatFragment;
     private boolean isLooping;
+    private GoodsCountDown goodsCountDown;
 
     public static PlayerFragment newInstance(String Uid, String Appid, String avatar, String nickName, String accountNo, String ticketId) {
         PlayerFragment fragment = new PlayerFragment();
@@ -159,6 +162,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         mLoveLayout = rootView.findViewById(R.id.love_playerfragment_layout);
         mzVideoView = rootView.findViewById(R.id.video_playerfragment_view);
         mRlSendChat = rootView.findViewById(R.id.rl_playerfragment_send_chat);
+        mRlLiveOver = rootView.findViewById(R.id.rl_activity_broadcast_live_over);
         mTvHitChat = rootView.findViewById(R.id.tv_playerfragment_chat);
         mPlayerGoodsLayout = rootView.findViewById(R.id.live_broadcast_goods_view);
         mPlayerGoodsPushLayout = rootView.findViewById(R.id.live_broadcast_goods_push_view);
@@ -205,6 +209,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
     private void initView() {
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(getActivity()));
         mChatFragment = new PlayerChatListFragment();
+        goodsCountDown = new GoodsCountDown(10000 * 5000, 5000);
     }
 
     private void initListener() {
@@ -249,6 +254,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
 
             @Override
             public void monitorInformResult(String s, Object o) {
+                Log.e("wzh","消息类型="+s);
                 ChatMessageDto mChatMessage = (ChatMessageDto) o;
                 ChatTextDto mChatText = mChatMessage.getText();
                 BaseDto mBase = mChatText.getBaseDto();
@@ -280,6 +286,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
                     case ChatMessageObserver.COMPLETE:
                         ChatCompleteDto mChatComplete = (ChatCompleteDto) mBase;
                         mChatCompleteDtos.add(mChatComplete);
+                        mPlayerGoodsPushLayout.setVisibility(View.VISIBLE);
                         if (mChatComplete.getType().equals(ChatPresenter.STORE_GENERALIZE)) {
 //                            if (mPlayerGoodsPushLayout.getVisibility() == View.VISIBLE) {
 //                                return;
@@ -301,7 +308,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
                                                 mPlayerGoodsPushLayout.startPlayerGoods();
                                                 mPlayerGoodsPushLayout.setGoodsData(mChatCompleteDtos.get(0));
                                             } else {
-                                                mPlayerGoodsLayout.setVisibility(View.VISIBLE);
+                                                mPlayerGoodsPushLayout.setVisibility(View.GONE);
                                             }
                                         }
                                     });
@@ -314,10 +321,18 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
                         ChatCmdDto mChatCmd = (ChatCmdDto) mBase;
                         if (mChatCmd.getType().equals(ChatCmdDto.DISABLE_CHAT)) {
                             //禁言消息
-                            mPlayInfoDto.setUser_status(3);
+                            if(mPlayInfoDto.getChat_uid().equals(((ChatCmdDto) mBase).getUser_id())) {
+                                mPlayInfoDto.setUser_status(3);
+                            }
                         } else if (mChatCmd.getType().equals(ChatCmdDto.PERMIT_CHAT)) {
                             //取消禁言消息
-                            mPlayInfoDto.setUser_status(1);
+                            if(mPlayInfoDto.getChat_uid().equals(((ChatCmdDto) mBase).getUser_id())) {
+                                mPlayInfoDto.setUser_status(1);
+                            }
+                        }else if(mChatCmd.getType().equals(ChatCmdDto.LIVE_OVER)){
+                            //主播离开
+                            mRlLiveOver.setVisibility(View.VISIBLE);
+                            mzVideoView.pause();
                         }
                         break;
                 }
@@ -364,7 +379,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
                 if (mGoodsListDtos.size() > 0) {
                     //循环商品
                     mGoodsIv.setText(mzGoodsListExternalDto.getTotal() + "");
-                    GoodsCountDown goodsCountDown = new GoodsCountDown(10000 * 5000, 5000);
                     goodsCountDown.start();
                     isLooping = true;
                 }
@@ -526,21 +540,21 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
             mOnlinePersonIv1.setVisibility(View.VISIBLE);
             mOnlinePersonIv2.setVisibility(View.VISIBLE);
             mOnlinePersonIv3.setVisibility(View.VISIBLE);
-            ImageLoader.getInstance().displayImage(personAvatars.get(personAvatars.size() - 1) + String_Utils.getPictureSizeAvatar(), mOnlinePersonIv1, avatarOptions);
-            ImageLoader.getInstance().displayImage(personAvatars.get(personAvatars.size() - 2) + String_Utils.getPictureSizeAvatar(), mOnlinePersonIv2, avatarOptions);
-            ImageLoader.getInstance().displayImage(personAvatars.get(personAvatars.size() - 3) + String_Utils.getPictureSizeAvatar(), mOnlinePersonIv3, avatarOptions);
+            ImageLoader.getInstance().displayImage(personAvatars.get(personAvatars.size() - 1), mOnlinePersonIv1, avatarOptions);
+            ImageLoader.getInstance().displayImage(personAvatars.get(personAvatars.size() - 2), mOnlinePersonIv2, avatarOptions);
+            ImageLoader.getInstance().displayImage(personAvatars.get(personAvatars.size() - 3), mOnlinePersonIv3, avatarOptions);
         } else if (personAvatars.size() == 2) {
             mOnlinePersonIv1.setVisibility(View.VISIBLE);
             mOnlinePersonIv2.setVisibility(View.VISIBLE);
             mOnlinePersonIv3.setVisibility(View.GONE);
-            ImageLoader.getInstance().displayImage(personAvatars.get(personAvatars.size() - 1) + String_Utils.getPictureSizeAvatar(), mOnlinePersonIv1, avatarOptions);
-            ImageLoader.getInstance().displayImage(personAvatars.get(personAvatars.size() - 2) + String_Utils.getPictureSizeAvatar(), mOnlinePersonIv2, avatarOptions);
+            ImageLoader.getInstance().displayImage(personAvatars.get(personAvatars.size() - 1), mOnlinePersonIv1, avatarOptions);
+            ImageLoader.getInstance().displayImage(personAvatars.get(personAvatars.size() - 2), mOnlinePersonIv2, avatarOptions);
 
         } else if (personAvatars.size() == 1) {
             mOnlinePersonIv1.setVisibility(View.VISIBLE);
             mOnlinePersonIv2.setVisibility(View.GONE);
             mOnlinePersonIv3.setVisibility(View.GONE);
-            ImageLoader.getInstance().displayImage(personAvatars.get(personAvatars.size() - 1) + String_Utils.getPictureSizeAvatar(), mOnlinePersonIv1, avatarOptions);
+            ImageLoader.getInstance().displayImage(personAvatars.get(personAvatars.size() - 1), mOnlinePersonIv1, avatarOptions);
         }
     }
 
@@ -559,8 +573,10 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
                 mPosition = 0;
             }
             if (mPlayerGoodsLayout != null) {
-                mPlayerGoodsLayout.startPlayerGoods();
-                mPlayerGoodsLayout.setGoodsData(mGoodsListDtos.get(mPosition));
+                if(mGoodsListDtos.size()>0){
+                    mPlayerGoodsLayout.startPlayerGoods();
+                    mPlayerGoodsLayout.setGoodsData(mGoodsListDtos.get(mPosition));
+                }
             }
         }
 
@@ -569,6 +585,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
             if (mPlayerGoodsLayout != null) {
                 mPlayerGoodsLayout.setVisibility(View.GONE);
             }
+            isLooping = false;
         }
 
     }
@@ -578,15 +595,20 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
      */
     public void showGoodsDialog() {
         GoodsListPopupWindow goodsListPopupWindow = new GoodsListPopupWindow(mActivity, 1, ticketId, new GoodsListPopupWindow.OnGoodsLoadListener() {
+            //商品列表回调
             @Override
             public void onGoodsLoad(ArrayList<MZGoodsListDto> mzGoodsListDtos) {
                 mGoodsListDtos = mzGoodsListDtos;
+                mGoodsIv.setText(mGoodsListDtos.size()>0?mGoodsListDtos.size()+"":"");
                 if (mGoodsListDtos.size() > 0) {
-                    mGoodsIv.setText(mGoodsListDtos.size() + "");
+                    mPlayerGoodsLayout.setVisibility(View.VISIBLE);
                     if (!isLooping) {
-                        GoodsCountDown goodsCountDown = new GoodsCountDown(10000 * 5000, 5000);
+//                        GoodsCountDown goodsCountDown = new GoodsCountDown(10000 * 5000, 5000);
                         goodsCountDown.start();
+                        isLooping = true;
                     }
+                }else {
+                    mPlayerGoodsLayout.setVisibility(View.GONE);
                 }
             }
         });

@@ -80,7 +80,7 @@ public class PlayerChatLeltWrap extends BaseViewObtion {
                 }
 //                String_Utils.handlerContent(megTxtDto.getText(), holder.mPlayerChatContent, R.color.mz_at_name_color);
 
-                ImageLoader.getInstance().displayImage(textDto.getAvatar() + String_Utils.getPictureSizeAvatar(), holder.mPlayerChatIcon, new DisplayImageOptions.Builder()
+                ImageLoader.getInstance().displayImage(textDto.getAvatar(), holder.mPlayerChatIcon, new DisplayImageOptions.Builder()
                         .showStubImage(R.mipmap.icon_default_avatar)
                         .showImageForEmptyUri(R.mipmap.icon_default_avatar)
                         .showImageOnFail(R.mipmap.icon_default_avatar)
@@ -110,53 +110,12 @@ public class PlayerChatLeltWrap extends BaseViewObtion {
 
         @Override
         public void onClick(View view) {
-//            if (isLock()) {
-//                return;
-//            }
+
             if (view.getId() == R.id.player_chat_icon) {
                 if(mOnChatIconClickListener!=null){
                     mOnChatIconClickListener.onChatIconClick(mDto);
                 }
-//                if ((mPlayInfoDto.getGlobal_right()!=null&&mPlayInfoDto.getGlobal_right().getGlobal_forbiden_check_userinfo()!=1&&!mPlayInfoDto.isForbiden_check_userinfo()) || mPlayInfoDto.getRole_name().equals(PlayInfoDto.ROLE_HOST)||mPlayInfoDto.getRole_name().equals(PlayInfoDto.ROLE_SUB_ACCOUNT)) {
-//                    mDto = (ChatTextDto) view.getTag();
-//                ((WatchBroadcastActivity)mContext).showUserInfoPopup(mDto.getUser_id());
-//                boolean isManager = LoginSystemManage.getInstance().getUserID().equals(mPlayInfoDto.getUser_info().getUid());
-//                    boolean isManager =mPlayInfoDto.getRole_name().equals(PlayInfoDto.ROLE_HOST)||mPlayInfoDto.getRole_name().equals(PlayInfoDto.ROLE_SUB_ACCOUNT);
 
-//                     if(isManager){
-//                        if (mContext instanceof WatchBroadcastActivity) {
-//                            ((WatchBroadcastActivity) mContext).showAnonymousInfoWindow(mDto.getUser_id());
-//                        } else if (mContext instanceof LiveBroadcastActivity) {
-//                            ((LiveBroadcastActivity) mContext).showAnonymousInfoWindow(mPlayInfoDto,mDto.getUser_id());
-//                        }else if(mContext instanceof LiveVoiceActivity){
-//                            ((LiveVoiceActivity) mContext).showAnonymousInfoWindow(mPlayInfoDto,mDto.getUser_id());
-//                        }
-//                    }else{
-//                        ToastUtils.popUpToast("管理员才能查看游客");
-//                    }
-//                } else {
-//                    CommonDialog dialog = new CommonDialog(mContext);
-//                    dialog.setContentMessage(R.string.forbid_check_user_info);
-//                    dialog.setTitle(R.string.notice);
-//                    dialog.setSingleType(R.string.confirm);
-//                    dialog.show();
-//                }
-
-//            } else if (!mDto.getUser_id().equals(LoginSystemManage.getInstance().getUserID())) {
-//                if (!StaticStateDto.getInstance().isBanned()) {
-//                    if (!StaticStateDto.getInstance().isForbidPublicMsg() || mPlayInfoDto.getRole_name().equals(PlayInfoDto.ROLE_HOST)||mPlayInfoDto.getRole_name().equals(PlayInfoDto.ROLE_SUB_ACCOUNT)) {
-//                        LiveBroadcastActivity.isChat = true;
-//                        ActivityUtils.startLandscapeTransActivity(true, getActivity(), mPlayInfoDto.getChat_conf(), mDto.getUser_name(), mDto.getUser_id(), mPlayInfoDto.getTicket_id(), mPlayInfoDto);
-//                    } else {
-//                        Toast.makeText(getActivity(), R.string.forbid_public_hint, Toast.LENGTH_SHORT).show();
-//                    }
-//                } else {
-//                    DialogManager mDialogManager = new DialogManager(getActivity());
-//                    if (!mDialogManager.isShowing()) {
-//                        mDialogManager.showDialog(DialogType.PLAY_MANAGER, null, DialogManager.BANNED_TO_POST);
-//                    }
-//                    Toast.makeText(getActivity(), R.string.mz_banned_to_post, Toast.LENGTH_SHORT).show();
-//                }
             }
         }
     }

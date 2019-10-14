@@ -115,6 +115,7 @@ public class GoodsListPopupWindow extends AbstractPopupWindow {
                 }
             }
         });
+        //请求商店列表api
         apiRequest = new MZApiRequest();
         apiRequest.createRequest(mContext, MZApiRequest.API_TYPE_GOODS_LIST);
         apiRequest.setResultListener(new MZApiDataListener() {
