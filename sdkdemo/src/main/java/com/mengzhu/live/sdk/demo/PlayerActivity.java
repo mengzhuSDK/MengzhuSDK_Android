@@ -25,15 +25,14 @@ public class PlayerActivity extends AppCompatActivity implements  IPlayerClickLi
         setTheme(R.style.AppCompatTheme);
         setContentView(R.layout.test_play_layout);
         MUIImmerseUtils.setStatusTextColor(false,this);
-        String ticketID = getIntent().getStringExtra("ticketid");
+//        String ticketID = getIntent().getStringExtra("ticketid");
         //传递用户信息
         mPlayerFragment = PlayerFragment.newInstance(
-                getIntent().getStringExtra("uid"),
-                getIntent().getStringExtra("appid"),
-                getIntent().getStringExtra("avatar"),
-                getIntent().getStringExtra("nickname"),
-                getIntent().getStringExtra("accountNo"),
-                ticketID);
+                getIntent().getStringExtra(PlayerFragment.APP_ID),
+                getIntent().getStringExtra(PlayerFragment.AVATAR),
+                getIntent().getStringExtra(PlayerFragment.NICKNAME),
+                getIntent().getStringExtra(PlayerFragment.ACCOUNTNO),
+                getIntent().getStringExtra(PlayerFragment.TICKET_ID));
         mFragmentManager = getSupportFragmentManager();
         mFragmentManager.beginTransaction().replace(R.id.container_activity_watch_broadcast, mPlayerFragment).commitAllowingStateLoss();
         mPlayerFragment.setIPlayerClickListener(this);

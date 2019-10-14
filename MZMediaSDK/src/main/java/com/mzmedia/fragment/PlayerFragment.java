@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
@@ -54,14 +55,17 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerFragment extends Fragment implements View.OnClickListener, MZApiDataListener {
 
     private static final String USER_INFO = "userDto";
-    private static final String TICKET_ID = "ticket_id";
+    public static final String APP_ID = "appid";
+    public static final String AVATAR = "avatar";
+    public static final String NICKNAME = "nickName";
+    public static final String ACCOUNTNO = "accountNo";
+    public static final String TICKET_ID = "ticket_id";
     private MZVideoView mzVideoView;
     private CircleImageView mIvAvatar; //头像
     private CircleImageView mOnlinePersonIv1, mOnlinePersonIv2, mOnlinePersonIv3; //在线人数头像
@@ -107,14 +111,13 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
     private boolean isLooping;
     private GoodsCountDown goodsCountDown;
 
-    public static PlayerFragment newInstance(String Uid, String Appid, String avatar, String nickName, String accountNo, String ticketId) {
+    public static PlayerFragment newInstance(String Appid, String avatar, String nickName, String accountNo, String ticketId) {
         PlayerFragment fragment = new PlayerFragment();
         Bundle args = new Bundle();
-        args.putSerializable("uid", Uid);
-        args.putSerializable("appid", Appid);
-        args.putSerializable("avatar", avatar);
-        args.putSerializable("nickName", nickName);
-        args.putSerializable("accountNo", accountNo);
+        args.putSerializable(APP_ID, Appid);
+        args.putSerializable(AVATAR, avatar);
+        args.putSerializable(NICKNAME, nickName);
+        args.putSerializable(ACCOUNTNO, accountNo);
         args.putString(TICKET_ID, ticketId);
         fragment.setArguments(args);
         return fragment;
@@ -124,15 +127,13 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mUid = getArguments().getString("uid");
-            mAppid = getArguments().getString("appid");
-            mAvatr = getArguments().getString("avatar");
-            mNickName = getArguments().getString("nickName");
-            mAccountNo = getArguments().getString("accountNo");
+            mAppid = getArguments().getString(APP_ID);
+            mAvatr = getArguments().getString(AVATAR);
+            mNickName = getArguments().getString(NICKNAME);
+            mAccountNo = getArguments().getString(ACCOUNTNO);
             ticketId = getArguments().getString(TICKET_ID);
         }
         mUserDto = new UserDto();
-        mUserDto.setUid(mUid);
         mUserDto.setAppid(mAppid);
         mUserDto.setAvatar(mAvatr);
         mUserDto.setNickname(mNickName);
@@ -254,7 +255,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
 
             @Override
             public void monitorInformResult(String s, Object o) {
-                Log.e("wzh","消息类型="+s);
+                Log.e("wzh", "消息类型=" + s);
                 ChatMessageDto mChatMessage = (ChatMessageDto) o;
                 ChatTextDto mChatText = mChatMessage.getText();
                 BaseDto mBase = mChatText.getBaseDto();
@@ -319,20 +320,26 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
 
                     case ChatMessageObserver.CMD_TYPE:
                         ChatCmdDto mChatCmd = (ChatCmdDto) mBase;
-                        if (mChatCmd.getType().equals(ChatCmdDto.DISABLE_CHAT)) {
-                            //禁言消息
-                            if(mPlayInfoDto.getChat_uid().equals(((ChatCmdDto) mBase).getUser_id())) {
-                                mPlayInfoDto.setUser_status(3);
-                            }
-                        } else if (mChatCmd.getType().equals(ChatCmdDto.PERMIT_CHAT)) {
-                            //取消禁言消息
-                            if(mPlayInfoDto.getChat_uid().equals(((ChatCmdDto) mBase).getUser_id())) {
-                                mPlayInfoDto.setUser_status(1);
-                            }
-                        }else if(mChatCmd.getType().equals(ChatCmdDto.LIVE_OVER)){
-                            //主播离开
-                            mRlLiveOver.setVisibility(View.VISIBLE);
-                            mzVideoView.pause();
+                        switch (mChatCmd.getType()) {
+                            case ChatCmdDto.DISABLE_CHAT:
+                                //禁言消息
+                                if (mPlayInfoDto.getChat_uid().equals(((ChatCmdDto) mBase).getUser_id())) {
+                                    mPlayInfoDto.setUser_status(3);
+                                    initBanChat(true);
+                                }
+                                break;
+                            case ChatCmdDto.PERMIT_CHAT:
+                                //取消禁言消息
+                                if (mPlayInfoDto.getChat_uid().equals(((ChatCmdDto) mBase).getUser_id())) {
+                                    mPlayInfoDto.setUser_status(1);
+                                    initBanChat(false);
+                                }
+                                break;
+                            case ChatCmdDto.LIVE_OVER:
+                                //主播离开
+                                mRlLiveOver.setVisibility(View.VISIBLE);
+                                mzVideoView.pause();
+                                break;
                         }
                         break;
                 }
@@ -518,6 +525,9 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         }
         //加载人气
         mTvPopular.setText("人气" + String_Utils.convert2W0_0(mPlayInfoDto.getPopular()) + "人");
+        //是否禁言
+        initBanChat(mPlayInfoDto.getUser_status() == 3);
+
         //添加聊天fragment
         Bundle bundle = new Bundle();
         bundle.putBoolean(PlayerChatListFragment.PLAY_TYPE_KEY, true);
@@ -573,7 +583,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
                 mPosition = 0;
             }
             if (mPlayerGoodsLayout != null) {
-                if(mGoodsListDtos.size()>0){
+                if (mGoodsListDtos.size() > 0) {
                     mPlayerGoodsLayout.startPlayerGoods();
                     mPlayerGoodsLayout.setGoodsData(mGoodsListDtos.get(mPosition));
                 }
@@ -599,7 +609,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
             @Override
             public void onGoodsLoad(ArrayList<MZGoodsListDto> mzGoodsListDtos) {
                 mGoodsListDtos = mzGoodsListDtos;
-                mGoodsIv.setText(mGoodsListDtos.size()>0?mGoodsListDtos.size()+"":"");
+                mGoodsIv.setText(mGoodsListDtos.size() > 0 ? mGoodsListDtos.size() + "" : "");
                 if (mGoodsListDtos.size() > 0) {
                     mPlayerGoodsLayout.setVisibility(View.VISIBLE);
                     if (!isLooping) {
@@ -607,7 +617,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
                         goodsCountDown.start();
                         isLooping = true;
                     }
-                }else {
+                } else {
                     mPlayerGoodsLayout.setVisibility(View.GONE);
                 }
             }
@@ -661,6 +671,20 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         //关闭播放器
         if (null != mzVideoView) {
             mzVideoView.destroy();
+        }
+    }
+
+    private void initBanChat(boolean isBan) {
+        if (isBan) {
+            mTvHitChat.setText(mActivity.getResources().getString(R.string.ban_talk_to_up));
+            mTvHitChat.setTextColor(mActivity.getResources().getColor(R.color.white));
+            Drawable drawable = mActivity.getResources().getDrawable(R.drawable.icon_playerfragment_ban_chat);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            mTvHitChat.setCompoundDrawables(drawable, null, null, null);
+        } else {
+            mTvHitChat.setText(mActivity.getResources().getString(R.string.talk_to_up));
+            mTvHitChat.setTextColor(mActivity.getResources().getColor(R.color.crop_99FFFFFF));
+            mTvHitChat.setCompoundDrawables(null, null, null, null);
         }
     }
 }
