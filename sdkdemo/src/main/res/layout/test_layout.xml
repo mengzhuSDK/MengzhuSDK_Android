@@ -28,5 +28,5 @@
         android:id="@+id/app_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="填写accountNo" />
+        android:hint="填写appId" />
 </LinearLayout>
