@@ -142,7 +142,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         mUserDto.setAccountNo(mAccountNo);
         //保存观看用户信息
         MyUserInfoPresenter.getInstance().saveUserinfo(mUserDto);
-        MZSDKInitManager.getInstance().initLive("1000000");
+        MZSDKInitManager.getInstance().initLive();
         MZSDKInitManager.getInstance().registerInitListener(new SDKInitListener() {
             @Override
             public void dataResult(int i) {
