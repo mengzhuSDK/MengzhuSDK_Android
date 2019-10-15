@@ -38,6 +38,8 @@ import com.mengzhu.live.sdk.business.presenter.chat.ChatMessageObserver;
 import com.mengzhu.live.sdk.business.presenter.chat.ChatPresenter;
 import com.mengzhu.live.sdk.business.presenter.player.media.IRenderView;
 import com.mengzhu.live.sdk.business.view.widgets.MZVideoView;
+import com.mengzhu.live.sdk.core.MZSDKInitManager;
+import com.mengzhu.live.sdk.core.SDKInitListener;
 import com.mengzhu.live.sdk.core.netwock.Page;
 import com.mengzhu.live.sdk.ui.api.MZApiDataListener;
 import com.mengzhu.live.sdk.ui.api.MZApiRequest;
@@ -140,6 +142,19 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         mUserDto.setAccountNo(mAccountNo);
         //保存观看用户信息
         MyUserInfoPresenter.getInstance().saveUserinfo(mUserDto);
+        MZSDKInitManager.getInstance().initLive("1000000");
+        MZSDKInitManager.getInstance().registerInitListener(new SDKInitListener() {
+            @Override
+            public void dataResult(int i) {
+                //请求获取观看信息api
+                mzApiRequest.startData(MZApiRequest.API_TYPE_PLAY_INFO, ticketId);
+            }
+
+            @Override
+            public void errorResult(int i, String s) {
+
+            }
+        });
     }
 
     @Override
@@ -429,8 +444,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         mzApiRequestGoods.createRequest(mActivity, MZApiRequest.API_TYPE_GOODS_LIST);
         mzApiRequestAnchorInfo.createRequest(mActivity, MZApiRequest.API_TYPE_ANCHOR_INFO);
 
-        //请求获取观看信息api
-        mzApiRequest.startData(MZApiRequest.API_TYPE_PLAY_INFO, ticketId);
         //请求商店列表api
         mzApiRequestGoods.startData(MZApiRequest.API_TYPE_GOODS_LIST, true, ticketId);
         //请求在线人数api
