@@ -6,31 +6,31 @@
               android:orientation="horizontal">
 
     <LinearLayout
-        android:id="@id/input_options_basic"
+        android:id="@+id/input_options_basic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <RadioGroup
-            android:id="@id/input_options_group_textsize"
+            android:id="@+id/input_options_group_textsize"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkedButton="@id/input_options_medium_textsize"
             android:orientation="horizontal">
 
             <RadioButton
-                android:id="@id/input_options_small_textsize"
+                android:id="@+id/input_options_small_textsize"
                 style="@style/DanmakuInputOptionRadioButton"
                 android:background="@drawable/sel_btn_danmaku_input_options_small_textsize"/>
 
             <RadioButton
-                android:id="@id/input_options_medium_textsize"
+                android:id="@+id/input_options_medium_textsize"
                 style="@style/DanmakuInputOptionRadioButton"
                 android:background="@drawable/sel_btn_danmaku_input_options_medium_textsize"/>
         </RadioGroup>
 
         <RadioGroup
-            android:id="@id/input_options_group_type"
+            android:id="@+id/input_options_group_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15.0dip"
@@ -39,38 +39,38 @@
             android:orientation="horizontal">
 
             <RadioButton
-                android:id="@id/input_options_top_type"
+                android:id="@+id/input_options_top_type"
                 style="@style/DanmakuInputOptionRadioButton"
                 android:background="@drawable/sel_btn_danmaku_input_options_top_type"/>
 
             <RadioButton
-                android:id="@id/input_options_rl_type"
+                android:id="@+id/input_options_rl_type"
                 style="@style/DanmakuInputOptionRadioButton"
                 android:background="@drawable/sel_btn_danmaku_input_options_rl_type"/>
 
             <RadioButton
-                android:id="@id/input_options_bottom_type"
+                android:id="@+id/input_options_bottom_type"
                 style="@style/DanmakuInputOptionRadioButton"
                 android:background="@drawable/sel_btn_danmaku_input_options_bottom_type"/>
         </RadioGroup>
     </LinearLayout>
 
     <LinearLayout
-        android:id="@id/input_options_more"
+        android:id="@+id/input_options_more"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="5.0dip"
         android:orientation="horizontal">
 
         <RadioButton
-            android:id="@id/input_options_color_current"
+            android:id="@+id/input_options_color_current"
             style="@style/DanmakuInputOptionColorRadioButton"
             android:background="#ffffff"
             android:checked="true"
             android:clickable="false"/>
 
         <ImageView
-            android:id="@id/input_options_color_more_icon"
+            android:id="@+id/input_options_color_more_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
