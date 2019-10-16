@@ -28,15 +28,17 @@ public class MyGoodsListRecyclerViewAdapter extends RecyclerView.Adapter<MyGoods
     private ArrayList<MZGoodsListDto> mValues;
     private OnListFragmentInteractionListener mListener;
     private int labelPosition;
+    private int mTotalNum;
 
     public MyGoodsListRecyclerViewAdapter(ArrayList<MZGoodsListDto> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
 
-    public void setData(ArrayList<MZGoodsListDto> items) {
+    public void setData(ArrayList<MZGoodsListDto> items, int totalNum) {
         mValues = items;
         labelPosition = mValues.size();
+        mTotalNum = totalNum;
     }
 
     @Override
@@ -50,15 +52,17 @@ public class MyGoodsListRecyclerViewAdapter extends RecyclerView.Adapter<MyGoods
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final MZGoodsListDto listBean = mValues.get(position);
         holder.tv_item_goods_name.setText(listBean.getName());
-        holder.tv_item_goods_icon_label.setText("" + labelPosition);
-        if (labelPosition > 1) {
-            labelPosition--;
+        if (mTotalNum <= 1) {
+            labelPosition = 1;
+        } else {
+            labelPosition = mTotalNum - position;
         }
-        holder.tv_item_goods_price.setText("¥"+listBean.getPrice());
+        holder.tv_item_goods_icon_label.setText("" + labelPosition);
+        holder.tv_item_goods_price.setText("¥" + listBean.getPrice());
         ImageLoader.getInstance().displayImage(listBean.getPic() + String_Utils.getPictureSizeAvatar(), holder.iv_item_goods_icon, new DisplayImageOptions.Builder()
-                .showStubImage(R.mipmap.icon_default_avatar)
-                .showImageForEmptyUri(R.mipmap.icon_default_avatar)
-                .showImageOnFail(R.mipmap.icon_default_avatar)
+                .showStubImage(R.mipmap.icon_goods_default)
+                .showImageForEmptyUri(R.mipmap.icon_goods_default)
+                .showImageOnFail(R.mipmap.icon_goods_default)
                 .cacheInMemory(true)
                 .cacheOnDisc(true)
                 .displayer(new RoundedBitmapDisplayer(0))

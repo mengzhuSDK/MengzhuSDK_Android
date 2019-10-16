@@ -132,11 +132,11 @@ public class GoodsListPopupWindow extends AbstractPopupWindow {
                     mTotalGoodsList.addAll(mGoodsList);
                 }
                 if (mOnGoodsLoadListener != null) {
-                    mOnGoodsLoadListener.onGoodsLoad(mTotalGoodsList);
+                    mOnGoodsLoadListener.onGoodsLoad(mTotalGoodsList,mzGoodsListExternalDto.getTotal());
                 }
                 fragment_goodlist_rv.onRefreshComplete();
                 tv_dialog_goods_title.setText("全部商品·" + mzGoodsListExternalDto.getTotal());
-                myGoodsListRecyclerViewAdapter.setData(mTotalGoodsList);
+                myGoodsListRecyclerViewAdapter.setData(mTotalGoodsList,mzGoodsListExternalDto.getTotal());
                 myGoodsListRecyclerViewAdapter.notifyDataSetChanged();
             }
 
@@ -148,7 +148,7 @@ public class GoodsListPopupWindow extends AbstractPopupWindow {
     }
 
     public interface OnGoodsLoadListener {
-        void onGoodsLoad(ArrayList<MZGoodsListDto> mzGoodsListDtos);
+        void onGoodsLoad(ArrayList<MZGoodsListDto> mzGoodsListDtos,int totalNum);
     }
     @Override
     public void showAtLocation(View parent, int gravity, int x, int y) {

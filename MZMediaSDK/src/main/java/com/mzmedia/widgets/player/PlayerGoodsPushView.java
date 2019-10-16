@@ -79,9 +79,9 @@ public class PlayerGoodsPushView extends LinearLayout {
         item_player_goods_name_tv.setText(mzGoodsListDto.getName());
         item_player_goods_price_tv.setText("¥"+mzGoodsListDto.getPrice());
         ImageLoader.getInstance().displayImage(mzGoodsListDto.getPic() + String_Utils.getPictureSizeAvatar(), item_player_goods_avatar_iv, new DisplayImageOptions.Builder()
-                .showStubImage(R.mipmap.icon_default_avatar)
-                .showImageForEmptyUri(R.mipmap.icon_default_avatar)
-                .showImageOnFail(R.mipmap.icon_default_avatar)
+                .showStubImage(R.mipmap.icon_goods_default)
+                .showImageForEmptyUri(R.mipmap.icon_goods_default)
+                .showImageOnFail(R.mipmap.icon_goods_default)
                 .cacheInMemory(true)
                 .cacheOnDisc(true)
                 .displayer(new RoundedBitmapDisplayer(0))

@@ -620,9 +620,9 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         GoodsListPopupWindow goodsListPopupWindow = new GoodsListPopupWindow(mActivity, 1, ticketId, new GoodsListPopupWindow.OnGoodsLoadListener() {
             //商品列表回调
             @Override
-            public void onGoodsLoad(ArrayList<MZGoodsListDto> mzGoodsListDtos) {
+            public void onGoodsLoad(ArrayList<MZGoodsListDto> mzGoodsListDtos,int totalNum) {
                 mGoodsListDtos = mzGoodsListDtos;
-                mGoodsIv.setText(mGoodsListDtos.size() > 0 ? mGoodsListDtos.size() + "" : "");
+                mGoodsIv.setText(mGoodsListDtos.size() > 0 ? totalNum + "" : "");
                 if (mGoodsListDtos.size() > 0) {
                     mPlayerGoodsLayout.setVisibility(View.VISIBLE);
                     if (!isLooping) {
