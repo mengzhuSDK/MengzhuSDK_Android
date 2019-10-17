@@ -15,4 +15,5 @@ public interface IPlayerClickListener {
     void onRecommendGoods(PlayInfoDto dto);
     void onGoodsListItem(MZGoodsListDto dto);
     void onChatAvatar(ChatTextDto dto);
+    void onNotLogin(PlayInfoDto dto);
 }

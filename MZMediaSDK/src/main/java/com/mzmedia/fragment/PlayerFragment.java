@@ -506,11 +506,14 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
             mLoveLayout.addLoveView();
         }
         if (view.getId() == R.id.rl_playerfragment_send_chat) { //点击发送消息
-            if (mPlayInfoDto.getUser_status() == 1) {
-                ActivityUtils.startLandscapeTransActivity(mActivity);
-            } else if (mPlayInfoDto.getUser_status() == 3) {
-                Toast.makeText(mActivity, "您已被禁言", Toast.LENGTH_SHORT).show();
-
+            if (!TextUtils.isEmpty(mAccountNo)) {
+                if (mPlayInfoDto.getUser_status() == 1) {
+                    ActivityUtils.startLandscapeTransActivity(mActivity);
+                } else if (mPlayInfoDto.getUser_status() == 3) {
+                    Toast.makeText(mActivity, "您已被禁言", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                mListener.onNotLogin(mPlayInfoDto);
             }
         }
         if (view.getId() == R.id.iv_player_fragment_goods) { //点击商店
@@ -620,7 +623,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         GoodsListPopupWindow goodsListPopupWindow = new GoodsListPopupWindow(mActivity, 1, ticketId, new GoodsListPopupWindow.OnGoodsLoadListener() {
             //商品列表回调
             @Override
-            public void onGoodsLoad(ArrayList<MZGoodsListDto> mzGoodsListDtos,int totalNum) {
+            public void onGoodsLoad(ArrayList<MZGoodsListDto> mzGoodsListDtos, int totalNum) {
                 mGoodsListDtos = mzGoodsListDtos;
                 mGoodsIv.setText(mGoodsListDtos.size() > 0 ? totalNum + "" : "");
                 if (mGoodsListDtos.size() > 0) {

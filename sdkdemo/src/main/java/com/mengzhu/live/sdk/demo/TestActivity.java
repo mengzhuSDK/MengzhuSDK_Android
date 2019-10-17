@@ -41,7 +41,7 @@ public class TestActivity extends Activity {
             intent.putExtra(PlayerFragment.APP_ID, appId.getText().toString());
         }
 
-        if (!TextUtils.isEmpty(ticketId.getText().toString()) && !TextUtils.isEmpty(accountNo.getText().toString()) && !TextUtils.isEmpty(appId.getText().toString())) {
+        if (!TextUtils.isEmpty(ticketId.getText().toString())  && !TextUtils.isEmpty(appId.getText().toString())) {
             intent.putExtra(PlayerFragment.NICKNAME, "我是测试用户");
             intent.putExtra(PlayerFragment.AVATAR, "http://img3.duitang.com/uploads/item/201507/23/20150723115018_ma428.thumb.700_0.jpeg");
             startActivity(intent);
