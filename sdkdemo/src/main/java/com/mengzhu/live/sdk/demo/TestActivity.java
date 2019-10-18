@@ -34,9 +34,9 @@ public class TestActivity extends Activity {
         if (!TextUtils.isEmpty(ticketId.getText().toString())) {
             intent.putExtra(PlayerFragment.TICKET_ID, ticketId.getText().toString());
         }
-        if (!TextUtils.isEmpty(accountNo.getText().toString())) {
+//        if (!TextUtils.isEmpty(accountNo.getText().toString())) {
             intent.putExtra(PlayerFragment.ACCOUNTNO, accountNo.getText().toString());
-        }
+//        }
         if (!TextUtils.isEmpty(appId.getText().toString())) {
             intent.putExtra(PlayerFragment.APP_ID, appId.getText().toString());
         }

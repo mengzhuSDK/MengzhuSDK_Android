@@ -284,7 +284,9 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
                         int current = Integer.valueOf(mTotalPerson) + Integer.valueOf(mPlayInfoDto.getUv());
                         try {
                             mTvOnline.setText(String_Utils.convert2W0_0(current + ""));
-                            personAvatars.add(mChatText.getAvatar());
+                            if (Long.parseLong(mChatMessage.getText().getUser_id()) < Long.parseLong("5000000000")) {
+                                personAvatars.add(mChatText.getAvatar());
+                            }
                             initOnlineAvatar();
                         } catch (Exception e) {
                         }
@@ -389,7 +391,9 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
                 List<MZOnlineUserListDto> mzOnlineUserListDto = (List<MZOnlineUserListDto>) dto;
                 mTvOnline.setText(mzOnlineUserListDto.size() + "");
                 for (int i = 0; i < mzOnlineUserListDto.size(); i++) {
-                    personAvatars.add(mzOnlineUserListDto.get(i).getAvatar());
+                    if (Long.parseLong(mzOnlineUserListDto.get(i).getUid()) < Long.parseLong("5000000000")) {
+                        personAvatars.add(mzOnlineUserListDto.get(i).getAvatar());
+                    }
                 }
                 initOnlineAvatar();
                 Log.d("gm", "dataResult: API_TYPE_ONLINE_USER_LIST");
@@ -478,7 +482,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         }
         if (view.getId() == R.id.tv_playerfragment_attention) { //点击关注
             if (mListener != null) {
-                mListener.onAttentionClick(mPlayInfoDto,mTvAttention);
+                mListener.onAttentionClick(mPlayInfoDto, mTvAttention);
             }
 
         }
@@ -509,7 +513,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         }
         if (view.getId() == R.id.iv_playerfragment_zan) { //点击点赞
             if (mListener != null) {
-                mListener.onLikeClick(mPlayInfoDto,mIvLike);
+                mListener.onLikeClick(mPlayInfoDto, mIvLike);
             }
             //飘心
             mLoveLayout.addLoveView();
