@@ -3,6 +3,7 @@ package com.mzmedia.adapter.base.chat;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mengzhu.live.sdk.R;
@@ -33,6 +34,7 @@ public class PlayerChatRightWrap extends BaseViewObtion {
         if (convertView == null) {
             mHolder = new ViewHolder();
             convertView = View.inflate(mContext, R.layout.mz_player_chat_right_item, null);
+            mHolder.mPlayerChatRightLayout = convertView.findViewById(R.id.player_chat_right_layout);
             mHolder.mPlayerChatRightIcon = convertView.findViewById(R.id.player_chat_right_icon);
             mHolder.mPlayerChatRightContent = convertView.findViewById(R.id.player_chat_right_content);
             mHolder.mPlayerChatRightUsername = convertView.findViewById(R.id.player_chat_right_username);
@@ -63,12 +65,13 @@ public class PlayerChatRightWrap extends BaseViewObtion {
                         .cacheOnDisc(true)
                         .displayer(new RoundedBitmapDisplayer(20))
                         .build());
-                holder.mPlayerChatRightIcon.setOnClickListener(new OnItemtClick(textDto));
+                holder.mPlayerChatRightLayout.setOnClickListener(new OnItemtClick(textDto));
             }
         }
     }
 
     class ViewHolder {
+        LinearLayout mPlayerChatRightLayout;
         CircularImage mPlayerChatRightIcon;
         TextView mPlayerChatRightContent;
         TextView mPlayerChatRightUsername;

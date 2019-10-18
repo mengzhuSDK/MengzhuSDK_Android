@@ -73,12 +73,12 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
     private CircleImageView mOnlinePersonIv1, mOnlinePersonIv2, mOnlinePersonIv3; //在线人数头像
     private TextView mTvNickName; //昵称
     private TextView mTvPopular; //人气
-    private TextView mTvAttention; //关注
+    public TextView mTvAttention; //关注
     private TextView mTvOnline; //在线人数
     private ImageView mIvClose; //退出
     private ImageView mIvConfig; //配置
     private ImageView mIvShare; //分享
-    private ImageView mIvLike; //点赞
+    public ImageView mIvLike; //点赞
     private ImageView mIvReport; //举报
     private RelativeLayout mRlLiveOver; //主播离开
     private RelativeLayout mRlSendChat; //发消息
@@ -109,9 +109,11 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
     private ChatOnlineView mChatOnlineView;
     private ArrayList<ChatCompleteDto> mChatCompleteDtos = new ArrayList<>();
     private PlayInfoDto mPlayInfoDto;
+    private AnchorInfoDto anchorInfoDto; //主播信息
     private PlayerChatListFragment mChatFragment;
     private boolean isLooping;
     private GoodsCountDown goodsCountDown;
+    private MZGoodsListDto presentGoodsListDto;
 
     public static PlayerFragment newInstance(String Appid, String avatar, String nickName, String accountNo, String ticketId) {
         PlayerFragment fragment = new PlayerFragment();
@@ -244,7 +246,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
             @Override
             public void onGoodsItemClick() {
                 if (mListener != null) {
-                    mListener.onRecommendGoods(mPlayInfoDto);
+                    mListener.onRecommendGoods(presentGoodsListDto);
                 }
             }
         });
@@ -252,7 +254,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
             @Override
             public void onGoodsItemClick() {
                 if (mListener != null) {
-                    mListener.onRecommendGoods(mPlayInfoDto);
+                    mListener.onRecommendGoods(presentGoodsListDto);
                 }
             }
         });
@@ -315,6 +317,13 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
                                         @Override
                                         public void onAnimationStart(Animator animator) {
                                             mPlayerGoodsLayout.setVisibility(View.GONE);
+
+                                            presentGoodsListDto.setId(mChatCompleteDtos.get(0).getId());
+                                            presentGoodsListDto.setBuy_url(mChatCompleteDtos.get(0).getUrl());
+                                            presentGoodsListDto.setName(mChatCompleteDtos.get(0).getName());
+                                            presentGoodsListDto.setPrice(mChatCompleteDtos.get(0).getPrice());
+                                            presentGoodsListDto.setPic(mChatCompleteDtos.get(0).getPic());
+                                            presentGoodsListDto.setType(mChatCompleteDtos.get(0).getType());
                                         }
 
                                         @Override
@@ -415,7 +424,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         mzApiRequestAnchorInfo.setResultListener(new MZApiDataListener() {
             @Override
             public void dataResult(String s, Object o) {
-                AnchorInfoDto anchorInfoDto = (AnchorInfoDto) o;
+                anchorInfoDto = (AnchorInfoDto) o;
                 mTvNickName.setText(anchorInfoDto.getNickname());
                 ImageLoader.getInstance().displayImage(anchorInfoDto.getAvatar() + String_Utils.getPictureSizeAvatar(), mIvAvatar, avatarOptions);
             }
@@ -463,13 +472,13 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
     public void onClick(View view) {
         if (view.getId() == R.id.civ_playerfragment_avatar) { //点击主播头像
             if (mListener != null) {
-                mListener.onAvatarClick(mPlayInfoDto);
+                mListener.onAvatarClick(anchorInfoDto);
             }
 
         }
         if (view.getId() == R.id.tv_playerfragment_attention) { //点击关注
             if (mListener != null) {
-                mListener.onAttentionClick(mPlayInfoDto);
+                mListener.onAttentionClick(mPlayInfoDto,mTvAttention);
             }
 
         }
@@ -500,7 +509,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         }
         if (view.getId() == R.id.iv_playerfragment_zan) { //点击点赞
             if (mListener != null) {
-                mListener.onLikeClick(mPlayInfoDto);
+                mListener.onLikeClick(mPlayInfoDto,mIvLike);
             }
             //飘心
             mLoveLayout.addLoveView();
@@ -600,6 +609,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
             }
             if (mPlayerGoodsLayout != null) {
                 if (mGoodsListDtos.size() > 0) {
+                    presentGoodsListDto = mGoodsListDtos.get(mPosition);
                     mPlayerGoodsLayout.startPlayerGoods();
                     mPlayerGoodsLayout.setGoodsData(mGoodsListDtos.get(mPosition));
                 }

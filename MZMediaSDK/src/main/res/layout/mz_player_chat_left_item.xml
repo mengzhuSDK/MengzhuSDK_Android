@@ -3,27 +3,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:paddingLeft="@dimen/dimen_18"
-    android:paddingRight="@dimen/dimen_18"
     android:paddingTop="3dp"
+    android:paddingRight="@dimen/dimen_18"
     android:paddingBottom="3dp">
 
 
     <LinearLayout
+        android:id="@+id/player_chat_avatar_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dimen_18">
+
         <com.mzmedia.widgets.CircularImage
             android:id="@+id/player_chat_icon"
             android:layout_width="@dimen/dimen_17"
-            android:scaleType="fitXY"
-            android:layout_height="@dimen/dimen_17" />
+            android:layout_height="@dimen/dimen_17"
+            android:paddingLeft="@dimen/dimen_18"
+            android:scaleType="fitXY" />
 
         <TextView
             android:id="@+id/player_chat_username"
             android:layout_width="wrap_content"
-            android:layout_marginLeft="5dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:clickable="true"
             android:ellipsize="end"
             android:focusable="true"
@@ -42,11 +45,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:maxLines="2"
         android:ellipsize="end"
         android:focusable="true"
         android:lineSpacingExtra="2dp"
         android:maxWidth="200dp"
+        android:maxLines="2"
         android:text="content"
         android:textColor="@color/white"
         android:textSize="13sp" />

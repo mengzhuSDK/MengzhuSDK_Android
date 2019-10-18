@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
-
+import com.mengzhu.live.sdk.business.dto.AnchorInfoDto;
 import com.mengzhu.live.sdk.business.dto.MZGoodsListDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatTextDto;
 import com.mengzhu.live.sdk.business.dto.play.PlayInfoDto;
@@ -64,13 +66,13 @@ public class PlayerActivity extends AppCompatActivity implements IPlayerClickLis
      * 播放器上的控件点击回调
      */
     @Override
-    public void onAvatarClick(PlayInfoDto dto) {
-        Toast.makeText(this, "国民实现点击主播头像", Toast.LENGTH_LONG).show();
+    public void onAvatarClick(AnchorInfoDto dto) {
+        Toast.makeText(this,"国民实现点击主播头像",Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public void onAttentionClick(PlayInfoDto dto) {
-        Toast.makeText(this, "国民实现点击关注", Toast.LENGTH_LONG).show();
+    public void onAttentionClick(PlayInfoDto dto, TextView Attention) {
+        Toast.makeText(this,"国民实现点击关注",Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -94,12 +96,12 @@ public class PlayerActivity extends AppCompatActivity implements IPlayerClickLis
     }
 
     @Override
-    public void onLikeClick(PlayInfoDto dto) {
-        Toast.makeText(this, "国民实现点击点赞", Toast.LENGTH_LONG).show();
+    public void onLikeClick(PlayInfoDto dto, ImageView Like) {
+        Toast.makeText(this,"国民实现点击点赞",Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public void onRecommendGoods(PlayInfoDto dto) {
+    public void onRecommendGoods(MZGoodsListDto dto) {
         Toast.makeText(this, "国民实现点击推荐商品", Toast.LENGTH_LONG).show();
     }
 

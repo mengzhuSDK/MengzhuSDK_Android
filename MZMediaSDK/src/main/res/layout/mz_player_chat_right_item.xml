@@ -3,16 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:paddingLeft="@dimen/dimen_18"
-    android:paddingRight="@dimen/dimen_18"
     android:paddingTop="3dp"
+    android:paddingRight="@dimen/dimen_18"
     android:paddingBottom="3dp">
 
 
     <LinearLayout
+        android:id="@+id/player_chat_right_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dimen_18">
+
         <com.mzmedia.widgets.CircularImage
             android:id="@+id/player_chat_right_icon"
             android:layout_width="@dimen/dimen_17"
@@ -23,10 +25,10 @@
             android:id="@+id/player_chat_right_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimen_5"
             android:autoLink="web"
             android:clickable="true"
             android:focusable="true"
-            android:layout_marginLeft="@dimen/dimen_5"
             android:maxWidth="225.0dip"
             android:text="name"
             android:textColor="#0091ff"
@@ -40,10 +42,10 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:ellipsize="end"
-        android:maxLines="2"
         android:focusable="true"
         android:lineSpacingExtra="2dp"
         android:maxWidth="200dp"
+        android:maxLines="2"
         android:text="content"
         android:textColor="@color/white"
         android:textSize="13sp" />

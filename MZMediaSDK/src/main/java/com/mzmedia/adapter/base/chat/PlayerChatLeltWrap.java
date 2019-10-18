@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mengzhu.live.sdk.R;
@@ -39,6 +40,7 @@ public class PlayerChatLeltWrap extends BaseViewObtion {
             mHolder = new ViewHolder();
             convertView = View.inflate(mContext, R.layout.mz_player_chat_left_item, null);
             mHolder.mPlayerChatIcon = convertView.findViewById(R.id.player_chat_icon);
+            mHolder.mPlayerChatLayout = convertView.findViewById(R.id.player_chat_avatar_layout);
             mHolder.mPlayerChatContent = convertView.findViewById(R.id.player_chat_content);
             mHolder.mPlayerChatUsername = convertView.findViewById(R.id.player_chat_username);
             convertView.setTag(mHolder);
@@ -66,7 +68,7 @@ public class PlayerChatLeltWrap extends BaseViewObtion {
                 holder.mPlayerChatUsername.setText(textDto.getUser_name() + ": ");
 //                holder.mPlayerChatUsername.setTextColor(mContext.getResources().getColor(mTextColorArray[mContentCount]));
                 holder.mPlayerChatIcon.setTag(textDto);
-                holder.mPlayerChatIcon.setOnClickListener(new ChatLeltItemtListener(textDto));
+                holder.mPlayerChatLayout.setOnClickListener(new ChatLeltItemtListener(textDto));
                 switch (mContentCount) {
                     case 0:
                         mContentCount++;
@@ -111,7 +113,7 @@ public class PlayerChatLeltWrap extends BaseViewObtion {
         @Override
         public void onClick(View view) {
 
-            if (view.getId() == R.id.player_chat_icon) {
+            if (view.getId() == R.id.player_chat_avatar_layout) {
                 if(mOnChatIconClickListener!=null){
                     mOnChatIconClickListener.onChatIconClick(mDto);
                 }
@@ -146,6 +148,7 @@ public class PlayerChatLeltWrap extends BaseViewObtion {
     }
 
     class ViewHolder {
+        LinearLayout mPlayerChatLayout;
         CircularImage mPlayerChatIcon;
         TextView mPlayerChatContent;
         TextView mPlayerChatUsername;
