@@ -42,7 +42,7 @@ public class PlayerGoodsView extends LinearLayout {
             super.handleMessage(msg);
             animatorSetsuofang = new AnimatorSet();//组合动画
             item_player_goods_layout.setPivotX(0);
-            item_player_goods_layout.setPivotY(0);
+            item_player_goods_layout.setPivotY(PlayerGoodsView.this.getHeight());
             ObjectAnimator scaleX = ObjectAnimator.ofFloat(item_player_goods_layout, "scaleX", 1f, 0);
             ObjectAnimator scaleY = ObjectAnimator.ofFloat(item_player_goods_layout, "scaleY", 1f, 0);
 
@@ -130,7 +130,7 @@ public class PlayerGoodsView extends LinearLayout {
         if (!isEndAnimation) {
             animatorSetsuofang = new AnimatorSet();//组合动画
             item_player_goods_layout.setPivotX(0);
-            item_player_goods_layout.setPivotY(0);
+            item_player_goods_layout.setPivotY(PlayerGoodsView.this.getHeight()==0?180:PlayerGoodsView.this.getHeight());
             ObjectAnimator scaleX = ObjectAnimator.ofFloat(item_player_goods_layout, "scaleX", 0, 1f);
             ObjectAnimator scaleY = ObjectAnimator.ofFloat(item_player_goods_layout, "scaleY", 0, 1f);
 

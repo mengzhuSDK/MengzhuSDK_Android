@@ -85,7 +85,6 @@ public class LoveLayout extends RelativeLayout {
 				LoveLayout.this.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 				mWidth = LoveLayout.this.getMeasuredWidth();
 				mHeight = LoveLayout.this.getMeasuredHeight();
-				Log.e("wzh","h="+mHeight+"w="+mWidth);
 				runnable = new Runnable() {
 					@Override
 					public void run() {
