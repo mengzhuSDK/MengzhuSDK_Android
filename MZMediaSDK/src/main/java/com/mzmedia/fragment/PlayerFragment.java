@@ -20,7 +20,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alibaba.fastjson.JSONObject;
 import com.mengzhu.live.sdk.R;
 import com.mengzhu.live.sdk.business.dto.AnchorInfoDto;
 import com.mengzhu.live.sdk.business.dto.BaseDto;
@@ -144,6 +143,9 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         mUserDto.setAvatar(mAvatr);
         mUserDto.setNickname(mNickName);
         mUserDto.setAccountNo(mAccountNo);
+        //初始化签名Secret
+//        URLParamsUtils.setSecretKey("U7un408H0vDvBpF6MRzUWJ3p0bJwcO7upxHviKQuf0TuYgQzpoDysWWWRMqgCV2p");
+
         //保存观看用户信息
         MyUserInfoPresenter.getInstance().saveUserinfo(mUserDto);
         MZSDKInitManager.getInstance().initLive();
@@ -322,7 +324,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
                                         @Override
                                         public void onAnimationStart(Animator animator) {
                                             mPlayerGoodsLayout.setVisibility(View.GONE);
-                                            presentGoodsListDto=new MZGoodsListDto();
+                                            presentGoodsListDto = new MZGoodsListDto();
                                             presentGoodsListDto.setId(mChatCompleteDtos.get(0).getId());
                                             presentGoodsListDto.setBuy_url(mChatCompleteDtos.get(0).getUrl());
                                             presentGoodsListDto.setName(mChatCompleteDtos.get(0).getName());
