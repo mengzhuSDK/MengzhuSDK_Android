@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mengzhu.core.coreutils.URLParamsUtils;
 import com.mengzhu.live.sdk.R;
 import com.mengzhu.live.sdk.business.dto.AnchorInfoDto;
 import com.mengzhu.live.sdk.business.dto.BaseDto;
@@ -143,8 +144,11 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         mUserDto.setAvatar(mAvatr);
         mUserDto.setNickname(mNickName);
         mUserDto.setAccountNo(mAccountNo);
-        //初始化签名Secret
-//        URLParamsUtils.setSecretKey("U7un408H0vDvBpF6MRzUWJ3p0bJwcO7upxHviKQuf0TuYgQzpoDysWWWRMqgCV2p");
+        /**
+         * 必填
+         * 初始化签名Secret_Key
+         */
+        URLParamsUtils.setSecretKey("自己的Secret_Key");
 
         //保存观看用户信息
         MyUserInfoPresenter.getInstance().saveUserinfo(mUserDto);
