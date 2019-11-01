@@ -144,12 +144,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         mUserDto.setAvatar(mAvatr);
         mUserDto.setNickname(mNickName);
         mUserDto.setAccountNo(mAccountNo);
-        /**
-         * 必填
-         * 初始化签名Secret_Key
-         */
-        URLParamsUtils.setSecretKey("自己的Secret_Key");
-
         //保存观看用户信息
         MyUserInfoPresenter.getInstance().saveUserinfo(mUserDto);
         MZSDKInitManager.getInstance().initLive();

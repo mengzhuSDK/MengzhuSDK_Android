@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.mengzhu.core.coreutils.URLParamsUtils;
 import com.mzmedia.fragment.PlayerFragment;
 
 /**
@@ -29,6 +30,11 @@ public class TestActivity extends Activity {
     }
 
     public void onPlayClick(View view) {
+        /**
+         * 必填
+         * 初始化签名Secret_Key
+         */
+        URLParamsUtils.setSecretKey("自己的Secret_Key");
         //传入观看用户的信息和活动id到直播间
         Intent intent = new Intent(this, PlayerActivity.class);
         if (!TextUtils.isEmpty(ticketId.getText().toString())) {
