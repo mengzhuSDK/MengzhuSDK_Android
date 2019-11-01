@@ -13,6 +13,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mengzhu.live.sdk.R;
 import com.mengzhu.live.sdk.business.dto.MZGoodsListDto;
@@ -88,7 +89,7 @@ public class GoodsListPopupWindow extends AbstractPopupWindow {
             myGoodsListRecyclerViewAdapter = new MyGoodsListRecyclerViewAdapter(mTotalGoodsList, new MyGoodsListRecyclerViewAdapter.OnListFragmentInteractionListener() {
                 @Override
                 public void onListFragmentInteraction(MZGoodsListDto listBean) {
-                    if(mOnGoodsListItemClickListener!=null){
+                    if (mOnGoodsListItemClickListener != null) {
                         mOnGoodsListItemClickListener.onGoodsListItemClick(listBean);
                     }
                 }
@@ -132,24 +133,26 @@ public class GoodsListPopupWindow extends AbstractPopupWindow {
                     mTotalGoodsList.addAll(mGoodsList);
                 }
                 if (mOnGoodsLoadListener != null) {
-                    mOnGoodsLoadListener.onGoodsLoad(mTotalGoodsList,mzGoodsListExternalDto.getTotal());
+                    mOnGoodsLoadListener.onGoodsLoad(mTotalGoodsList, mzGoodsListExternalDto.getTotal());
                 }
                 fragment_goodlist_rv.onRefreshComplete();
                 tv_dialog_goods_title.setText("全部商品·" + mzGoodsListExternalDto.getTotal());
-                myGoodsListRecyclerViewAdapter.setData(mTotalGoodsList,mzGoodsListExternalDto.getTotal());
+                myGoodsListRecyclerViewAdapter.setData(mTotalGoodsList, mzGoodsListExternalDto.getTotal());
                 myGoodsListRecyclerViewAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void errorResult(String apiType, int code, String msg) {
+                Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
             }
         });
         apiRequest.startData(MZApiRequest.API_TYPE_GOODS_LIST, true, ticketId);
     }
 
     public interface OnGoodsLoadListener {
-        void onGoodsLoad(ArrayList<MZGoodsListDto> mzGoodsListDtos,int totalNum);
+        void onGoodsLoad(ArrayList<MZGoodsListDto> mzGoodsListDtos, int totalNum);
     }
+
     @Override
     public void showAtLocation(View parent, int gravity, int x, int y) {
         super.showAtLocation(parent, gravity, x, y);
@@ -183,11 +186,14 @@ public class GoodsListPopupWindow extends AbstractPopupWindow {
         });
         root.startAnimation(exitAnim);
     }
+
     private OnGoodsListItemClickListener mOnGoodsListItemClickListener;
-    public interface OnGoodsListItemClickListener{
+
+    public interface OnGoodsListItemClickListener {
         void onGoodsListItemClick(MZGoodsListDto dto);
     }
-    public void setOnGoodsListItemClickListener(OnGoodsListItemClickListener listener){
+
+    public void setOnGoodsListItemClickListener(OnGoodsListItemClickListener listener) {
         mOnGoodsListItemClickListener = listener;
     }
 }
