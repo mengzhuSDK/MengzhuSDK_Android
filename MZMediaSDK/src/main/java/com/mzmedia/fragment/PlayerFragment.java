@@ -144,8 +144,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         mUserDto.setAvatar(mAvatr);
         mUserDto.setNickname(mNickName);
         mUserDto.setAccountNo(mAccountNo);
-//      初始化签名Secret
-        URLParamsUtils.setSecretKey("自己的Secret_Key");
+
 
         //保存观看用户信息
         MyUserInfoPresenter.getInstance().saveUserinfo(mUserDto);

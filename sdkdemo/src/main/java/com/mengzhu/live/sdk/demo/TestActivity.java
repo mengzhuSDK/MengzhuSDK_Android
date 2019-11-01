@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.mengzhu.core.coreutils.URLParamsUtils;
 import com.mzmedia.fragment.PlayerFragment;
 
 /**
@@ -40,7 +41,8 @@ public class TestActivity extends Activity {
         if (!TextUtils.isEmpty(appId.getText().toString())) {
             intent.putExtra(PlayerFragment.APP_ID, appId.getText().toString());
         }
-
+//      初始化签名Secret
+        URLParamsUtils.setSecretKey("自己的Secret_Key");
         if (!TextUtils.isEmpty(ticketId.getText().toString())  && !TextUtils.isEmpty(appId.getText().toString())) {
             intent.putExtra(PlayerFragment.NICKNAME, "我是测试用户");
             intent.putExtra(PlayerFragment.AVATAR, "http://img3.duitang.com/uploads/item/201507/23/20150723115018_ma428.thumb.700_0.jpeg");
