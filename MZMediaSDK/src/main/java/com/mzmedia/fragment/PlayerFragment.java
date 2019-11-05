@@ -144,6 +144,8 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         mUserDto.setAvatar(mAvatr);
         mUserDto.setNickname(mNickName);
         mUserDto.setAccountNo(mAccountNo);
+
+
         //保存观看用户信息
         MyUserInfoPresenter.getInstance().saveUserinfo(mUserDto);
         MZSDKInitManager.getInstance().initLive();

@@ -30,11 +30,6 @@ public class TestActivity extends Activity {
     }
 
     public void onPlayClick(View view) {
-        /**
-         * 必填
-         * 初始化签名Secret_Key
-         */
-        URLParamsUtils.setSecretKey("自己的Secret_Key");
         //传入观看用户的信息和活动id到直播间
         Intent intent = new Intent(this, PlayerActivity.class);
         if (!TextUtils.isEmpty(ticketId.getText().toString())) {
@@ -46,7 +41,9 @@ public class TestActivity extends Activity {
         if (!TextUtils.isEmpty(appId.getText().toString())) {
             intent.putExtra(PlayerFragment.APP_ID, appId.getText().toString());
         }
+//        URLParamsUtils.setSecretKey("");
 
+        boolean debug=URLParamsUtils.isDebug();
         if (!TextUtils.isEmpty(ticketId.getText().toString())  && !TextUtils.isEmpty(appId.getText().toString())) {
             intent.putExtra(PlayerFragment.NICKNAME, "我是测试用户");
             intent.putExtra(PlayerFragment.AVATAR, "http://img3.duitang.com/uploads/item/201507/23/20150723115018_ma428.thumb.700_0.jpeg");
