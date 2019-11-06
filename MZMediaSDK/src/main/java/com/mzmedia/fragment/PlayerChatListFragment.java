@@ -244,6 +244,11 @@ public class PlayerChatListFragment extends BaseFragement implements MZChatMessa
 //        }
     }
 
+    public void setmPlayInfoDto(PlayInfoDto mPlayInfoDto) {
+        this.mPlayInfoDto = mPlayInfoDto;
+        MZChatManager.getInstance(mActivity).setPlayinfo(mPlayInfoDto);
+    }
+
     @Override
     public void onDestroy() {
 //        mChatPresenter.closeChat();
