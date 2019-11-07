@@ -454,14 +454,17 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         });
 
         //聊天用户头像点击的回调
-        mChatFragment.setOnChatAvatarClickListener(new PlayerChatListFragment.OnChatAvatarClickListener() {
-            @Override
-            public void onChatAvatarClick(ChatTextDto dto) {
-                if (null != mListener) {
-                    mListener.onChatAvatar(dto);
-                }
+        mChatFragment.setOnChatAvatarClickListener(new ChatAvatarClick());
+    }
+
+    class ChatAvatarClick implements PlayerChatListFragment.OnChatAvatarClickListener{
+
+        @Override
+        public void onChatAvatarClick(ChatTextDto dto) {
+            if (null != mListener) {
+                mListener.onChatAvatar(dto);
             }
-        });
+        }
     }
 
     private void loadData() {
@@ -786,6 +789,17 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
                 mVideoUrl = mPlayInfoDto.getVideo().getHttp_url();
                 //是否禁言
                 initBanChat(mPlayInfoDto.getUser_status() == 3);
+                MZChatManager.getInstance(mActivity).destroyChat();
+                if(mChatFragment!=null) {
+                    getChildFragmentManager().beginTransaction().remove(mChatFragment).commit();
+                }
+                mChatFragment = new PlayerChatListFragment();
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(PlayerChatListFragment.PLAY_TYPE_KEY, true);
+                bundle.putSerializable(PlayerChatListFragment.PLAY_INFO_KEY, mPlayInfoDto);
+                mChatFragment.setArguments(bundle);
+                getChildFragmentManager().beginTransaction().replace(R.id.layout_activity_live_broadcast_chat, mChatFragment).commitAllowingStateLoss();
+                mChatFragment.setOnChatAvatarClickListener(new ChatAvatarClick());
                 if(mChatFragment!=null) {
                     mChatFragment.setmPlayInfoDto(mPlayInfoDto);
                 }
