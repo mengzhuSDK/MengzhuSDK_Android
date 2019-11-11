@@ -9,8 +9,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.mengzhu.live.sdk.business.dto.AnchorInfoDto;
 import com.mengzhu.live.sdk.business.dto.MZGoodsListDto;
+import com.mengzhu.live.sdk.business.dto.UserDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatTextDto;
 import com.mengzhu.live.sdk.business.dto.play.PlayInfoDto;
+import com.mengzhu.live.sdk.business.presenter.MyUserInfoPresenter;
 import com.mzmedia.IPlayerClickListener;
 import com.mzmedia.fragment.PlayerFragment;
 import com.mzmedia.utils.MUIImmerseUtils;
@@ -45,6 +47,13 @@ public class PlayerActivity extends AppCompatActivity implements IPlayerClickLis
     @Override
     protected void onResume() {
         super.onResume();
+//        if(mPlayerFragment!=null){
+//            UserDto user= MyUserInfoPresenter.getInstance().getUserInfo();
+//            user.setAccountNo("GM20181202092745000830");
+//            user.setNickname("11111");
+//            user.setAvatar("https://upload.jianshu.io/users/upload_avatars/11711317/38d64087-b8c9-489a-b203-9f297e35e1e7?imageMogr2/auto-orient/strip|imageView2/1/w/96/h/96/format/webp");
+//            mPlayerFragment.loginCallback(user);
+//        }
 //        mManager.onResume();
     }
 
@@ -67,57 +76,58 @@ public class PlayerActivity extends AppCompatActivity implements IPlayerClickLis
      */
     @Override
     public void onAvatarClick(AnchorInfoDto dto) {
-        Toast.makeText(this,"国民实现点击主播头像",Toast.LENGTH_LONG).show();
+        Toast.makeText(this,"外部实现点击主播头像",Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onAttentionClick(PlayInfoDto dto, TextView Attention) {
-        Toast.makeText(this,"国民实现点击关注",Toast.LENGTH_LONG).show();
+        Toast.makeText(this,"外部实现点击关注",Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onOnlineClick() {
-        Toast.makeText(this, "国民实现点击在线人数", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "外部实现点击在线人数", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onCloseClick(PlayInfoDto dto) {
-        Toast.makeText(this, "国民实现点击退出", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "外部实现点击退出", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onReportClick(PlayInfoDto dto) {
-        Toast.makeText(this, "国民实现点击举报", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "外部实现点击举报", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onShareClick(PlayInfoDto dto) {
-        Toast.makeText(this, "国民实现点击分享", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "外部实现点击分享", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onLikeClick(PlayInfoDto dto, ImageView Like) {
+
         Toast.makeText(this,"国民实现点击点赞",Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onRecommendGoods(MZGoodsListDto dto) {
-        Toast.makeText(this, "国民实现点击推荐商品", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "外部实现点击推荐商品", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onGoodsListItem(MZGoodsListDto dto) {
-        Toast.makeText(this, "国民实现点击商品列表", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "外部实现点击商品列表", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onChatAvatar(ChatTextDto dto) {
-        Toast.makeText(this, "国民实现点击聊天用户头像", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "外部实现点击聊天用户头像", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onNotLogin(PlayInfoDto dto) {
-        Toast.makeText(this, "国民实现点击聊天未登录状态", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "外部实现点击聊天未登录状态", Toast.LENGTH_LONG).show();
     }
 
 }

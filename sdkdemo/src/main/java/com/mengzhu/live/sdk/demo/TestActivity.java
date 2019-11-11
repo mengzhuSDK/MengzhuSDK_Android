@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.mengzhu.core.coreutils.URLParamsUtils;
+import com.mengzhu.live.sdk.business.dto.UserDto;
+import com.mengzhu.live.sdk.business.presenter.MyUserInfoPresenter;
 import com.mzmedia.fragment.PlayerFragment;
 
 /**
@@ -30,25 +32,32 @@ public class TestActivity extends Activity {
     }
 
     public void onPlayClick(View view) {
+        /**
+         * 必填
+         * 初始化签名Secret
+         */
+        URLParamsUtils.setSecretKey("自己的Secret_Key");
         //传入观看用户的信息和活动id到直播间
         Intent intent = new Intent(this, PlayerActivity.class);
         if (!TextUtils.isEmpty(ticketId.getText().toString())) {
             intent.putExtra(PlayerFragment.TICKET_ID, ticketId.getText().toString());
         }
-        if (!TextUtils.isEmpty(accountNo.getText().toString())) {
+//        if (!TextUtils.isEmpty(accountNo.getText().toString())) {
             intent.putExtra(PlayerFragment.ACCOUNTNO, accountNo.getText().toString());
-        }
+//        }
         if (!TextUtils.isEmpty(appId.getText().toString())) {
             intent.putExtra(PlayerFragment.APP_ID, appId.getText().toString());
         }
-//      初始化签名Secret
-        URLParamsUtils.setSecretKey("自己的Secret_Key");
+        URLParamsUtils.setSecretKey("xEyRRg4QYWbk09hfRJHYHeKPv8nWZITlBiklc44MZCxbdk4E6cGVzrXve6iVaNBn");
+
+        boolean debug=URLParamsUtils.isDebug();
         if (!TextUtils.isEmpty(ticketId.getText().toString())  && !TextUtils.isEmpty(appId.getText().toString())) {
-            intent.putExtra(PlayerFragment.NICKNAME, "我是测试用户");
-            intent.putExtra(PlayerFragment.AVATAR, "http://img3.duitang.com/uploads/item/201507/23/20150723115018_ma428.thumb.700_0.jpeg");
+            intent.putExtra(PlayerFragment.NICKNAME, "1111");
+            intent.putExtra(PlayerFragment.AVATAR, "https://upload.jianshu.io/users/upload_avatars/11711317/38d64087-b8c9-489a-b203-9f297e35e1e7?imageMogr2/auto-orient/strip|imageView2/1/w/96/h/96/format/webp");
             startActivity(intent);
         } else {
             Toast.makeText(this, "所有id不能为空", Toast.LENGTH_SHORT).show();
         }
+
     }
 }
