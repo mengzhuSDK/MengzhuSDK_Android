@@ -29,4 +29,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="填写appId" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/play2"
+        android:text="横屏播放器"
+        android:onClick="playLandscape"
+        />
 </LinearLayout>
