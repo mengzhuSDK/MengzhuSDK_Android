@@ -25,6 +25,7 @@ import com.mengzhu.live.sdk.ui.chat.MZChatManager;
 import com.mengzhu.live.sdk.ui.chat.MZChatMessagerListener;
 import com.mzmedia.adapter.base.CommonAdapterType;
 import com.mzmedia.adapter.base.chat.PlayerChatLeltWrap;
+import com.mzmedia.adapter.base.chat.PlayerChatNoticeWrap;
 import com.mzmedia.adapter.base.chat.PlayerChatRightWrap;
 import com.mzmedia.widgets.PlayerChatLayout;
 import com.mzmedia.widgets.WithScrollChangeScrollView;
@@ -40,6 +41,7 @@ public class PlayerChatListFragment extends BaseFragement implements MZChatMessa
     private CommonAdapterType mAdapter;
     private PlayerChatLeltWrap mLeltWrap;
     private PlayerChatRightWrap mRightWrap;
+    private PlayerChatNoticeWrap mNoticeWrap;
     //    private ChatPresenter mChatPresenter;
     private WithScrollChangeScrollView mPayerScroll;
     public static final String PLAY_TYPE_KEY = "play_type_key";
@@ -85,10 +87,12 @@ public class PlayerChatListFragment extends BaseFragement implements MZChatMessa
         mAdapter = new CommonAdapterType(getActivity());
         mLeltWrap = new PlayerChatLeltWrap(getActivity());
         mRightWrap = new PlayerChatRightWrap(getActivity());
+        mNoticeWrap=new PlayerChatNoticeWrap(getActivity(),mPlayInfoDto);
         mRightWrap.setIsLandscape(isPush);
         mLeltWrap.setIsLandscape(isPush);
         mAdapter.addViewObtains(ChatMessageDto.CHAT_LELT_WRAP, mLeltWrap);
         mAdapter.addViewObtains(ChatMessageDto.CHAT_RRIGHT_WRAP, mRightWrap);
+        mAdapter.addViewObtains(ChatMessageDto.CHAT_NOTICE_WRAP,mNoticeWrap);
         mListView.setAdapter(mAdapter);
         mListView.setAddViewListener(new MyAddViewListener());
         if (isVoiceChat) {

@@ -25,6 +25,7 @@
         <item>超清</item>
         <item>1080P</item>
     </string-array>
+    <string name="gm_chat_notice">国民直播依法对直播内容进行24小时巡查，禁止传播暴力血腥、低俗色情、招嫖诈骗、非法政治活动等违法信息，坚决维护社会文明健康环境</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
