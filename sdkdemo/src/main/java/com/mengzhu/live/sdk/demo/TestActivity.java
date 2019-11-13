@@ -12,7 +12,6 @@ import android.widget.Toast;
 import com.mengzhu.core.coreutils.URLParamsUtils;
 import com.mengzhu.live.sdk.business.dto.UserDto;
 import com.mengzhu.live.sdk.business.presenter.MyUserInfoPresenter;
-import com.mengzhu.live.sdk.business.presenter.player.PlayerController;
 import com.mzmedia.fragment.PlayerFragment;
 
 /**
@@ -60,11 +59,5 @@ public class TestActivity extends Activity {
             Toast.makeText(this, "所有id不能为空", Toast.LENGTH_SHORT).show();
         }
 
-    }
-
-    public void playLandscape(View v){
-        Intent intent = new Intent(this, PlayerActivity2.class);
-        intent.putExtra("TYPE", PlayerController.TYPE_VIDEO);
-        startActivity(intent);
     }
 }

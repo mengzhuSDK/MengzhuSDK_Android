@@ -33,9 +33,6 @@
             android:name=".PlayerActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
-        <activity android:name=".PlayerActivity2"
-            android:configChanges="orientation|screenSize"
-            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
