@@ -49,7 +49,7 @@ public class TestActivity extends Activity {
         if (!TextUtils.isEmpty(appId.getText().toString())) {
             intent.putExtra(PlayerFragment.APP_ID, appId.getText().toString());
         }
-        URLParamsUtils.setSecretKey("xEyRRg4QYWbk09hfRJHYHeKPv8nWZITlBiklc44MZCxbdk4E6cGVzrXve6iVaNBn");
+        URLParamsUtils.setSecretKey("");
 
         boolean debug=URLParamsUtils.isDebug();
         if (!TextUtils.isEmpty(ticketId.getText().toString())  && !TextUtils.isEmpty(appId.getText().toString())) {

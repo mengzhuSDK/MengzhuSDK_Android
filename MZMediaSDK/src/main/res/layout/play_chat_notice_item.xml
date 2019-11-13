@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/play_chat_tip_ll"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/dimen_18"
+    android:background="@color/translucency"
+    android:paddingBottom="2dp"
+    android:paddingTop="2dp"
+    android:paddingRight="150dp">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/play_chat_get_into_bg"
+    android:padding="@dimen/dimen_8"
+    >
+
+    <TextView
+        android:id="@+id/play_chat_notice_txt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="xxxxxxxxxxxxxxxxxxxx"
+        android:textColor="@color/white"
+        android:textSize="13sp"
+        android:visibility="visible"/>
+</LinearLayout>
+</LinearLayout>

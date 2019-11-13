@@ -45,7 +45,7 @@
         android:focusable="true"
         android:lineSpacingExtra="2dp"
         android:maxWidth="200dp"
-        android:maxLines="2"
+        android:maxLines="5"
         android:text="content"
         android:textColor="@color/white"
         android:textSize="13sp" />
