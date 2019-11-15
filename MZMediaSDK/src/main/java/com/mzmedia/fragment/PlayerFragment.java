@@ -602,7 +602,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
     public void dataResult(String s, Object o) {
         mPlayInfoDto = (PlayInfoDto) o;
         //获取播放地址
-        mVideoUrl = mPlayInfoDto.getVideo().getHttp_url();
+        mVideoUrl = mPlayInfoDto.getVideo().getUrl();
         if (!TextUtils.isEmpty(mVideoUrl)) {
             //设置播放地址到播放器
             mzVideoView.setVideoPath(mVideoUrl);
