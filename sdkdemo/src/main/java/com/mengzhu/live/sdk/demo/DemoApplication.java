@@ -12,7 +12,7 @@ public class DemoApplication extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
-        URLParamsUtils.setDebug(false);
+        URLParamsUtils.setDebug(true);
         MZSDKInitManager.getInstance().initApplication(this);
     }
 }

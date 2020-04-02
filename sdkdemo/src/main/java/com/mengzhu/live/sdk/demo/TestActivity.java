@@ -14,6 +14,7 @@ import com.mengzhu.live.sdk.business.dto.UserDto;
 import com.mengzhu.live.sdk.business.presenter.MyUserInfoPresenter;
 import com.mzmedia.fragment.PlayerFragment;
 
+
 /**
  * Created by DELL on 2018/10/12.
  */
@@ -28,6 +29,12 @@ public class TestActivity extends Activity {
         setContentView(R.layout.test_layout);
         ticketId = findViewById(R.id.ticket_id);
         accountNo = findViewById(R.id.account_no);
+        findViewById(R.id.download_test_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TestActivity.this.startActivity(new Intent(TestActivity.this,TestDownloadActivity.class));
+            }
+        });
         appId = findViewById(R.id.app_id);
     }
 
@@ -43,7 +50,7 @@ public class TestActivity extends Activity {
         if (!TextUtils.isEmpty(appId.getText().toString())) {
             intent.putExtra(PlayerFragment.APP_ID, appId.getText().toString());
         }
-        URLParamsUtils.setSecretKey("");
+        URLParamsUtils.setSecretKey("xEyRRg4QYWbk09hfRJHYHeKPv8nWZITlBiklc44MZCxbdk4E6cGVzrXve6iVaNBn");
 
         boolean debug=URLParamsUtils.isDebug();
         if (!TextUtils.isEmpty(ticketId.getText().toString())  && !TextUtils.isEmpty(appId.getText().toString())) {
