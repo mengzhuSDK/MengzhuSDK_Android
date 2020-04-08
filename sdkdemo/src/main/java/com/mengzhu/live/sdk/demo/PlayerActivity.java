@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,13 +33,24 @@ public class PlayerActivity extends AppCompatActivity implements IPlayerClickLis
         setContentView(R.layout.test_play_layout);
         MUIImmerseUtils.setStatusTextColor(false, this);
 //        String ticketID = getIntent().getStringExtra("ticketid");
-        //传递用户信息
-        mPlayerFragment = PlayerFragment.newInstance(
-                getIntent().getStringExtra(PlayerFragment.APP_ID),
-                getIntent().getStringExtra(PlayerFragment.AVATAR),
-                getIntent().getStringExtra(PlayerFragment.NICKNAME),
-                getIntent().getStringExtra(PlayerFragment.ACCOUNTNO),
-                getIntent().getStringExtra(PlayerFragment.TICKET_ID));
+        if(!TextUtils.isEmpty( getIntent().getStringExtra(PlayerFragment.TICKET_URL))) {
+            //传递用户信息
+            mPlayerFragment = PlayerFragment.newInstance(
+                    getIntent().getStringExtra(PlayerFragment.APP_ID),
+                    getIntent().getStringExtra(PlayerFragment.AVATAR),
+                    getIntent().getStringExtra(PlayerFragment.NICKNAME),
+                    getIntent().getStringExtra(PlayerFragment.ACCOUNTNO),
+                    getIntent().getStringExtra(PlayerFragment.TICKET_ID),
+                    getIntent().getStringExtra(PlayerFragment.TICKET_URL));
+        }else {
+            //传递用户信息
+            mPlayerFragment = PlayerFragment.newInstance(
+                    getIntent().getStringExtra(PlayerFragment.APP_ID),
+                    getIntent().getStringExtra(PlayerFragment.AVATAR),
+                    getIntent().getStringExtra(PlayerFragment.NICKNAME),
+                    getIntent().getStringExtra(PlayerFragment.ACCOUNTNO),
+                    getIntent().getStringExtra(PlayerFragment.TICKET_ID));
+        }
         mFragmentManager = getSupportFragmentManager();
         mFragmentManager.beginTransaction().replace(R.id.container_activity_watch_broadcast, mPlayerFragment).commitAllowingStateLoss();
         mPlayerFragment.setIPlayerClickListener(this);
