@@ -78,3 +78,101 @@
     void onShareClick()//分享
     void onLikeClick()//点赞
     void onRecommendGoods()//推荐商品
+
+### 4.3.1推流SDK
+
+#### 推流Activity实现
+        @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        MUIImmerseUtils.setStatusTranslucent(getWindow(), this);
+        //更具需要选择是竖屏推还是横屏推
+        screen = getIntent().getIntExtra("screen",0);
+        switch (screen){
+            case 1:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);竖屏
+                break;
+            case 2:
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);横屏
+                break;
+        }
+        super.onCreate(savedInstanceState);
+        setTheme(R.style.AppCompatTheme);
+        setContentView(...);
+        MUIImmerseUtils.setStatusTextColor(false, this);
+    }
+#### IPushClickListener推流UI点击回调
+    /**
+     * 点击结束直播
+     */
+    void onStopLive();
+    /**
+     * 点击聊天用户头像回调
+     */
+    void onChatAvatar(ChatTextDto chatTextDto);
+    /**
+     * 点击全体禁言
+     */
+    void onALLBanChat();
+    /**
+     * 点击单体禁言
+     */
+    void onBanChat();
+    /**
+     * 点击分享
+     */
+    void onShare(PlayInfoDto dto);
+    /**
+     * 点击主播头像
+     */
+    void onLiveAvatar();
+    /**
+     * 点击在线人数
+     */
+    void onOnlineNum(List<MZOnlineUserListDto> mzOnlineUserListDto);
+    
+#### PushStreamingListener推流回调
+    void onScreenShotResult(Bitmap var1);
+    void onOpenConnectionResult(int var1); //开始推流
+    void onWriteError(int var1);
+    void onCloseConnectionResult(int var1); //结束推流
+
+#### 推流Fragment实现
+    mPlayInfoDto = new PlayInfoDto();
+    mPlayInfoDto.setMsg_config(startBroadcastInfoDto.getMsg_conf());
+    mPlayInfoDto.setChat_config(startBroadcastInfoDto.getChat_conf());
+    mPlayInfoDto.setTicket_id(startBroadcastInfoDto.getTicket_id());
+    mPlayInfoDto.setChannel_id(startBroadcastInfoDto.getChannel_id());
+    //参数1 推流地址 2活动id 3横竖屏 4活动必要信息 5推流前默认配置集合()
+    mzPlugFlowFragement=MZPlugFlowFragement.newInstance(startBroadcastInfoDto.getPush_url(),startBroadcastInfoDto.getTicket_id()
+                ,screen,mPlayInfoDto,liveConfigDto);
+    
+#### 推流初始化
+        
+    StreamAVOption streamAVOption = new StreamAVOption();//推流配置
+    streamAVOption.streamUrl = pushUrl; //推流地址
+    MZPushManager mzPushManager = new MZPushManager(getActivity(),streamAVOption);
+    mzPushManager.initPushLive(streamLiveCameraView); //初始化推流view
+    
+#### 推流相关API
+    mzApiRequestOnline = new MZApiRequest();
+    mzApiRequestStopLive = new MZApiRequest();
+    mzApiRequestBanChat = new MZApiRequest();
+    mzApiRequestAllChat = new MZApiRequest();
+    //在线人数列表
+    mzApiRequestOnline.createRequest(getActivity(),MZApiRequest.API_TYPE_ONLINE_USER_LIST);
+    //请求在线人数api 参数1true第一页false下一页 2活动id
+    mzApiRequestOnline.startData(MZApiRequest.API_TYPE_ONLINE_USER_LIST, true, ticketId);
+    //结束推流
+    mzApiRequestStopLive.createRequest(getActivity(),MZApiRequest.API_TYPE_LIVE_STOP);
+    //请求结束推流直播api 参数1 活动id
+    mzApiRequestStopLive.startData(MZApiRequest.API_TYPE_LIVE_STOP,ticketId);
+    //单体禁言
+    mzApiRequestBanChat.createRequest(getActivity(),MZApiRequest.API_TYPE_ROOM_FORBIDDEN);
+    //请求单体禁言api 参数1用户id 2活动id 3 0解除1禁言
+    mzApiRequestBanChat.startData(MZApiRequest.API_TYPE_ROOM_FORBIDDEN,uId,ticketId,type);
+    //全体禁言
+    mzApiRequestAllChat.createRequest(getActivity(),MZApiRequest.API_TYPE_ROOM_ALLOWCHATALL);
+    //请求全体禁言api 参数1 活动id 2频道id 3 开启或关闭
+    mzApiRequestAllChat.startData(MZApiRequest.API_TYPE_ROOM_ALLOWCHATALL,mPlayInfoDto.getTicket_id(),mPlayInfoDto.getChannel_id(),isAllChat?0:1);
+        
+    
