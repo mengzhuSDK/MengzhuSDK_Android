@@ -303,7 +303,7 @@
                 android:layout_height="@dimen/dimen_44"
                 android:layout_marginRight="12dp"
                 android:layout_toLeftOf="@+id/iv_playerfragment_share"
-                android:src="@mipmap/gm_icon_config" />
+                android:src="@mipmap/mz_icon_config" />
 
 
             <ImageView

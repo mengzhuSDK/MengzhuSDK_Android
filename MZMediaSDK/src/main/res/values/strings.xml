@@ -25,12 +25,13 @@
         <item>超清</item>
         <item>1080P</item>
     </string-array>
-    <string name="gm_chat_notice">国民直播依法对直播内容进行24小时巡查，禁止传播暴力血腥、低俗色情、招嫖诈骗、非法政治活动等违法信息，坚决维护社会文明健康环境</string>
+    <string name="gm_chat_notice">依法对直播内容进行24小时巡查，禁止传播暴力血腥、低俗色情、招嫖诈骗、非法政治活动等违法信息，坚决维护社会文明健康环境</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
     <string name="talk_to_up">跟主播聊点什么？</string>
+    <string name="talk_to">聊点什么？</string>
     <string name="ban_talk_to_up">你已被禁言</string>
 
 </resources>

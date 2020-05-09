@@ -2,20 +2,16 @@ package com.mengzhu.live.sdk.demo;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.mengzhu.core.coreutils.URLParamsUtils;
 import com.mengzhu.sdk.download.MZDownloadManager;
 import com.mengzhu.sdk.download.controller.scheduler.M3U8PeerTaskListener;
 import com.mengzhu.sdk.download.controller.scheduler.NormalTaskListener;
@@ -25,7 +21,6 @@ import com.mengzhu.sdk.download.library.publics.util.ALog;
 import com.mengzhu.sdk.download.permission.OnPermissionCallback;
 import com.mengzhu.sdk.download.permission.PermissionManager;
 import com.mengzhu.sdk.download.util.UrlPathUtil;
-import com.mzmedia.fragment.PlayerFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +53,6 @@ public class TestDownloadActivity extends Activity implements NormalTaskListener
                 urlListCount=entityList!=null?entityList.size():0;
             }
         });
-
         final List<String> list=new ArrayList<>();
         list.add("http://vod-o.t.zmengzhu.com/record/base/6eab6cca45f2368b00086104.m3u8");
         list.add("http://vod01.zmengzhu.com/record/base/hls-sd/0e00257c1f0a454d00135606.m3u8");
@@ -84,7 +78,7 @@ public class TestDownloadActivity extends Activity implements NormalTaskListener
                     String parentUrl = downloadUrl.substring(index + 1, indexs + 1);
                     String path = UrlPathUtil.getConfigValue(TestDownloadActivity.this, M3U8_PATH_KEY, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath() + "/" + parentUrl + ".m3u8");
 
-                    MZDownloadManager.getInstance().getDownloadContrller().startDownload(downloadUrl, path,parentUrl,"ssss","222222");
+                    MZDownloadManager.getInstance().getDownloadContrller().startDownload(downloadUrl, path,parentUrl,"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1586499217528&di=6679e5aebd960a64b2a14b7c72313834&imgtype=0&src=http%3A%2F%2Fa0.att.hudong.com%2F78%2F52%2F01200000123847134434529793168.jpg","312312");
                     urlListCount++;
                     mAdapter.notifyDataSetChanged();
                 }
@@ -117,9 +111,6 @@ public class TestDownloadActivity extends Activity implements NormalTaskListener
             }
         }
     }
-
-
-
 
 
     @Override

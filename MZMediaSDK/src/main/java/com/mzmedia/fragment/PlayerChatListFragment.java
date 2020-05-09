@@ -87,7 +87,7 @@ public class PlayerChatListFragment extends BaseFragement implements MZChatMessa
         mAdapter = new CommonAdapterType(getActivity());
         mLeltWrap = new PlayerChatLeltWrap(getActivity());
         mRightWrap = new PlayerChatRightWrap(getActivity());
-        mNoticeWrap=new PlayerChatNoticeWrap(getActivity(),mPlayInfoDto);
+        mNoticeWrap=new PlayerChatNoticeWrap(getActivity());
         mRightWrap.setIsLandscape(isPush);
         mLeltWrap.setIsLandscape(isPush);
         mAdapter.addViewObtains(ChatMessageDto.CHAT_LELT_WRAP, mLeltWrap);

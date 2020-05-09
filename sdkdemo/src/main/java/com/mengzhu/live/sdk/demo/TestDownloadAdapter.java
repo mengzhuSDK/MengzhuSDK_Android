@@ -13,11 +13,9 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.mengzhu.core.coreutils.URLParamsUtils;
 import com.mengzhu.sdk.download.MZDownloadManager;
 import com.mengzhu.sdk.download.library.publics.core.download.DownloadEntity;
 import com.mengzhu.sdk.download.library.publics.core.inf.IEntity;
-import com.mzmedia.fragment.PlayerFragment;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -137,17 +135,10 @@ public class TestDownloadAdapter extends BaseAdapter {
         @Override
         public void onClick(View view) {
 
-            onPlayClick(view, entity.getFilePath());
+             Intent in=new Intent(mContext,PlayerActivity.class);
+             in.putExtra("live_URL",entity.getFilePath());
+            ((Activity)mContext).startActivity(in);
         }
-    }
-    public void onPlayClick(View view,String path) {
-        //传入观看用户的信息和活动id到直播间
-        Intent intent = new Intent(mContext, PlayerActivity.class);
-        intent.putExtra(PlayerFragment.APP_ID,"用户的appid");//这里如果填写的是线上环境的APPID 请在application里面把debug模式修改一下
-        URLParamsUtils.setSecretKey("用户的secretkey");//这里如果填写的是线上环境的secretkey 请在application里面把debug模式修改一下
-        intent.putExtra(PlayerFragment.TICKET_URL, path);
-        ((Activity)(mContext)).startActivity(intent);
-
     }
 
     class StartStopClick implements View.OnClickListener{

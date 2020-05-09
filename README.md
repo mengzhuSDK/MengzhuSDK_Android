@@ -175,4 +175,17 @@
     //请求全体禁言api 参数1 活动id 2频道id 3 开启或关闭
     mzApiRequestAllChat.startData(MZApiRequest.API_TYPE_ROOM_ALLOWCHATALL,mPlayInfoDto.getTicket_id(),mPlayInfoDto.getChannel_id(),isAllChat?0:1);
         
+#### 推流SDK build.gradle配置
+    
+    api 'com.github.mengzhuSDK:MZKitLiveSDK:1.0.2'
+
+#### 下载SDK build.gradle配置
+  
+    api 'com.github.mengzhuSDK:MZKitDownloadSDK:1.0.5'
+    
+#### 项目build.gradle配置
+    
+    repositories {
+      maven { url "https://jitpack.io"}
+    }
     

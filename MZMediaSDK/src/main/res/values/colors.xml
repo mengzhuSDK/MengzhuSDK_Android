@@ -57,5 +57,6 @@
     <color name="color_000000">#000000</color>
     <color name="crop__selector_pressed">#1a000000</color>
     <color name="crop_99FFFFFF">#99FFFFFF</color>
+    <color name="color_50E3C2">#50E3C2</color>
 
 </resources>

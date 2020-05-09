@@ -20,7 +20,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mengzhu.core.coreutils.URLParamsUtils;
 import com.mengzhu.live.sdk.R;
 import com.mengzhu.live.sdk.business.dto.AnchorInfoDto;
 import com.mengzhu.live.sdk.business.dto.BaseDto;
@@ -42,7 +41,6 @@ import com.mengzhu.live.sdk.business.view.widgets.MZVideoView;
 import com.mengzhu.live.sdk.core.MZSDKInitManager;
 import com.mengzhu.live.sdk.core.SDKInitListener;
 import com.mengzhu.live.sdk.core.netwock.Page;
-import com.mengzhu.live.sdk.core.utils.ToastUtils;
 import com.mengzhu.live.sdk.ui.api.MZApiDataListener;
 import com.mengzhu.live.sdk.ui.api.MZApiRequest;
 import com.mengzhu.live.sdk.ui.chat.MZChatManager;
@@ -70,7 +68,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
     public static final String NICKNAME = "nickName";
     public static final String ACCOUNTNO = "accountNo";
     public static final String TICKET_ID = "ticket_id";
-    public static final String TICKET_URL="ticket_url";
     private MZVideoView mzVideoView;
     private CircleImageView mIvAvatar; //头像
     private CircleImageView mOnlinePersonIv1, mOnlinePersonIv2, mOnlinePersonIv3; //在线人数头像
@@ -106,7 +103,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
     private MZApiRequest mzApiRequestOnline;
     private MZApiRequest mzApiRequestAnchorInfo;
     private String ticketId; //活动id
-    private String ticketUrl;
     private ArrayList<MZGoodsListDto> mGoodsListDtos;
     private int mPosition;
     private String mTotalPerson;
@@ -134,18 +130,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         fragment.setArguments(args);
         return fragment;
     }
-    public static PlayerFragment newInstance(String Appid, String avatar, String nickName, String accountNo, String ticketId,String ticketURL) {
-        PlayerFragment fragment = new PlayerFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(APP_ID, Appid);
-        args.putSerializable(AVATAR, avatar);
-        args.putSerializable(NICKNAME, nickName);
-        args.putSerializable(ACCOUNTNO, accountNo);
-        args.putString(TICKET_ID, ticketId);
-        args.putString(TICKET_URL, ticketURL);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -157,7 +141,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
             mUserDto.setNickname(getArguments().getString(NICKNAME));
             mUserDto.setAccountNo(getArguments().getString(ACCOUNTNO));
             ticketId = getArguments().getString(TICKET_ID);
-            ticketUrl=getArguments().getString(TICKET_URL);
         }
 
 
@@ -168,20 +151,13 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         MZSDKInitManager.getInstance().registerInitListener(new SDKInitListener() {
             @Override
             public void dataResult(int i) {
-
-                if(!TextUtils.isEmpty(ticketUrl)){
-                    mzVideoView.setVideoPath(ticketUrl);
-                    //开始观看
-                    mzVideoView.start();
-                }else {
-                    //请求获取观看信息api
-                    mzApiRequest.startData(MZApiRequest.API_TYPE_PLAY_INFO, ticketId);
-                }
+                //请求获取观看信息api
+                mzApiRequest.startData(MZApiRequest.API_TYPE_PLAY_INFO, ticketId);
             }
 
             @Override
             public void errorResult(int i, String s) {
-                ToastUtils.showShortToast(getActivity(),s);
+
             }
         });
     }
@@ -538,7 +514,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         }
         if (view.getId() == R.id.iv_playerfragment_config) { //点击底部三个点显示举报
             isConfig = !isConfig;
-            mIvConfig.setImageResource(isConfig ? R.mipmap.gm_icon_config_true : R.mipmap.gm_icon_config);
+            mIvConfig.setImageResource(isConfig ? R.mipmap.gm_icon_config_true : R.mipmap.mz_icon_config);
             mIvReport.setVisibility(isConfig ? View.VISIBLE : View.GONE);
         }
         if (view.getId() == R.id.iv_playerfragment_report) { //点击举报

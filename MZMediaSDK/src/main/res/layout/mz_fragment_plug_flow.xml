@@ -1,0 +1,423 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.mengzhu.live.sdk.ui.push.StreamLiveCameraView
+        android:id="@+id/push_stream_previewView"
+        android:layout_width="match_parent"
+        android:background="@color/color_000000"
+        android:layout_height="match_parent"/>
+    <RelativeLayout
+        android:id="@+id/push_rl_activity_broadcast_live_over"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+        <ImageView
+            android:id="@+id/push_iv_activity_broadcast_live_over"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#80000000"/>
+        <TextView
+            android:id="@+id/push_tv_activity_broadcast_live_over"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:text="主播暂时离开，\n稍等一下马上回来"
+            android:gravity="center_horizontal"/>
+    </RelativeLayout>
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/push_sv_activity_content_appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#00000000"
+        android:fitsSystemWindows="true"
+        app:elevation="0dp">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:statusBarScrim="#00000000">
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/push_layout_activity_set_channel_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@color/transparent"
+                android:fitsSystemWindows="true"
+                app:contentInsetStart="0dp"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/Theme.AppCompat">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <View
+                        android:id="@+id/push_v_live_toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="24dp" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <android.support.constraint.ConstraintLayout
+                            android:id="@+id/push_layout_plugfragment"
+                            android:layout_width="172dp"
+                            android:layout_height="@dimen/dimen_40"
+                            android:layout_marginLeft="@dimen/dimen_12"
+                            android:background="@drawable/bg_live_ground_icon">
+
+                            <com.mzmedia.widgets.CircleImageView
+                                android:id="@+id/push_civ_playerfragment_avatar"
+                                android:layout_width="@dimen/dimen_30"
+                                android:layout_height="@dimen/dimen_30"
+                                android:layout_margin="@dimen/dimen_5"
+                                android:src="@mipmap/icon_default_avatar"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/push_tv_playerfragment_nickname"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dimen_5"
+                                android:ellipsize="end"
+                                android:maxEms="10"
+                                android:maxLines="1"
+                                android:text="--"
+                                android:textColor="@color/white"
+                                android:textSize="13sp"
+                                app:layout_constraintLeft_toRightOf="@id/push_civ_playerfragment_avatar"
+                                app:layout_constraintTop_toTopOf="@id/push_civ_playerfragment_avatar" />
+
+                            <TextView
+                                android:id="@+id/push_tv_playerfragment_popularity"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxEms="5"
+                                android:maxLines="1"
+                                android:text="人气--"
+                                android:textColor="@color/white"
+                                android:textSize="10sp"
+                                app:layout_constraintLeft_toLeftOf="@id/push_tv_playerfragment_nickname"
+                                app:layout_constraintTop_toBottomOf="@id/push_tv_playerfragment_nickname" />
+
+
+                        </android.support.constraint.ConstraintLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/push_ll_activity_live_broadcast_top_group"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginLeft="12dp"
+                            android:layout_marginRight="16dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <android.support.constraint.ConstraintLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <com.mzmedia.widgets.CircleImageView
+                                    android:id="@+id/push_civ_activity_live_online_person3"
+                                    android:layout_width="@dimen/dimen_28"
+                                    android:layout_height="@dimen/dimen_28"
+                                    android:layout_marginLeft="@dimen/dimen_44"
+                                    android:src="@mipmap/icon_default_avatar"
+                                    android:visibility="gone"
+                                    app:layout_constraintLeft_toLeftOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <com.mzmedia.widgets.CircleImageView
+                                    android:id="@+id/push_civ_activity_live_online_person2"
+                                    android:layout_width="@dimen/dimen_28"
+                                    android:layout_height="@dimen/dimen_28"
+                                    android:layout_marginLeft="@dimen/dimen_22"
+                                    android:src="@mipmap/icon_default_avatar"
+                                    android:visibility="gone"
+                                    app:layout_constraintLeft_toLeftOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                                <com.mzmedia.widgets.CircleImageView
+                                    android:id="@+id/push_civ_activity_live_online_person1"
+                                    android:layout_width="@dimen/dimen_28"
+                                    android:layout_height="@dimen/dimen_28"
+                                    android:src="@mipmap/icon_default_avatar"
+                                    android:visibility="gone"
+                                    app:layout_constraintLeft_toLeftOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+                            </android.support.constraint.ConstraintLayout>
+
+                            <TextView
+                                android:id="@+id/push_tv_playerfragment_person"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dimen_3"
+                                android:layout_marginRight="@dimen/dimen_5"
+                                android:background="@drawable/bg_live_ground_icon"
+                                android:gravity="center"
+                                android:paddingLeft="@dimen/dimen_10"
+                                android:paddingTop="@dimen/dimen_6"
+                                android:paddingRight="@dimen/dimen_10"
+                                android:paddingBottom="@dimen/dimen_6"
+                                android:text="0"
+                                android:textColor="@color/white"
+                                android:textSize="12sp" />
+
+                            <ImageView
+                                android:id="@+id/push_iv_playerfragment_close"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentTop="true"
+                                android:layout_alignParentRight="true"
+                                android:src="@mipmap/icon_gm__closed_black" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/push_layout_live_kb_time_group"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:background="@drawable/bg_live_ground_icon"
+                            android:layout_below="@+id/push_layout_plugfragment"
+                            android:layout_marginTop="@dimen/dimen_10"
+                            android:layout_marginLeft="@dimen/dimen_12">
+                            <TextView
+                                android:id="@+id/tv_plug_fragment_kb"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="1000kb"
+                                android:textSize="10sp"
+                                android:textColor="@color/color_50E3C2"
+                                android:paddingTop="7dp"
+                                android:paddingBottom="7dp"
+                                android:paddingLeft="10dp"
+                                android:layout_marginRight="@dimen/dimen_10"/>
+                            <TextView
+                                android:id="@+id/tv_plug_fragment_time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="00:00:00"
+                                android:textSize="10sp"
+                                android:textColor="@color/white"
+                                android:paddingRight="10dp"
+                                android:paddingTop="7dp"
+                                android:paddingBottom="7dp"/>
+                        </LinearLayout>
+                    </RelativeLayout>
+                </LinearLayout>
+
+
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_anchor="@+id/push_stream_previewView"
+        app:layout_anchorGravity="center_vertical">
+
+            <!--上下线消息-->
+            <com.mzmedia.widgets.ChatOnlineView
+                android:id="@+id/push_player_chat_list_online_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dimen_10"
+                android:layout_above="@+id/push_layout_activity_live_broadcast_chat"/>
+            <!--聊天信息-->
+            <FrameLayout
+                android:id="@+id/push_layout_activity_live_broadcast_chat"
+                android:layout_width="match_parent"
+                android:layout_height="158dp"
+                android:layout_marginBottom="7dp"
+                android:layout_above="@+id/push_rl_activity_live_broadcast_bottom_group"/>
+        <LinearLayout
+            android:id="@+id/push_layout_live_config_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginRight="@dimen/dimen_12"
+            android:layout_alignParentRight="true"
+            android:layout_above="@+id/push_rl_activity_live_broadcast_bottom_group"
+            android:visibility="gone">
+            <ImageView
+                android:id="@+id/push_iv_playerfragment_allchat"
+                android:layout_width="@dimen/dimen_44"
+                android:layout_height="@dimen/dimen_44"
+                android:layout_marginBottom="@dimen/dimen_8"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/mz_icon_allchat_default" />
+            <ImageView
+                android:id="@+id/push_iv_playerfragment_voice"
+                android:layout_width="@dimen/dimen_44"
+                android:layout_height="@dimen/dimen_44"
+                android:layout_marginBottom="@dimen/dimen_8"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/mz_icon_voice_default" />
+            <ImageView
+                android:id="@+id/push_iv_playerfragment_flash"
+                android:layout_width="@dimen/dimen_44"
+                android:layout_height="@dimen/dimen_44"
+                android:layout_marginBottom="@dimen/dimen_8"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/mz_icon_flash_default" />
+            <ImageView
+                android:id="@+id/push_iv_playerfragment_mirror"
+                android:layout_width="@dimen/dimen_44"
+                android:layout_height="@dimen/dimen_44"
+                android:layout_marginBottom="@dimen/dimen_8"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/mz_icon_mirror_default" />
+            <ImageView
+                android:id="@+id/push_iv_playerfragment_beauty"
+                android:layout_width="@dimen/dimen_44"
+                android:layout_height="@dimen/dimen_44"
+                android:layout_marginBottom="@dimen/dimen_8"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/mz_icon_beauty_on" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/push_rl_activity_live_broadcast_bottom_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:paddingBottom="12dp">
+
+            <RelativeLayout
+                android:id="@+id/push_rl_playerfragment_send_chat"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_44"
+                android:layout_marginLeft="14dp"
+                android:layout_marginRight="8dp"
+                android:layout_weight="1"
+                android:layout_toLeftOf="@+id/push_iv_playerfragment_share"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/push_tv_playerfragment_chat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:drawablePadding="@dimen/dimen_8"
+                    android:text="@string/talk_to"
+                    android:textColor="@color/crop_99FFFFFF"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="#80ffffff" />
+            </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/push_layout_live_config_group_h"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentRight="true"
+                android:visibility="gone">
+                <ImageView
+                    android:id="@+id/push_iv_playerfragment_allchat_h"
+                    android:layout_width="@dimen/dimen_44"
+                    android:layout_height="@dimen/dimen_44"
+                    android:layout_marginRight="@dimen/dimen_12"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/mz_icon_allchat_default" />
+                <ImageView
+                    android:id="@+id/push_iv_playerfragment_voice_h"
+                    android:layout_width="@dimen/dimen_44"
+                    android:layout_height="@dimen/dimen_44"
+                    android:layout_marginRight="@dimen/dimen_12"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/mz_icon_voice_default" />
+                <ImageView
+                    android:id="@+id/push_iv_playerfragment_flash_h"
+                    android:layout_width="@dimen/dimen_44"
+                    android:layout_height="@dimen/dimen_44"
+                    android:layout_marginRight="@dimen/dimen_12"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/mz_icon_flash_default" />
+                <ImageView
+                    android:id="@+id/push_iv_playerfragment_mirror_h"
+                    android:layout_width="@dimen/dimen_44"
+                    android:layout_height="@dimen/dimen_44"
+                    android:layout_marginRight="@dimen/dimen_12"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/mz_icon_mirror_default" />
+                <ImageView
+                    android:id="@+id/push_iv_playerfragment_beauty_h"
+                    android:layout_width="@dimen/dimen_44"
+                    android:layout_height="@dimen/dimen_44"
+                    android:layout_marginRight="@dimen/dimen_12"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/mz_icon_beauty_on" />
+            </LinearLayout>
+            <ImageView
+                android:id="@+id/push_iv_playerfragment_share"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginRight="12dp"
+                android:layout_toLeftOf="@+id/push_iv_playerfragment_cut"
+                android:src="@mipmap/gm_icon_share" />
+
+            <ImageView
+                android:id="@+id/push_iv_playerfragment_cut"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_toLeftOf="@+id/push_iv_playerfragment_config"
+                android:src="@mipmap/mz_icon_camera" />
+            <ImageView
+                android:id="@+id/push_iv_playerfragment_config"
+                android:layout_width="@dimen/dimen_44"
+                android:layout_height="@dimen/dimen_44"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="@dimen/dimen_12"
+                android:src="@mipmap/mz_icon_config"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/layout_activity_broadcast_count"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/icon_start_live_count_bg"
+        android:fitsSystemWindows="true">
+
+        <TextView
+            android:id="@+id/tv_activity_broadcast_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/white"
+            android:textSize="100dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text=""/>
+
+        <ImageView
+            android:id="@+id/iv_activity_live_broadcast_close_out"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="24dp"
+            android:layout_marginRight="@dimen/dimen_16"
+            android:src="@mipmap/icon_gm__closed_black"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+</android.support.design.widget.CoordinatorLayout>

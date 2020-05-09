@@ -57,7 +57,6 @@ dependencies {
     api 'io.reactivex:rxjava:1.1.5'
     api 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
-    api files('libs/MZLiveSDK.jar')
-    implementation files('libs/MZLiveSDK.jar')
-    api files('libs/MZDownload.jar')
+    api 'com.github.mengzhuSDK:MZKitDownloadSDK:1.0.5'
+    api 'com.github.mengzhuSDK:MZKitLiveSDK:1.0.2'
 }

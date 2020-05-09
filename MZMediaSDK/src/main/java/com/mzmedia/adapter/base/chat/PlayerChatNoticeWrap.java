@@ -18,11 +18,9 @@ import com.mzmedia.adapter.base.BaseViewObtion;
 
 public class PlayerChatNoticeWrap extends BaseViewObtion {
     private Context mContext;
-    private PlayInfoDto mDto;
 
-    public PlayerChatNoticeWrap(Context context, PlayInfoDto dto){
+    public PlayerChatNoticeWrap(Context context){
         mContext=context;
-        mDto=dto;
     }
 
     @Override
