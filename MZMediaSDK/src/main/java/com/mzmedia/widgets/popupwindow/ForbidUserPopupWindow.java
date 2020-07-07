@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
-import com.mengzhu.live.sdk.R;
+import com.mengzhu.sdk.R;
 import com.mzmedia.widgets.CircleImageView;
 import com.mzmedia.widgets.dialog.AbstractPopupWindow;
 

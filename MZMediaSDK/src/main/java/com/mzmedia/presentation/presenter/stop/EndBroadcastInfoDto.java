@@ -1,6 +1,7 @@
 package com.mzmedia.presentation.presenter.stop;
 
-import com.mengzhu.live.sdk.business.dto.BaseDto;
+
+import tv.mengzhu.core.module.model.dto.BaseDto;
 
 
 /**

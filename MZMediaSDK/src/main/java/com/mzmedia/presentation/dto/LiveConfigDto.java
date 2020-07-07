@@ -1,6 +1,7 @@
 package com.mzmedia.presentation.dto;
 
-import com.mengzhu.live.sdk.business.dto.BaseDto;
+
+import tv.mengzhu.core.module.model.dto.BaseDto;
 
 public class LiveConfigDto extends BaseDto {
     private int bitrate;

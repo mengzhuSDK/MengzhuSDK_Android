@@ -1,28 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- 弹幕颜色选择按钮 -->
-    <style name="DanmakuInputOptionColorRadioButton">
-        <item name="android:layout_width">@dimen/danmaku_input_options_color_radio_btn_width</item>
-        <item name="android:layout_height">@dimen/danmaku_input_options_color_radio_btn_height
-        </item>
-        <item name="android:layout_marginLeft">@dimen/danmaku_input_options_color_radio_btn_margin
-        </item>
-        <item name="android:layout_marginRight">
-            @dimen/danmaku_input_options_color_radio_btn_margin
-        </item>
-        <item name="android:paddingLeft">@dimen/danmaku_input_options_color_radio_btn_margin</item>
-        <item name="android:paddingRight">@dimen/danmaku_input_options_color_radio_btn_margin</item>
-        <item name="android:button">@drawable/sel_btn_danmaku_input_options_color</item>
-    </style>
 
-    <!-- 弹幕参数选项 -->
-    <style name="DanmakuInputOptionRadioButton">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginLeft">8.0dip</item>
-        <item name="android:layout_marginRight">8.0dip</item>
-        <item name="android:button">@null</item>
-    </style>
+
 
     <!-- 屏幕宽高比选项 -->
     <style name="AspectRatioButton">
@@ -32,41 +11,9 @@
         <item name="android:button">@null</item>
     </style>
 
-    <!-- 截图对话框 -->
-    <style name="AnimateDialog">
-        <item name="android:windowEnterAnimation">@anim/dialog_zoom_in</item>
-        <item name="android:windowExitAnimation">@anim/dialog_zoom_out</item>
-    </style>
 
-    <style name="mProgress_circle">
-        <item name="android:indeterminateDrawable">@drawable/progress_circle</item>
-        <item name="android:minWidth">76dip</item>
-        <item name="android:minHeight">76dip</item>
-        <item name="android:maxWidth">76dip</item>
-        <item name="android:maxHeight">76dip</item>
-    </style>
 
-    <declare-styleable name="PlayPauseView">
-        <attr name="bg_color" format="color" />
-        <attr name="btn_color" format="color" />
-        <attr name="gap_width" format="float" />
-        <attr name="space_padding" format="float" />
-        <attr name="anim_duration" format="integer" />
-        <attr name="anim_direction">
-            <enum name="positive" value="1" />
-            <enum name="negative" value="2" />
-        </attr>
-    </declare-styleable>
-    <declare-styleable name="SoundRippleView">
-        <attr name="stroke_width" format="dimension" />
-        <attr name="ripple_duration" format="integer" />
-        <attr name="repeat_count" format="integer" />
-        <!--同时显示的最大圆环数量-->
-        <attr name="circle_num" format="integer" />
-        <!--最大半径倍数-->
-        <attr name="max_radius_multiple" format="float" />
-        <attr name="circle_color" format="color" />
-    </declare-styleable>
+
 
     <style name="mz_public_bg_line_style">
         <item name="android:background">@color/color_dddddd</item>
@@ -105,7 +52,6 @@
     <style name="PushDialog" parent="android:style/Theme.Light">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowContentOverlay">@null</item>
-        <item name="android:background">@drawable/bg_palyer_goods_dialog</item>
         <item name="android:windowBackground">@color/crop__selector_pressed</item>
     </style>
 
@@ -131,5 +77,10 @@
         <item name="android:activityOpenExitAnimation">@anim/dialog_out_no_anim</item>
         <item name="android:activityCloseEnterAnimation">@anim/dialog_in_no_anim</item>
         <item name="android:activityCloseExitAnimation">@anim/dialog_out_no_anim</item>
+    </style>
+
+    <style name="dialogNoAnim" mce_bogus="1" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@null</item>
+        <item name="android:windowExitAnimation">@null</item>
     </style>
 </resources>

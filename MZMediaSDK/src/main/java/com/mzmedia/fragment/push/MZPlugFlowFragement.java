@@ -1,21 +1,19 @@
 package com.mzmedia.fragment.push;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
-import android.os.Message;
+import android.os.UserManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,46 +23,44 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mengzhu.live.sdk.R;
-import com.mengzhu.live.sdk.business.dto.AnchorInfoDto;
-import com.mengzhu.live.sdk.business.dto.BaseDto;
+import com.mengzhu.sdk.R;
 import com.mengzhu.live.sdk.business.dto.MZOnlineUserListDto;
-import com.mengzhu.live.sdk.business.dto.UserDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatMessageDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatTextDto;
 import com.mengzhu.live.sdk.business.dto.chat.impl.ChatCmdDto;
 import com.mengzhu.live.sdk.business.dto.chat.impl.ChatOnlineDto;
 import com.mengzhu.live.sdk.business.dto.play.PlayInfoDto;
-import com.mengzhu.live.sdk.business.presenter.IBasePresenterLinstener;
 import com.mengzhu.live.sdk.business.presenter.chat.ChatMessageObserver;
-import com.mengzhu.live.sdk.core.netwock.Page;
-import com.mengzhu.live.sdk.core.restreaming.ws.StreamAVOption;
 import com.mengzhu.live.sdk.ui.api.MZApiDataListener;
 import com.mengzhu.live.sdk.ui.api.MZApiRequest;
 import com.mengzhu.live.sdk.ui.chat.MZChatManager;
 import com.mengzhu.live.sdk.ui.chat.MZChatMessagerListener;
-import com.mengzhu.live.sdk.ui.push.MZPushManager;
-import com.mengzhu.live.sdk.ui.push.PushStreamingListener;
-import com.mengzhu.live.sdk.ui.push.StreamLiveCameraView;
-import com.mengzhu.sdk.download.util.ScreenUtil;
 import com.mzmedia.IPushClickListener;
 import com.mzmedia.fragment.PlayerChatListFragment;
 import com.mzmedia.presentation.dto.LiveConfigDto;
-import com.mzmedia.presentation.presenter.stop.StopBroadcastPresenter;
 import com.mzmedia.utils.ActivityUtils;
 import com.mzmedia.utils.String_Utils;
 import com.mzmedia.widgets.ChatOnlineView;
 import com.mzmedia.widgets.CircleImageView;
-import com.mzmedia.widgets.player.PlayerGoodsPushView;
-import com.mzmedia.widgets.player.PlayerGoodsView;
+import com.mzmedia.widgets.popupwindow.PersonListPopupWindow;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import tv.mengzhu.core.module.model.dto.BaseDto;
+import tv.mengzhu.core.wrap.netwock.Page;
+import tv.mengzhu.core.wrap.user.modle.UserDto;
+import tv.mengzhu.core.wrap.user.presenter.MyUserInfoPresenter;
+import tv.mengzhu.restreaming.push.MZPushManager;
+import tv.mengzhu.restreaming.push.PushStreamingListener;
+import tv.mengzhu.restreaming.push.StreamLiveCameraView;
+import tv.mengzhu.restreaming.ws.StreamAVOption;
 
 public class MZPlugFlowFragement extends Fragment implements View.OnClickListener {
     private StreamLiveCameraView streamLiveCameraView;
@@ -118,7 +114,7 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
 
     private PlayInfoDto mPlayInfoDto;
     private LiveConfigDto mLiveConfigDto;
-    private List<String> personAvatars = new ArrayList<>(); //用户头像组
+    private List<MZOnlineUserListDto> personAvatars = new ArrayList<>(); //用户头像组
     private DisplayImageOptions avatarOptions;
     private Activity mActivity;
     private FragmentTransaction fragmentTransaction;
@@ -278,9 +274,8 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
         bundle.putSerializable(PlayerChatListFragment.PLAY_INFO_KEY, mPlayInfoDto);
         mChatFragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.push_layout_activity_live_broadcast_chat, mChatFragment).commitAllowingStateLoss();
-        mPushTvNickName.setText("test");
-        mPushTvPopular.setText("人气999");
-        ImageLoader.getInstance().displayImage("https://avatars3.githubusercontent.com/u/13464940?s=60&v=4" + String_Utils.getPictureSizeAvatar(), mPushIvAvatar);
+        mPushTvNickName.setText(MyUserInfoPresenter.getInstance().getUserInfo().getNickname());
+        ImageLoader.getInstance().displayImage(MyUserInfoPresenter.getInstance().getUserInfo().getAvatar() + String_Utils.getPictureSizeAvatar(), mPushIvAvatar);
 
     }
     private void initListener(){
@@ -320,21 +315,26 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
         mzApiRequestOnline.setResultListener(new MZApiDataListener() {
             @Override
             public void dataResult(String apiType, Object dto) {
+                boolean isContainsMe = false;
                 List<MZOnlineUserListDto> mzOnlineUserListDto = (List<MZOnlineUserListDto>) dto;
-                if(mIPushClickListener!=null){
-                    mIPushClickListener.onOnlineNum(mzOnlineUserListDto);
-                }
-                if(personAvatars.size()>0){
-                    personAvatars.clear();
-                }
-                mPushTvOnline.setText(mzOnlineUserListDto.size() + "");
                 for (int i = 0; i < mzOnlineUserListDto.size(); i++) {
                     if (Long.parseLong(mzOnlineUserListDto.get(i).getUid()) < Long.parseLong("5000000000")) {
-                        personAvatars.add(mzOnlineUserListDto.get(i).getAvatar());
+                        personAvatars.add(mzOnlineUserListDto.get(i));
+                    }
+                    if (mzOnlineUserListDto.get(i).getUid().equals(mPlayInfoDto.getChat_uid())){
+                        isContainsMe = true;
                     }
                 }
+                if (!isContainsMe){
+                    MZOnlineUserListDto userListDto = new MZOnlineUserListDto();
+                    UserDto userInfoDto = MyUserInfoPresenter.getInstance().getUserInfo();
+                    userListDto.setUid(mPlayInfoDto.getChat_uid());
+                    userListDto.setAvatar(userInfoDto.getAvatar());
+                    userListDto.setNickname(userInfoDto.getNickname());
+                    personAvatars.add(userListDto);
+                }
+                mPushTvOnline.setText(personAvatars.size() + "");
                 initOnlineAvatar();
-
             }
 
             @Override
@@ -387,7 +387,7 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
         mzApiRequestAllChat.startData(MZApiRequest.API_TYPE_ROOM_ALLOWCHATALL,mPlayInfoDto.getTicket_id(),mPlayInfoDto.getChannel_id(),isAllChat?0:1);
     }
 
-    private class MZPushStreamListener implements PushStreamingListener{
+    private class MZPushStreamListener implements PushStreamingListener {
         //截屏
         @Override
         public void onScreenShotResult(Bitmap bitmap) {
@@ -531,8 +531,16 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
             }
         }
         if(v.getId() == R.id.push_tv_playerfragment_person){
-            //请求在线人数api
-            mzApiRequestOnline.startData(MZApiRequest.API_TYPE_ONLINE_USER_LIST, true, ticketId);
+            PersonListPopupWindow personListPopupWindow = new PersonListPopupWindow(mActivity , mPlayInfoDto.getTicket_id());
+            personListPopupWindow.showAtLocation(mPushLiveContent , Gravity.CENTER , 0 , 0);
+            personListPopupWindow.setOnPersonListClickCallBack(new PersonListPopupWindow.PersonListClickedCallBack() {
+                @Override
+                public void onPersonItemClicked(MZOnlineUserListDto onlineUserListDto) {
+                    if(mIPushClickListener!=null){
+                        mIPushClickListener.onOnlineNum(onlineUserListDto);
+                    }
+                }
+            });
         }
         if(v.getId() == R.id.push_civ_playerfragment_avatar){
             if(mIPushClickListener!=null){
@@ -594,12 +602,28 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
                     ChatOnlineDto mChatOnline = (ChatOnlineDto) mBase;
 //                    mTotalPerson = mChatOnline.getConcurrent_user();
                     mPushChatOnlineView.startOnline(getActivity(), mChatMessage);
-                    current++;
+
                     try {
-                        mPushTvOnline.setText(String_Utils.convert2W0_0(current + ""));
-                        if (Long.parseLong(mChatMessage.getText().getUser_id()) < Long.parseLong("5000000000")) {
-                            personAvatars.add(mChatText.getAvatar());
+                        boolean isContainsMe = false;
+                        for (int i = 0; i < personAvatars.size(); i++) {
+                            if (personAvatars.get(i).getUid().equals(mChatMessage.getText().getUser_id())){
+                                isContainsMe = true;
+                            }
                         }
+                        if (isContainsMe){
+                            break;
+                        }
+                        if (Long.parseLong(mChatMessage.getText().getUser_id()) < Long.parseLong("5000000000")) {
+                            MZOnlineUserListDto dto = new MZOnlineUserListDto();
+                            dto.setUid(mChatMessage.getText().getUser_id());
+                            dto.setAvatar(mChatText.getAvatar());
+                            dto.setIs_gag(mChatOnline.getIs_gag());
+                            dto.setRole_name(mChatOnline.getRole());
+                            dto.setNickname(mChatText.getUser_name());
+                            personAvatars.add(dto);
+                        }
+                        current++;
+                        mPushTvOnline.setText(String_Utils.convert2W0_0(current + ""));
                         initOnlineAvatar();
                     } catch (Exception e) {
                     }
@@ -611,7 +635,13 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
                     current--;
                     try {
                         mPushTvOnline.setText(String_Utils.convert2W0_0(current + ""));
-                        personAvatars.remove(mChatText.getAvatar());
+                        Iterator<MZOnlineUserListDto> iterator = personAvatars.iterator();
+                        while (iterator.hasNext()){
+                            MZOnlineUserListDto userListDto = iterator.next();
+                            if (userListDto.getUid().equals(mChatText.getUser_id())){
+                                iterator.remove();
+                            }
+                        }
                         initOnlineAvatar();
                     } catch (Exception e) {
                     }
@@ -660,21 +690,21 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
             mPushOnlinePersonIv1.setVisibility(View.VISIBLE);
             mPushOnlinePersonIv2.setVisibility(View.VISIBLE);
             mPushOnlinePersonIv3.setVisibility(View.VISIBLE);
-            ImageLoader.getInstance().displayImage(personAvatars.get(personAvatars.size() - 1), mPushOnlinePersonIv1, avatarOptions);
-            ImageLoader.getInstance().displayImage(personAvatars.get(personAvatars.size() - 2), mPushOnlinePersonIv2, avatarOptions);
-            ImageLoader.getInstance().displayImage(personAvatars.get(personAvatars.size() - 3), mPushOnlinePersonIv3, avatarOptions);
+            ImageLoader.getInstance().displayImage(personAvatars.get(personAvatars.size() - 1).getAvatar(), mPushOnlinePersonIv1, avatarOptions);
+            ImageLoader.getInstance().displayImage(personAvatars.get(personAvatars.size() - 2).getAvatar(), mPushOnlinePersonIv2, avatarOptions);
+            ImageLoader.getInstance().displayImage(personAvatars.get(personAvatars.size() - 3).getAvatar(), mPushOnlinePersonIv3, avatarOptions);
         } else if (personAvatars.size() == 2) {
             mPushOnlinePersonIv1.setVisibility(View.VISIBLE);
             mPushOnlinePersonIv2.setVisibility(View.VISIBLE);
             mPushOnlinePersonIv3.setVisibility(View.GONE);
-            ImageLoader.getInstance().displayImage(personAvatars.get(personAvatars.size() - 1), mPushOnlinePersonIv1, avatarOptions);
-            ImageLoader.getInstance().displayImage(personAvatars.get(personAvatars.size() - 2), mPushOnlinePersonIv2, avatarOptions);
+            ImageLoader.getInstance().displayImage(personAvatars.get(personAvatars.size() - 1).getAvatar(), mPushOnlinePersonIv1, avatarOptions);
+            ImageLoader.getInstance().displayImage(personAvatars.get(personAvatars.size() - 2).getAvatar(), mPushOnlinePersonIv2, avatarOptions);
 
         } else if (personAvatars.size() == 1) {
             mPushOnlinePersonIv1.setVisibility(View.VISIBLE);
             mPushOnlinePersonIv2.setVisibility(View.GONE);
             mPushOnlinePersonIv3.setVisibility(View.GONE);
-            ImageLoader.getInstance().displayImage(personAvatars.get(personAvatars.size() - 1), mPushOnlinePersonIv1, avatarOptions);
+            ImageLoader.getInstance().displayImage(personAvatars.get(personAvatars.size() - 1).getAvatar(), mPushOnlinePersonIv1, avatarOptions);
         }
     }
 

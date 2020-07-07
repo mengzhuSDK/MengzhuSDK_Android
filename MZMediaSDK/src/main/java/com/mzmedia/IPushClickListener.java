@@ -34,5 +34,5 @@ public interface IPushClickListener {
     /**
      * 点击在线人数
      */
-    void onOnlineNum(List<MZOnlineUserListDto> mzOnlineUserListDto);
+    void onOnlineNum(MZOnlineUserListDto mzOnlineUserListDto);
 }

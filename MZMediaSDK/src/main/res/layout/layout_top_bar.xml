@@ -19,7 +19,7 @@
             android:padding="10dp"
             android:src="@mipmap/icon_back"/>
 
-        <com.mengzhu.live.sdk.business.view.widgets.MarqueeTextView
+        <tv.mengzhu.sdk.module.MarqueeTextView
             android:id="@+id/tv_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

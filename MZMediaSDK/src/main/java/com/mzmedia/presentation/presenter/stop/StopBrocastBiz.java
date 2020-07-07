@@ -2,14 +2,13 @@ package com.mzmedia.presentation.presenter.stop;
 
 import android.content.Context;
 
-import com.mengzhu.core.base.datainterface.BaseLoadListener;
-import com.mengzhu.core.base.datainterface.IDao;
-import com.mengzhu.core.base.datainterface.impl.support.Result;
-import com.mengzhu.live.sdk.core.netwock.BazaarPostDao;
-import com.mengzhu.live.sdk.core.netwock.Paths;
-import com.mengzhu.sdk.download.config.CommonConstant;
 import com.mzmedia.presentation.biz.IBaseBiz;
 import com.mzmedia.presentation.biz.IBaseBizListener;
+
+import tv.mengzhu.core.frame.base.datainterface.BaseLoadListener;
+import tv.mengzhu.core.frame.base.datainterface.IDao;
+import tv.mengzhu.core.frame.base.datainterface.impl.support.Result;
+import tv.mengzhu.core.wrap.netwock.BazaarPostDao;
 
 /**
  * Created by sunjiale

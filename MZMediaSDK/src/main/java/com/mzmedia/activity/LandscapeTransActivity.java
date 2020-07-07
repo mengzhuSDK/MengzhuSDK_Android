@@ -21,19 +21,22 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mengzhu.live.sdk.R;
+import com.mengzhu.live.sdk.business.dto.chat.ChatMessageDto;
+import com.mengzhu.live.sdk.business.dto.chat.ChatTextDto;
+import com.mengzhu.sdk.R;
 import com.mengzhu.live.sdk.business.dto.StaticStateDto;
 import com.mengzhu.live.sdk.business.dto.chat.impl.ChatMegTxtDto;
 import com.mengzhu.live.sdk.business.dto.play.ChatConfDto;
 import com.mengzhu.live.sdk.business.presenter.IBasePresenterLinstener;
-import com.mengzhu.live.sdk.business.presenter.MyUserInfoPresenter;
 import com.mengzhu.live.sdk.business.presenter.chat.ChatMessageObserver;
 import com.mengzhu.live.sdk.business.presenter.chat.ChatPresenter;
-import com.mengzhu.live.sdk.core.netwock.Page;
-import com.mengzhu.live.sdk.core.utils.Device;
 import com.mengzhu.live.sdk.core.utils.KeyBoardUtils;
 import com.mengzhu.live.sdk.ui.chat.MZChatManager;
 import com.mzmedia.utils.String_Utils;
+
+import tv.mengzhu.core.frame.coreutils.Device;
+import tv.mengzhu.core.wrap.netwock.Page;
+import tv.mengzhu.core.wrap.user.presenter.MyUserInfoPresenter;
 
 /**
  * Created by DELL on 2016/7/13.
@@ -254,11 +257,19 @@ public class LandscapeTransActivity extends Activity implements View.OnClickList
 
             if (manager != null) {
                 ChatMegTxtDto dto = new ChatMegTxtDto();
+                ChatTextDto textDto = new ChatTextDto();
+                ChatMessageDto chatMessageDto = new ChatMessageDto();
                 dto.setText(msg);
                 String avatar = MyUserInfoPresenter.getInstance().getUserInfo().getAvatar();
                 dto.setAvatar(avatar);
-                dto.setAccountNo(MyUserInfoPresenter.getInstance().getUserInfo().getAccountNo());
+                dto.setUniqueID(MyUserInfoPresenter.getInstance().getUserInfo().getUniqueID());
                 String name = MyUserInfoPresenter.getInstance().getUserInfo().getNickname();
+                textDto.setBaseDto(dto);
+                textDto.setAvatar(avatar);
+                textDto.setUser_name(name);
+                textDto.setEvent(ChatMessageObserver.MESSAGE_TYPE);
+                chatMessageDto.setText(textDto);
+                ChatMessageObserver.getInstance().sendMsgMonitor(ChatMessageObserver.MESSAGE_TYPE, chatMessageDto);
                 manager.registerAtPushListener(new IBasePresenterLinstener() {
                     @Override
                     public void dataResult(Object obj, Page page, int status) {

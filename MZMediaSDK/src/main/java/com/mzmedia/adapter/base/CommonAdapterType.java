@@ -6,10 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.mengzhu.live.sdk.business.dto.BaseItemDto;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import tv.mengzhu.core.module.model.dto.BaseItemDto;
 
 public class CommonAdapterType<T extends BaseItemDto> extends BaseAdapter {
 

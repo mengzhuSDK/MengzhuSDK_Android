@@ -22,17 +22,17 @@
     <color name="seek_ball">#ffffffff</color>
     <color name="seek_progresss">#4b4b4b</color>
 
-    <color name="media_quality_selected">#ccec407a</color>
-    <color name="video_skip">#ffffff</color>
 
-    <color name="text_hint">#55ffffff</color>
-    <color name="text_content">#ffffff</color>
 
     <color name="background_gray">#ffa5a5a5</color>
     <color name="background_gray_light">#ffbababa</color>
 
     <color name="recover_screen_text">#f06292</color>
     <color name="white">#ffffff</color>
+    <color name="white_60">#99ffffff</color>
+    <color name="white_e6">#e6ffffff</color>
+    <color name="color_f6f6f6">#f6f6f6</color>
+    <color name="yellow_main">#ffd229</color>
     <color name="transparent">#00000000</color>
     <color name="color_dddddd">#dddddd</color>
     <color name="color_999999">#999999</color>
@@ -53,10 +53,17 @@
     <color name="color_FF174B">#FFFF174B</color>
     <color name="color_9cFF174B">#9cFF174B</color>
     <color name="color_33FF4141">#33FF4141</color>
+    <color name="color_cc000000">#cc000000</color>
+    <color name="color_66000000">#66000000</color>
     <color name="color_ff4141">#ff4141</color>
     <color name="color_000000">#000000</color>
     <color name="crop__selector_pressed">#1a000000</color>
     <color name="crop_99FFFFFF">#99FFFFFF</color>
     <color name="color_50E3C2">#50E3C2</color>
+    <color name="color_26324CAE">#26324CAE</color>
+    <color name="color_26ff2145">#26ff2145</color>
+    <color name="color_ff2145">#ff2145</color>
+    <color name="color_ff5b29">#ff5b29</color>
+    <color name="color_fff45c">#fff45c</color>
 
 </resources>

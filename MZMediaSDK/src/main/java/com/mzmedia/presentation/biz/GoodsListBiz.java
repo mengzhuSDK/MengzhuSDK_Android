@@ -2,11 +2,12 @@ package com.mzmedia.presentation.biz;
 
 import android.content.Context;
 
-import com.mengzhu.core.base.datainterface.BaseLoadListener;
-import com.mengzhu.core.base.datainterface.IDao;
-import com.mengzhu.core.base.datainterface.impl.support.Result;
-import com.mengzhu.live.sdk.core.netwock.BazaarGetDao;
 import com.mzmedia.presentation.dto.MallGoodsListDto;
+
+import tv.mengzhu.core.frame.base.datainterface.BaseLoadListener;
+import tv.mengzhu.core.frame.base.datainterface.IDao;
+import tv.mengzhu.core.frame.base.datainterface.impl.support.Result;
+import tv.mengzhu.core.wrap.netwock.BazaarGetDao;
 
 /**
  * @author max

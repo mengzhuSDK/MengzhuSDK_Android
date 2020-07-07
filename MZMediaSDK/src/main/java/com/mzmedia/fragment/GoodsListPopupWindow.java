@@ -3,6 +3,7 @@ package com.mzmedia.fragment;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,11 +12,14 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mengzhu.live.sdk.R;
+import com.mengzhu.live.sdk.core.utils.DensityUtil;
+import com.mengzhu.live.sdk.core.utils.UiUtils;
+import com.mengzhu.sdk.R;
 import com.mengzhu.live.sdk.business.dto.MZGoodsListDto;
 import com.mengzhu.live.sdk.business.dto.MZGoodsListExternalDto;
 import com.mengzhu.live.sdk.ui.api.MZApiDataListener;
@@ -43,6 +47,7 @@ public class GoodsListPopupWindow extends AbstractPopupWindow {
     private RecyclerView mRecyclerView;
     private TextView tv_dialog_goods_title;
     private ImageView iv_dialog_goods_close;
+    private LinearLayout goodsLayout;
     private boolean isShowNoMoreLabel;
     private MZApiRequest apiRequest;
     private static OnGoodsLoadListener mOnGoodsLoadListener;
@@ -54,6 +59,15 @@ public class GoodsListPopupWindow extends AbstractPopupWindow {
         super(context);
         this.mContext = context;
         root = View.inflate(context, R.layout.fragment_goodslist_list, null);
+        goodsLayout = root.findViewById(R.id.ll_goods_layout);
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) goodsLayout.getLayoutParams();
+        params.width = RelativeLayout.LayoutParams.MATCH_PARENT;
+        if (UiUtils.getOrientation(context) == Configuration.ORIENTATION_LANDSCAPE){
+            params.height = DensityUtil.dip2px(context ,240);
+        }else {
+            params.height = DensityUtil.dip2px(context ,413);
+        }
+        goodsLayout.setLayoutParams(params);
         exitAnim = AnimationUtils.loadAnimation(context, R.anim.side_bottom_exit);
         enterAnim = AnimationUtils.loadAnimation(context, R.anim.side_bottom_enter);
         setContentView(root);

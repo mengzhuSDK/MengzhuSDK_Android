@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.mengzhu.live.sdk.R;
+import com.mengzhu.sdk.R;
 import com.mengzhu.live.sdk.business.dto.chat.ChatMessageDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatTextDto;
 import com.mengzhu.live.sdk.business.dto.chat.impl.ChatMegTxtDto;
@@ -33,7 +33,7 @@ public class PlayerChatRightWrap extends BaseViewObtion {
     public View createView(Object o, int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             mHolder = new ViewHolder();
-            convertView = View.inflate(mContext, R.layout.mz_player_chat_right_item, null);
+            convertView = View.inflate(mContext, isHalfPlayer?R.layout.mz_halfplayer_chat_right_item : R.layout.mz_player_chat_right_item, null);
             mHolder.mPlayerChatRightLayout = convertView.findViewById(R.id.player_chat_right_layout);
             mHolder.mPlayerChatRightIcon = convertView.findViewById(R.id.player_chat_right_icon);
             mHolder.mPlayerChatRightContent = convertView.findViewById(R.id.player_chat_right_content);
@@ -78,9 +78,14 @@ public class PlayerChatRightWrap extends BaseViewObtion {
     }
 
     private boolean isLandscape;
+    private boolean isHalfPlayer;
 
     public void setIsLandscape(boolean isLandscape) {
         this.isLandscape = isLandscape;
+    }
+
+    public void setHalfPlayer(boolean halfPlayer) {
+        isHalfPlayer = halfPlayer;
     }
 
     class OnItemtClick implements View.OnClickListener {

@@ -5,10 +5,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.mengzhu.live.sdk.R;
+import com.mengzhu.sdk.R;
 import com.mengzhu.live.sdk.business.dto.chat.ChatMessageDto;
 import com.mengzhu.live.sdk.business.dto.chat.impl.ChatNoticeDto;
-import com.mengzhu.live.sdk.business.dto.play.PlayInfoDto;
 import com.mzmedia.adapter.base.BaseViewObtion;
 
 

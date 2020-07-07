@@ -8,9 +8,10 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.BaseAdapter;
 
-import com.mengzhu.live.sdk.business.dto.BaseItemDto;
 import com.mzmedia.adapter.base.CommonAdapterType;
 import com.mzmedia.widgets.LinearLayoutListView.ViewCache;
+
+import tv.mengzhu.core.module.model.dto.BaseItemDto;
 
 /**
  * Created by DELL on 2016/7/8.

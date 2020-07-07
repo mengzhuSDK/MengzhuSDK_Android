@@ -11,7 +11,6 @@ import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
@@ -20,11 +19,7 @@ import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import com.mengzhu.live.sdk.R;
-
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
+import com.mengzhu.sdk.R;
 
 
 /**

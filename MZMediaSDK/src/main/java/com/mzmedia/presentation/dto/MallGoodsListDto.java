@@ -1,8 +1,9 @@
 package com.mzmedia.presentation.dto;
 
-import com.mengzhu.live.sdk.business.dto.BaseDto;
 
 import java.util.List;
+
+import tv.mengzhu.core.module.model.dto.BaseDto;
 
 /**
  * @author xiefei

@@ -1,10 +1,10 @@
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.mengzhu.live.sdk.business.view.widgets.MZVideoView
+    <tv.mengzhu.sdk.module.MZPlayerView
         android:id="@+id/video_playerfragment_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
@@ -82,9 +82,32 @@
                             android:maxLines="1"
                             android:text="--"
                             android:textColor="@color/white"
-                            android:textSize="13sp"
+                            android:textSize="12sp"
                             app:layout_constraintLeft_toRightOf="@id/civ_playerfragment_avatar"
                             app:layout_constraintTop_toTopOf="@id/civ_playerfragment_avatar" />
+
+                        <TextView
+                            android:id="@+id/tv_playerfragment_livetype_tag"
+                            android:layout_width="3dp"
+                            android:layout_height="3dp"
+                            android:gravity="center"
+                            android:background="@drawable/shape_video_type_ball"
+                            app:layout_constraintLeft_toLeftOf="@id/tv_playerfragment_nickname"
+                            app:layout_constraintBottom_toBottomOf="@id/tv_playerfragment_livetype"
+                            app:layout_constraintTop_toTopOf="@id/tv_playerfragment_livetype" />
+
+                        <TextView
+                            android:id="@+id/tv_playerfragment_livetype"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:maxLines="1"
+                            android:text="回放"
+                            android:paddingLeft="2dp"
+                            android:paddingRight="5dp"
+                            android:textColor="@color/white"
+                            android:textSize="10sp"
+                            app:layout_constraintLeft_toRightOf= "@id/tv_playerfragment_livetype_tag"
+                            app:layout_constraintTop_toBottomOf="@id/tv_playerfragment_nickname" />
 
                         <TextView
                             android:id="@+id/tv_playerfragment_popularity"
@@ -94,9 +117,21 @@
                             android:maxEms="5"
                             android:maxLines="1"
                             android:text="人气--"
+                            android:paddingLeft="5dp"
                             android:textColor="@color/white"
                             android:textSize="10sp"
-                            app:layout_constraintLeft_toLeftOf="@id/tv_playerfragment_nickname"
+                            app:layout_constraintLeft_toRightOf="@id/tv_playerfragment_line"
+                            app:layout_constraintTop_toBottomOf="@id/tv_playerfragment_nickname" />
+
+                        <TextView
+                            android:id="@+id/tv_playerfragment_line"
+                            android:layout_width="0.5dp"
+                            android:layout_height="8dp"
+                            android:background="@color/white"
+                            android:gravity="center"
+                            app:layout_constraintTop_toTopOf="@id/tv_playerfragment_livetype"
+                            app:layout_constraintBottom_toBottomOf="@id/tv_playerfragment_livetype"
+                            app:layout_constraintLeft_toRightOf="@id/tv_playerfragment_livetype"
                             app:layout_constraintTop_toBottomOf="@id/tv_playerfragment_nickname" />
 
                         <TextView
@@ -120,7 +155,7 @@
                         android:layout_height="40dp"
                         android:layout_alignParentRight="true"
                         android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
+                        android:layout_marginRight="8dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
@@ -192,6 +227,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <RelativeLayout
+        android:id="@+id/rl_activity_chat_bottom"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -331,15 +367,42 @@
             android:layout_above="@+id/rl_activity_live_broadcast_bottom_group"
             android:layout_alignParentRight="true" />
 
-        <ImageView
-            android:id="@+id/iv_playerfragment_report"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <LinearLayout
+            android:id="@+id/iv_playerfragment_config_layout"
+            android:layout_width="72dp"
+            android:layout_height="78dp"
             android:layout_above="@+id/rl_activity_live_broadcast_bottom_group"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="95dp"
-            android:src="@mipmap/gm_icon_report"
-            android:visibility="gone" />
+            android:layout_marginEnd="110dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/bg_video_config_layout"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_playerfragment_danmaku_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dimen_10"
+                android:drawableLeft="@mipmap/ic_danmaku_open"
+                android:gravity="center"
+                android:text="弹幕"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_playerfragment_report"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dimen_10"
+                android:layout_marginLeft="@dimen/dimen_10"
+                android:layout_marginRight="@dimen/dimen_10"
+                android:drawableLeft="@mipmap/icon_repot"
+                android:gravity="center"
+                android:text="举报"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+        </LinearLayout>
     </RelativeLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+</FrameLayout>

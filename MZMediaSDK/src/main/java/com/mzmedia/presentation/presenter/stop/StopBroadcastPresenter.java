@@ -4,9 +4,10 @@ import android.content.Context;
 
 import com.mengzhu.live.sdk.business.presenter.IBasePresenter;
 import com.mengzhu.live.sdk.business.presenter.IBasePresenterLinstener;
-import com.mengzhu.live.sdk.core.netwock.Page;
 import com.mzmedia.presentation.biz.IBaseBiz;
 import com.mzmedia.presentation.biz.IBaseBizListener;
+
+import tv.mengzhu.core.wrap.netwock.Page;
 
 /**
  * Created by sunjiale

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.mengzhu.live.sdk.ui.push.StreamLiveCameraView
+    <tv.mengzhu.restreaming.push.StreamLiveCameraView
         android:id="@+id/push_stream_previewView"
         android:layout_width="match_parent"
         android:background="@color/color_000000"

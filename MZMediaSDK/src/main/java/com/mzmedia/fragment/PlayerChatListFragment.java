@@ -6,21 +6,18 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
-import com.mengzhu.live.sdk.R;
-import com.mengzhu.live.sdk.business.dto.BaseItemDto;
+import com.mengzhu.sdk.R;
 import com.mengzhu.live.sdk.business.dto.chat.ChatMessageDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatTextDto;
 import com.mengzhu.live.sdk.business.dto.chat.impl.ChatCompleteDto;
 import com.mengzhu.live.sdk.business.dto.play.PlayInfoDto;
 import com.mengzhu.live.sdk.business.presenter.chat.ChatMessageObserver;
-import com.mengzhu.live.sdk.core.netwock.Page;
 import com.mengzhu.live.sdk.ui.chat.MZChatManager;
 import com.mengzhu.live.sdk.ui.chat.MZChatMessagerListener;
 import com.mzmedia.adapter.base.CommonAdapterType;
@@ -31,6 +28,9 @@ import com.mzmedia.widgets.PlayerChatLayout;
 import com.mzmedia.widgets.WithScrollChangeScrollView;
 
 import java.util.List;
+
+import tv.mengzhu.core.module.model.dto.BaseItemDto;
+import tv.mengzhu.core.wrap.netwock.Page;
 
 /**
  * Created by DELL on 2016/7/8.
@@ -45,9 +45,11 @@ public class PlayerChatListFragment extends BaseFragement implements MZChatMessa
     //    private ChatPresenter mChatPresenter;
     private WithScrollChangeScrollView mPayerScroll;
     public static final String PLAY_TYPE_KEY = "play_type_key";
+    public static final String UI_TYPE_KEY = "UI_type_key";
     public static final String PLAY_INFO_KEY = "PLAY_INFO_KEY";
     private PlayInfoDto mPlayInfoDto;
     private boolean isPush = false;
+    private boolean isHalfPlayer = false;
     private boolean isVoiceChat = false;
     public static final String AUDIO_VOICE_CHAT = "audio_voice_chat";
     private ImageView mVoiceChatTopBg;
@@ -71,6 +73,7 @@ public class PlayerChatListFragment extends BaseFragement implements MZChatMessa
         Bundle bundle = getArguments();
         if (bundle != null) {
             isPush = bundle.getBoolean(PLAY_TYPE_KEY, false);
+            isHalfPlayer = bundle.getBoolean(UI_TYPE_KEY, false);
             mPlayInfoDto = (PlayInfoDto) getArguments().getSerializable(PLAY_INFO_KEY);
             isVoiceChat = getArguments().getBoolean(AUDIO_VOICE_CHAT, false);
         }
@@ -89,7 +92,9 @@ public class PlayerChatListFragment extends BaseFragement implements MZChatMessa
         mRightWrap = new PlayerChatRightWrap(getActivity());
         mNoticeWrap=new PlayerChatNoticeWrap(getActivity());
         mRightWrap.setIsLandscape(isPush);
+        mRightWrap.setHalfPlayer(isHalfPlayer);
         mLeltWrap.setIsLandscape(isPush);
+        mLeltWrap.setHalfPlayer(isHalfPlayer);
         mAdapter.addViewObtains(ChatMessageDto.CHAT_LELT_WRAP, mLeltWrap);
         mAdapter.addViewObtains(ChatMessageDto.CHAT_RRIGHT_WRAP, mRightWrap);
         mAdapter.addViewObtains(ChatMessageDto.CHAT_NOTICE_WRAP,mNoticeWrap);
