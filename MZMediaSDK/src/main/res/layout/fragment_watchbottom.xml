@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rl_activity_chat_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <ImageView
+            android:id="@+id/iv_activity_live_broadcast_push"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:visibility="gone" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="50dp"
+            android:orientation="vertical">
+            <FrameLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
+                <!--聊天信息-->
+                <!-- 适配p9不显示商品view weight设为1-->
+                <FrameLayout
+                    android:id="@+id/layout_activity_live_broadcast_chat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="7dp" />
+                <!--上下线消息-->
+                <com.mzmedia.widgets.ChatOnlineView
+                    android:id="@+id/player_chat_list_online_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dimen_10" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dimen_11"
+                android:layout_marginLeft="@dimen/dimen_12">
+
+                <com.mzmedia.widgets.player.PlayerGoodsPushView
+                    android:id="@+id/live_broadcast_goods_push_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.mzmedia.widgets.player.PlayerGoodsView
+                    android:id="@+id/live_broadcast_goods_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </FrameLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/iv_playerfragment_config_layout"
+            android:layout_width="72dp"
+            android:layout_height="78dp"
+            android:layout_above="@+id/rl_activity_live_broadcast_bottom_group"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="110dp"
+            android:background="@drawable/bg_video_config_layout"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_playerfragment_danmaku_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dimen_10"
+                android:drawableLeft="@mipmap/ic_danmaku_open"
+                android:gravity="center"
+                android:text="弹幕"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_playerfragment_report"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dimen_10"
+                android:layout_marginLeft="@dimen/dimen_10"
+                android:layout_marginRight="@dimen/dimen_10"
+                android:drawableLeft="@mipmap/icon_repot"
+                android:gravity="center"
+                android:text="举报"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_activity_live_broadcast_bottom_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/iv_activity_live_broadcast_push"
+            android:layout_toRightOf="@+id/iv_activity_live_broadcast_push"
+            android:orientation="horizontal"
+            android:paddingBottom="12dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp">
+
+            <ImageView
+                android:id="@+id/iv_playerfragment_config"
+                android:layout_width="@dimen/dimen_44"
+                android:layout_height="@dimen/dimen_44"
+                android:layout_marginRight="12dp"
+                android:layout_toLeftOf="@+id/iv_playerfragment_share"
+                android:src="@mipmap/mz_icon_config" />
+
+            <ImageView
+                android:id="@+id/iv_playerfragment_share"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginRight="12dp"
+                android:layout_toLeftOf="@+id/iv_playerfragment_zan"
+                android:src="@mipmap/gm_icon_share" />
+
+
+            <ImageView
+                android:id="@+id/iv_playerfragment_zan"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/gm_icon_zan" />
+
+
+            <RelativeLayout
+                android:id="@+id/rl_playerfragment_send_chat"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_44"
+                android:layout_marginLeft="14dp"
+                android:layout_marginRight="8dp"
+                android:layout_toLeftOf="@+id/iv_playerfragment_config"
+                android:layout_toRightOf="@+id/iv_player_fragment_goods"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:src="@drawable/bg_gm_live_senf_line" />
+
+                <TextView
+                    android:id="@+id/tv_playerfragment_chat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:drawablePadding="@dimen/dimen_8"
+                    android:text="@string/talk_to_up"
+                    android:textColor="@color/crop_99FFFFFF"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/iv_player_fragment_goods"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/gm_icon_goods"
+                android:gravity="center_horizontal"
+                android:paddingTop="21dp"
+                android:textColor="@color/white" />
+
+
+        </RelativeLayout>
+
+        <com.mzmedia.widgets.LoveLayout
+            android:id="@+id/love_playerfragment_layout"
+            android:layout_width="80dp"
+            android:layout_height="200dp"
+            android:layout_above="@+id/rl_activity_live_broadcast_bottom_group"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+</RelativeLayout>

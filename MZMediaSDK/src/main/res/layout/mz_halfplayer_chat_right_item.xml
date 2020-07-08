@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:paddingTop="10dp">
+
+
+    <LinearLayout
+        android:id="@+id/player_chat_right_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dimen_16">
+
+        <com.mzmedia.widgets.CircularImage
+            android:id="@+id/player_chat_right_icon"
+            android:layout_width="@dimen/dimen_32"
+            android:layout_height="@dimen/dimen_32"
+            android:scaleType="fitXY" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/player_chat_right_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/player_chat_right_layout"
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@id/player_chat_right_layout"
+        android:ellipsize="end"
+        android:lineSpacingExtra="2dp"
+        android:maxEms="6"
+        android:maxWidth="225.0dip"
+        android:singleLine="true"
+        android:text="name"
+        android:textColor="#94a5dd"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/player_chat_right_content"
+        android:background="@drawable/bg_chat_right_item_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/player_chat_right_username"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="6dp"
+        android:layout_toRightOf="@id/player_chat_right_layout"
+        android:clickable="true"
+        android:ellipsize="end"
+        android:focusable="true"
+        android:lineSpacingExtra="2dp"
+        android:maxLines="5"
+        android:paddingBottom="8dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_marginRight="@dimen/dimen_17"
+        android:paddingTop="8dp"
+        android:text="content"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+</RelativeLayout>

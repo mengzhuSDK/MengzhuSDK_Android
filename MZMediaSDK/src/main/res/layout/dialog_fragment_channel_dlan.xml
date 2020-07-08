@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/layout_dlan_outside"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"></LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_channel_dlan_dialog_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#ffffff">
+
+        <RelativeLayout
+            android:id="@+id/channel_goods_title_layout"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:id="@+id/dlna_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="选择投屏设备"
+                android:textColor="#3b475a"
+                android:textSize="16sp" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toEndOf="@+id/dlna_title"
+                android:layout_toRightOf="@+id/dlna_title">
+
+                <ProgressBar
+
+
+                    android:id="@+id/dlna_search_loading"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:indeterminateBehavior="repeat"
+                    android:indeterminateDrawable="@drawable/dialog_channel_dlna_loading" />
+
+                <ImageButton
+                    android:id="@+id/dlna_search_loading_btn"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:padding="@dimen/dimen_5"
+                    android:background="@drawable/channel_dlna_loading"
+                    android:gravity="center"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/dlan_bt_help"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="#00000000"
+                android:text="@string/playback_dlna_help"
+                android:textColor="@color/color_ff5b29"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/up_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/channel_goods_title_layout"
+            android:background="@color/cyan_main" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/iv_dialog_goods_close"
+            android:layout_below="@+id/up_line">
+
+            <ListView
+                android:id="@+id/lv_activity_dlan_tv_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="#00000000"
+                android:listSelector="#EDEDED" />
+
+            <TextView
+                android:id="@+id/lv_activity_dlan_tv_list_hint"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/dlna_loading_search"
+                android:textColor="#9b9b9b"
+                android:textSize="14sp"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_above="@+id/iv_dialog_goods_close"
+            android:background="@color/cyan_main" />
+        <TextView
+            android:id="@+id/iv_dialog_goods_close"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_alignParentBottom="true"
+            android:background="#ffffff"
+            android:gravity="center"
+            android:text="取消"
+            android:textColor="#2b2b2b"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+</RelativeLayout>
