@@ -173,18 +173,3 @@
      * 点击在线人数
      */
     void onOnlineNum(List<MZOnlineUserListDto> mzOnlineUserListDto);
-#### 推流SDK build.gradle配置
-    
-    api 'com.github.mengzhuSDK:MZKitLiveSDK:1.0.2'
-
-#### 下载SDK build.gradle配置
-  
-    api 'com.github.mengzhuSDK:MZKitDownloadSDK:1.0.5'
-    
-#### 项目build.gradle配置
-    
-![](https://s1.zmengzhu.com/upload/img/b5/e0/b5e074ae8ca9e0935a780c9f7246fe02.jpeg)    
-
-    repositories {
-      maven { url "https://jitpack.io"}
-    }
