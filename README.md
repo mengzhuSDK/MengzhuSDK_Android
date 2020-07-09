@@ -33,20 +33,27 @@
 支持商品列表  
 支持直播间信息获取  
 支持在线观众展示  
-支持主播信息获取  
+支持主播信息获取
+支持弹幕
+支持视频回放
+支持视频投屏
+支持添加防录屏
+支持视频小窗播放  
 
-# 4. 固定UI模板配置及实现方式
-#### 固定UI模板使用Module android-library方式提供，内部实现业务上提供的所有功能逻辑及UI。使用时将其library导入项目进行简单配置即可使用。具体配置代码请查看下发示例.
+# 4. 固定UI模板配置及实现方式(快速集成)
+#### 固定UI模板使用Module android-library方式提供，内部实现业务上提供的所有功能逻辑及UI的模板。使用时将其library导入项目进行简单配置即可使用。具体配置代码请查看下发示例.如需自主研发UI及逻辑请参考开发指南及API文档。
 ###  4.1 manifest配置
 
-    <uses-feature android:name="android.hardware.camera"/>
-    <uses-feature android:name="android.hardware.camera.autofocus"/>
-    <uses-feature android:name="android.hardware.camera.flash"/>
-    <uses-feature android:glEsVersion="0x00020000" android:required="true"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.camera.flash" />
+    <uses-feature android:glEsVersion="0x00020000" android:required="true" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
     
 ###  4.2 build.gradle配置
     dependencies {
@@ -61,7 +68,7 @@
 #### 初始化关键数据
         //用户信息
     UserDto dto=new UserDto();
-    dto.setAccountNo(用户Id);
+    dto.setUniqueID(用户Id);
     dto.setAppid(appId);
     dto.setAvatar(头像地址);
     dto.setNickname(昵称);
@@ -83,12 +90,13 @@
 #### IPlayerClickListener介绍
     void onAvatarClick()//点击主播头像
     void onAttentionClick()//关注
-    void onOnlineClick()//在线人数
+    void onOnlineClick(MZOnlineUserListDto onlineUserDto);//在线人数
     void onCloseClick()//退出
     void onReportClick()//举报
     void onShareClick()//分享
     void onLikeClick()//点赞
     void onRecommendGoods()//推荐商品
+	void resultAnchorInfo(AnchorInfoDto anchorInfoDto);//主播信息接口回调
 ### 4.3.1推流SDK
 #### 推流Activity实现
         @Override
@@ -172,4 +180,40 @@
     /**
      * 点击在线人数
      */
-    void onOnlineNum(List<MZOnlineUserListDto> mzOnlineUserListDto);
+    void onOnlineNum(MZOnlineUserListDto mzOnlineUserListDto);
+#### SDK build.gradle配置
+    
+    api 'tv.mengzhu.core:MZCoreLibrary:2.1.0'
+    api 'tv.mengzhu.dlna:MZDLNAlibrary:2.1.0'
+    api 'tv.mengzhu.restreaming:MZPushFlowSDK:2.1.0'
+    api 'com.mengzhu.sdk.download:MZDownload:2.1.0'
+    api 'com.mengzhu.live.sdk:MZLiveSDK:2.1.0'
+    api 'tv.mengzhu.sdk:MZPlayer:2.1.0'
+    
+#### 如遇support包冲突
+    api ('tv.mengzhu.core:MZCoreLibrary:2.1.0'){
+        exclude group: 'com.android.support'
+    }
+    api ('tv.mengzhu.dlna:MZDLNAlibrary:2.1.0'){
+        exclude group: 'com.android.support'
+    }
+    api ('tv.mengzhu.restreaming:MZPushFlowSDK:2.1.0'){
+        exclude group: 'com.android.support'
+    }
+    api ('com.mengzhu.sdk.download:MZDownload:2.1.0'){
+        exclude group: 'com.android.support'
+    }
+    api ('com.mengzhu.live.sdk:MZLiveSDK:2.1.0'){
+        exclude group: 'com.android.support'
+    }
+    api ('tv.mengzhu.sdk:MZPlayer:2.1.0'){
+        exclude group: 'com.android.support'
+    }
+   
+#### 项目build.gradle配置
+    
+![](http://s1.t.zmengzhu.com/upload/img/14/18/1418d85fd2d572b33c492cbb22b9fb12.png)    
+
+    repositories {
+     maven { url 'http://maven.zmengzhu.com:46081/repository/mz-android-hosted/'}
+    }
