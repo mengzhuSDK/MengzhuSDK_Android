@@ -35,8 +35,8 @@
 支持在线观众展示  
 支持主播信息获取  
 
-# 4. 固定UI模板配置及实现方式(快速集成)
-#### 固定UI模板使用Module android-library方式提供，内部实现业务上提供的所有功能逻辑及UI的模板。使用时将其library导入项目进行简单配置即可使用。具体配置代码请查看下发示例.如需自主研发UI及逻辑请参考开发指南及API文档。
+# 4. 固定UI模板配置及实现方式
+#### 固定UI模板使用Module android-library方式提供，内部实现业务上提供的所有功能逻辑及UI。使用时将其library导入项目进行简单配置即可使用。具体配置代码请查看下发示例.
 ###  4.1 manifest配置
 
     <uses-feature android:name="android.hardware.camera"/>
