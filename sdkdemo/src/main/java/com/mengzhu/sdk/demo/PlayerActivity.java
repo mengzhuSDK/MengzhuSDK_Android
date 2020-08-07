@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.mengzhu.live.sdk.business.dto.AnchorInfoDto;
 import com.mengzhu.live.sdk.business.dto.MZGoodsListDto;
 import com.mengzhu.live.sdk.business.dto.MZOnlineUserListDto;
@@ -16,13 +17,12 @@ import com.mzmedia.IPlayerClickListener;
 import com.mzmedia.fragment.PlayerFragment;
 import com.mzmedia.utils.MUIImmerseUtils;
 
-import tv.mengzhu.sdk.module.MZPlayerManager;
 import tv.mengzhu.sdk.module.PlayerEventListener;
 
 /**
  * Created by DELL on 2018/10/12.
  */
-public class PlayerActivity extends AppCompatActivity implements IPlayerClickListener , PlayerEventListener {
+public class PlayerActivity extends AppCompatActivity implements IPlayerClickListener{
     private FragmentManager mFragmentManager;
     private PlayerFragment mPlayerFragment;
 
@@ -44,8 +44,6 @@ public class PlayerActivity extends AppCompatActivity implements IPlayerClickLis
         mFragmentManager = getSupportFragmentManager();
         mFragmentManager.beginTransaction().replace(R.id.container_activity_watch_broadcast, mPlayerFragment).commitAllowingStateLoss();
         mPlayerFragment.setIPlayerClickListener(this);
-        mPlayerFragment.setPlayerEventListener(this);
-
     }
 
     @Override
@@ -94,6 +92,7 @@ public class PlayerActivity extends AppCompatActivity implements IPlayerClickLis
     @Override
     public void onCloseClick(PlayInfoDto dto) {
         Toast.makeText(this, "点击退出", Toast.LENGTH_LONG).show();
+        finish();
     }
 
     @Override
@@ -134,36 +133,6 @@ public class PlayerActivity extends AppCompatActivity implements IPlayerClickLis
 
     @Override
     public void resultAnchorInfo(AnchorInfoDto anchorInfoDto) {
-        Toast.makeText(this, "回调主播信息数据" + anchorInfoDto.getNickname(), Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void hideAllEvent() {
-        mPlayerFragment.showAllEvent();
-    }
-
-    @Override
-    public void showAllEvent() {
-        mPlayerFragment.hideAllEvent();
-    }
-
-    @Override
-    public void onBackClick(boolean b) {
-
-    }
-
-    @Override
-    public void onPausePlayer() {
-
-    }
-
-    @Override
-    public void onStartPlayer() {
-
-    }
-
-    @Override
-    public void onForbid(boolean b) {
-
+//        Toast.makeText(this, "回调主播信息数据" + anchorInfoDto.getNickname(), Toast.LENGTH_LONG).show();
     }
 }

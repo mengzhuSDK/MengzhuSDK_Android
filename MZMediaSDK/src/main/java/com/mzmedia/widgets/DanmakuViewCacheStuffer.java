@@ -2,12 +2,9 @@ package com.mzmedia.widgets;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
-import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mengzhu.sdk.R;
@@ -19,7 +16,6 @@ import com.nostra13.universalimageloader.core.imageaware.NonViewAware;
 
 import java.lang.ref.WeakReference;
 
-import tv.mengzhu.core.frame.coreutils.DensityUtil;
 import tv.mengzhu.sdk.danmaku.controller.IDanmakuView;
 import tv.mengzhu.sdk.danmaku.danmaku.model.BaseDanmaku;
 import tv.mengzhu.sdk.danmaku.danmaku.model.android.AndroidDisplayer;

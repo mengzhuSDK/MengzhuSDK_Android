@@ -15,6 +15,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.mengzhu.live.sdk.business.dto.MZOnlineUserListDto;
+import com.mengzhu.live.sdk.business.dto.play.PlayInfoDto;
 import com.mengzhu.live.sdk.core.utils.DensityUtil;
 import com.mengzhu.live.sdk.ui.api.MZApiDataListener;
 import com.mengzhu.live.sdk.ui.api.MZApiRequest;
@@ -29,6 +30,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import java.util.ArrayList;
 import java.util.List;
 
+import tv.mengzhu.core.wrap.netwock.Page;
+import tv.mengzhu.core.wrap.user.modle.UserDto;
+import tv.mengzhu.core.wrap.user.presenter.MyUserInfoPresenter;
 
 
 /**
@@ -50,11 +54,13 @@ public class PersonListPopupWindow extends AbstractPopupWindow implements OnClic
     private PersonListClickedCallBack listener;
 
     private String mTicketId;
+    private PlayInfoDto mPlayInfoDto;
 
-    public PersonListPopupWindow(Context context,  String ticketId) {
+    public PersonListPopupWindow(Context context, PlayInfoDto playInfoDto) {
         super(context);
         this.context = context;
-        this.mTicketId = ticketId;
+        this.mPlayInfoDto = playInfoDto;
+        this.mTicketId = mPlayInfoDto.getTicket_id();
         View root = View.inflate(context, R.layout.popup_person_list, null);
         setContentView(root);
         mLayout = (LinearLayout) root.findViewById(R.id.ll_content);
@@ -74,7 +80,7 @@ public class PersonListPopupWindow extends AbstractPopupWindow implements OnClic
      * @author sunjiale
      * @description 初始化
      */
-    private boolean isHeader;
+    private boolean isHeader = true;
     private boolean isShowNoMoreLabel;
 
     private void initView(View root) {
@@ -152,10 +158,24 @@ public class PersonListPopupWindow extends AbstractPopupWindow implements OnClic
     }
 
     @Override
-    public void dataResult(String apiType, Object dto) {
+    public void dataResult(String apiType, Object dto, Page page, int status) {
         List<MZOnlineUserListDto> mzOnlineUserListDto = (List<MZOnlineUserListDto>) dto;
         if (isHeader){
             totalPersons.clear();
+            boolean isContainsMe = false;
+            for (int i = 0; i < mzOnlineUserListDto.size(); i++) {
+                if (mzOnlineUserListDto.get(i).getUid().equals(mPlayInfoDto.getChat_uid())){
+                    isContainsMe = true;
+                }
+            }
+            if (!isContainsMe){
+                MZOnlineUserListDto userListDto = new MZOnlineUserListDto();
+                UserDto userInfoDto = MyUserInfoPresenter.getInstance().getUserInfo();
+                userListDto.setUid(mPlayInfoDto.getChat_uid());
+                userListDto.setAvatar(userInfoDto.getAvatar());
+                userListDto.setNickname(userInfoDto.getNickname());
+                totalPersons.add(userListDto);
+            }
         }
         isShowNoMoreLabel = mzOnlineUserListDto != null && mzOnlineUserListDto.size() < 20;
         totalPersons.addAll(mzOnlineUserListDto);

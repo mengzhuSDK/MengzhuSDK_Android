@@ -10,7 +10,6 @@ import android.view.ViewConfiguration;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 
-
 import com.mzmedia.widgets.magicindicator.abs.IPagerNavigator;
 import com.mzmedia.widgets.magicindicator.buildins.UIUtil;
 

@@ -1,6 +1,5 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -17,7 +16,7 @@
             android:id="@+id/iv_activity_broadcast_live_over"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#80000000"/>
+            android:background="#000000"/>
         <TextView
             android:id="@+id/tv_activity_broadcast_live_over"
             android:layout_width="wrap_content"
@@ -250,7 +249,7 @@
             <FrameLayout
                 android:id="@+id/layout_activity_live_broadcast_chat"
                 android:layout_width="match_parent"
-                android:layout_height="106dp"
+                android:layout_height="226dp"
                 android:layout_marginBottom="7dp" />
 
             <FrameLayout

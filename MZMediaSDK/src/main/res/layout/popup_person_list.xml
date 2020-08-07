@@ -27,7 +27,7 @@
                 android:layout_weight="1.0"
                 android:drawableLeft="@drawable/yellow_point"
                 android:drawablePadding="6dp"
-                android:text="参与"
+                android:text="在线人数"
                 android:textSize="@dimen/dimen_18sp" />
 
             <ImageView

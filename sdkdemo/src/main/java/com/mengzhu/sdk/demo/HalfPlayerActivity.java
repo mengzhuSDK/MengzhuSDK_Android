@@ -27,7 +27,7 @@ import tv.mengzhu.sdk.module.PlayerEventListener;
 /**
  * Created by DELL on 2018/10/12.
  */
-public class HalfPlayerActivity extends AppCompatActivity implements IPlayerClickListener, PlayerEventListener {
+public class HalfPlayerActivity extends AppCompatActivity implements IPlayerClickListener {
     private FragmentManager mFragmentManager;
     private HalfPlayerFragment mPlayerFragment;
 
@@ -54,8 +54,6 @@ public class HalfPlayerActivity extends AppCompatActivity implements IPlayerClic
         mFragmentManager = getSupportFragmentManager();
         mFragmentManager.beginTransaction().replace(R.id.container_activity_watch_broadcast, mPlayerFragment).commitAllowingStateLoss();
         mPlayerFragment.setIPlayerClickListener(this);
-        mPlayerFragment.setPlayerEventListener(this);
-
     }
 
     @Override
@@ -87,92 +85,64 @@ public class HalfPlayerActivity extends AppCompatActivity implements IPlayerClic
      */
     @Override
     public void onAvatarClick(AnchorInfoDto dto) {
-        Toast.makeText(this, "国民实现点击主播头像", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "点击主播头像", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onAttentionClick(PlayInfoDto dto, TextView Attention) {
-        Toast.makeText(this, "国民实现点击关注", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "点击关注", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onOnlineClick(MZOnlineUserListDto onlineUserDto) {
-        Toast.makeText(this, "国民实现点击在线人数", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "点击在线人数", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onCloseClick(PlayInfoDto dto) {
-        Toast.makeText(this, "国民实现点击退出", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "点击退出", Toast.LENGTH_LONG).show();
+        finish();
     }
 
     @Override
     public void onReportClick(PlayInfoDto dto) {
-        Toast.makeText(this, "国民实现点击举报", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "点击举报", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onShareClick(PlayInfoDto dto) {
-        Toast.makeText(this, "国民实现点击分享", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "点击分享", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onLikeClick(PlayInfoDto dto, ImageView Like) {
 
-        Toast.makeText(this, "国民实现点击点赞", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "点击点赞", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onRecommendGoods(MZGoodsListDto dto) {
-        Toast.makeText(this, "国民实现点击推荐商品", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "点击推荐商品", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onGoodsListItem(MZGoodsListDto dto) {
-        Toast.makeText(this, "国民实现点击商品列表", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "点击商品列表", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onChatAvatar(ChatTextDto dto) {
-        Toast.makeText(this, "国民实现点击聊天用户头像", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "点击聊天用户头像", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onNotLogin(PlayInfoDto dto) {
-        Toast.makeText(this, "国民实现点击聊天未登录状态", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "点击聊天未登录状态", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void resultAnchorInfo(AnchorInfoDto anchorInfoDto) {
-        Toast.makeText(this, "回调主播信息数据" + anchorInfoDto.getNickname(), Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, "回调主播信息数据" + anchorInfoDto.getNickname(), Toast.LENGTH_LONG).show();
     }
 
-    @Override
-    public void hideAllEvent() {
-        mPlayerFragment.showAllEvent();
-    }
-
-    @Override
-    public void showAllEvent() {
-        mPlayerFragment.hideAllEvent();
-    }
-
-    @Override
-    public void onBackClick(boolean b) {
-
-    }
-
-    @Override
-    public void onPausePlayer() {
-
-    }
-
-    @Override
-    public void onStartPlayer() {
-
-    }
-
-    @Override
-    public void onForbid(boolean b) {
-
-    }
 }

@@ -5,8 +5,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mengzhu.sdk.R;
 import com.mengzhu.live.sdk.core.utils.DensityUtil;
+import com.mengzhu.sdk.R;
 
 
 /**

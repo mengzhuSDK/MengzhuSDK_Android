@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
-import com.mengzhu.sdk.R;
 import com.mengzhu.live.sdk.business.dto.chat.ChatMessageDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatTextDto;
 import com.mengzhu.live.sdk.business.dto.chat.impl.ChatCompleteDto;
@@ -20,10 +19,11 @@ import com.mengzhu.live.sdk.business.dto.play.PlayInfoDto;
 import com.mengzhu.live.sdk.business.presenter.chat.ChatMessageObserver;
 import com.mengzhu.live.sdk.ui.chat.MZChatManager;
 import com.mengzhu.live.sdk.ui.chat.MZChatMessagerListener;
+import com.mengzhu.sdk.R;
 import com.mzmedia.adapter.base.CommonAdapterType;
-import com.mzmedia.adapter.base.chat.PlayerChatLeltWrap;
-import com.mzmedia.adapter.base.chat.PlayerChatNoticeWrap;
-import com.mzmedia.adapter.base.chat.PlayerChatRightWrap;
+import com.mzmedia.adapter.chat.PlayerChatLeltWrap;
+import com.mzmedia.adapter.chat.PlayerChatNoticeWrap;
+import com.mzmedia.adapter.chat.PlayerChatRightWrap;
 import com.mzmedia.widgets.PlayerChatLayout;
 import com.mzmedia.widgets.WithScrollChangeScrollView;
 
@@ -76,6 +76,7 @@ public class PlayerChatListFragment extends BaseFragement implements MZChatMessa
             isHalfPlayer = bundle.getBoolean(UI_TYPE_KEY, false);
             mPlayInfoDto = (PlayInfoDto) getArguments().getSerializable(PLAY_INFO_KEY);
             isVoiceChat = getArguments().getBoolean(AUDIO_VOICE_CHAT, false);
+            MZChatManager.getInstance(mActivity).setPlayinfo(mPlayInfoDto);
         }
 
         mListView = (PlayerChatLayout) findViewById(R.id.mz_player_chat_list);
@@ -147,7 +148,12 @@ public class PlayerChatListFragment extends BaseFragement implements MZChatMessa
     }
 
     @Override
-    public void monitorInformErrer(String s, int i, String s1) {
+    public void monitorInformError(String s, int i, String s1) {
+
+    }
+
+    @Override
+    public void monitorInformResult(String type, Object obj, Object extend) {
 
     }
 
@@ -185,7 +191,7 @@ public class PlayerChatListFragment extends BaseFragement implements MZChatMessa
         }
 
         @Override
-        public void monitorInformErrer(String type, int state, String msg) {
+        public void monitorInformError(String type, int state, String msg) {
 
         }
     }
@@ -251,11 +257,6 @@ public class PlayerChatListFragment extends BaseFragement implements MZChatMessa
 //        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
 //            mChatPresenter.removeListener(PlayerChatListFragment.class.getSimpleName());
 //        }
-    }
-
-    public void setmPlayInfoDto(PlayInfoDto mPlayInfoDto) {
-        this.mPlayInfoDto = mPlayInfoDto;
-        MZChatManager.getInstance(mActivity).setPlayinfo(mPlayInfoDto);
     }
 
     @Override

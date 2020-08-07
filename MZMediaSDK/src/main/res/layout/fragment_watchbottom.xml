@@ -8,7 +8,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
         <ImageView
             android:id="@+id/iv_activity_live_broadcast_push"
             android:layout_width="wrap_content"
@@ -17,7 +16,6 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:visibility="gone" />
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -63,7 +61,6 @@
             </FrameLayout>
 
         </LinearLayout>
-
 
         <LinearLayout
             android:id="@+id/iv_playerfragment_config_layout"
@@ -184,5 +181,31 @@
             android:layout_height="200dp"
             android:layout_above="@+id/rl_activity_live_broadcast_bottom_group"
             android:layout_alignParentRight="true" />
+
+        <LinearLayout
+            android:id="@+id/ll_func_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dimen_20"
+            android:layout_marginTop="@dimen/dimen_20"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv_sign_in"
+                android:layout_width="@dimen/dimen_44"
+                android:layout_height="@dimen/dimen_44"
+                android:visibility="gone"
+                android:src="@mipmap/icon_mz_sign_in" />
+
+            <ImageView
+                android:id="@+id/iv_vote"
+                android:layout_width="@dimen/dimen_44"
+                android:layout_height="@dimen/dimen_44"
+                android:layout_marginTop="@dimen/dimen_12"
+                android:visibility="gone"
+                android:src="@mipmap/icon_mz_vote" />
+        </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>

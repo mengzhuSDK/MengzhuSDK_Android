@@ -17,18 +17,20 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mengzhu.live.sdk.core.utils.DensityUtil;
-import com.mengzhu.live.sdk.core.utils.UiUtils;
-import com.mengzhu.sdk.R;
 import com.mengzhu.live.sdk.business.dto.MZGoodsListDto;
 import com.mengzhu.live.sdk.business.dto.MZGoodsListExternalDto;
+import com.mengzhu.live.sdk.core.utils.DensityUtil;
+import com.mengzhu.live.sdk.core.utils.UiUtils;
 import com.mengzhu.live.sdk.ui.api.MZApiDataListener;
 import com.mengzhu.live.sdk.ui.api.MZApiRequest;
+import com.mengzhu.sdk.R;
 import com.mzmedia.pullrefresh.PullToRefreshBase;
 import com.mzmedia.pullrefresh.PullToRefreshRecyclerView;
 import com.mzmedia.widgets.dialog.AbstractPopupWindow;
 
 import java.util.ArrayList;
+
+import tv.mengzhu.core.wrap.netwock.Page;
 
 public class GoodsListPopupWindow extends AbstractPopupWindow {
 
@@ -135,7 +137,7 @@ public class GoodsListPopupWindow extends AbstractPopupWindow {
         apiRequest.createRequest(mContext, MZApiRequest.API_TYPE_GOODS_LIST);
         apiRequest.setResultListener(new MZApiDataListener() {
             @Override
-            public void dataResult(String apiType, Object dto) {
+            public void dataResult(String apiType, Object dto , Page page, int status) {
                 mzGoodsListExternalDto = (MZGoodsListExternalDto) dto;
                 mGoodsList = (ArrayList<MZGoodsListDto>) mzGoodsListExternalDto.getList();
                 if (isHeader) {

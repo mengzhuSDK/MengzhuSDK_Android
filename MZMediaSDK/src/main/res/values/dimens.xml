@@ -10,10 +10,12 @@
     <dimen name="aspect_btn_height">20dp</dimen>
     <dimen name="dimen_12">12dp</dimen>
     <dimen name="dimen_44">44dp</dimen>
+    <dimen name="dimen_42">42dp</dimen>
     <dimen name="dimen_28">28dp</dimen>
     <dimen name="dimen_40">40dp</dimen>
     <dimen name="dimen_9">9dp</dimen>
     <dimen name="dimen_3">3dp</dimen>
+    <dimen name="dimen_2">2dp</dimen>
     <dimen name="dimen_5">5dp</dimen>
     <dimen name="dimen_30">30dp</dimen>
     <dimen name="dimen_16">16dp</dimen>
@@ -32,6 +34,7 @@
     <dimen name="dimen_14sp">14sp</dimen>
     <dimen name="dimen_16sp">16sp</dimen>
     <dimen name="dimen_90">90dp</dimen>
+    <dimen name="dimen_94">94dp</dimen>
     <dimen name="dimen_4">4dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="dimen_18">18dp</dimen>
@@ -43,6 +46,7 @@
     <dimen name="dimen_32">32dp</dimen>
     <dimen name="dimen_15">15dp</dimen>
     <dimen name="dimen_26">26dp</dimen>
+    <dimen name="dimen_56">56dp</dimen>
 
     <dimen name="indicator_right_padding">10dp</dimen>
     <dimen name="indicator_corner_radius">12dp</dimen>

@@ -2,6 +2,7 @@ package com.mzmedia.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -10,6 +11,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,13 +20,15 @@ import com.mengzhu.live.sdk.business.dto.MZGoodsListDto;
 import com.mengzhu.live.sdk.business.dto.MZGoodsListExternalDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatMessageDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatTextDto;
+import com.mengzhu.live.sdk.business.dto.chat.ContentBean;
 import com.mengzhu.live.sdk.business.dto.chat.impl.ChatCompleteDto;
 import com.mengzhu.live.sdk.business.dto.chat.impl.ChatOnlineDto;
 import com.mengzhu.live.sdk.business.dto.play.PlayInfoDto;
 import com.mengzhu.live.sdk.business.presenter.chat.ChatMessageObserver;
+import com.mengzhu.live.sdk.core.utils.ToastUtils;
 import com.mengzhu.live.sdk.ui.api.MZApiDataListener;
 import com.mengzhu.live.sdk.ui.api.MZApiRequest;
-import com.mengzhu.live.sdk.ui.chat.MZChatManager;
+import com.mengzhu.live.sdk.ui.widgets.popupwindow.SignInWebFragment;
 import com.mengzhu.sdk.R;
 import com.mzmedia.IPlayerClickListener;
 import com.mzmedia.utils.ActivityUtils;
@@ -37,6 +41,7 @@ import java.util.ArrayList;
 
 import tv.mengzhu.core.frame.coreutils.PreferencesUtils;
 import tv.mengzhu.core.module.model.dto.BaseDto;
+import tv.mengzhu.core.wrap.netwock.Page;
 import tv.mengzhu.core.wrap.user.presenter.MyUserInfoPresenter;
 
 /**
@@ -65,8 +70,13 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
     private PlayerGoodsPushView mPlayerGoodsPushLayout;
     private TextView mGoodsIv; //店铺
 
+    private LinearLayout mFuncLayout;
+    private ImageView mIvVote;
+    private ImageView mIvSignIn;
+
     private MZApiRequest mzApiRequestGoods;
     private MZApiRequest mPraiseRequest;
+    private MZApiRequest mzApiRequestVoteInfo;
     private boolean isPraise = true;
 
     private PlayInfoDto mPlayInfoDto;
@@ -79,8 +89,11 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
 
     private PlayerChatListFragment mChatFragment;
 
-
     private IPlayerClickListener mListener;
+
+    private ContentBean signInfoBean;
+    private CountDownTimer signCountDown;
+    private boolean signDialogShowing = false;
 
     public void setIPlayerClickListener(IPlayerClickListener listener) {
         mListener = listener;
@@ -99,6 +112,27 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
         //释放飘心资源
         if (null != mLoveLayout) {
             mLoveLayout.removeView();
+        }
+        if (signCountDown != null)
+            signCountDown.cancel();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        //切换为竖屏
+        if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            if (mPlayInfoDto.isVoteShow()){
+                mIvVote.setVisibility(View.VISIBLE);
+            }
+            if (mPlayInfoDto.isSignShow()){
+                mIvSignIn.setVisibility(View.VISIBLE);
+            }
+        }
+        //切换为横屏
+        else if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            mIvVote.setVisibility(View.GONE);
+            mIvSignIn.setVisibility(View.GONE);
         }
     }
 
@@ -125,6 +159,16 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
         mPlayerGoodsPushLayout = (PlayerGoodsPushView) findViewById(R.id.live_broadcast_goods_push_view);
         mGoodsIv = (TextView) findViewById(R.id.iv_player_fragment_goods);
         mChatOnlineView = (ChatOnlineView) findViewById(R.id.player_chat_list_online_view);
+
+        mFuncLayout = (LinearLayout) findViewById(R.id.ll_func_layout);
+        mIvVote = (ImageView) findViewById(R.id.iv_vote);
+        mIvSignIn = (ImageView) findViewById(R.id.iv_sign_in);
+        if (mPlayInfoDto.isVoteShow()){
+            mIvVote.setVisibility(View.VISIBLE);
+        }
+        if (mPlayInfoDto.isSignShow()){
+            mIvSignIn.setVisibility(View.VISIBLE);
+        }
         goodsCountDown = new GoodsCountDown(10000 * 5000, 5000);
     }
 
@@ -141,6 +185,24 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
         bundle.putSerializable(PlayerChatListFragment.PLAY_INFO_KEY, mPlayInfoDto);
         mChatFragment.setArguments(bundle);
         getChildFragmentManager().beginTransaction().replace(R.id.layout_activity_live_broadcast_chat, mChatFragment).commitAllowingStateLoss();
+
+        for (int i = 0; i < mPlayInfoDto.getRight().size(); i++) {
+            if ("sign".equals(mPlayInfoDto.getRight().get(i).getType())){
+                signInfoBean = mPlayInfoDto.getRight().get(i).getContent();
+            }
+        }
+        initSign();
+    }
+
+    public void updateConfig(PlayInfoDto playInfoDto){
+        if (playInfoDto.isVoteShow()){
+            mIvVote.setVisibility(View.VISIBLE);
+        }else {
+            mIvVote.setVisibility(View.GONE);
+        }
+        if (!playInfoDto.isSignShow()){
+            mIvSignIn.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -152,6 +214,8 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
         mTvDanmakuSwtich.setOnClickListener(this);
         mRlSendChat.setOnClickListener(this);
         mGoodsIv.setOnClickListener(this);
+        mIvVote.setOnClickListener(this);
+        mIvSignIn.setOnClickListener(this);
 
         mPlayerGoodsPushLayout.setOnGoodsPushItemClickListener(new PlayerGoodsView.OnGoodsItemClickListener() {
             @Override
@@ -170,11 +234,24 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
             }
         });
 
+        mzApiRequestVoteInfo = new MZApiRequest();
+        mzApiRequestVoteInfo.createRequest(mActivity , MZApiRequest.API_TYPE_VOTE_INFO);
+        mzApiRequestVoteInfo.setResultListener(new MZApiDataListener() {
+            @Override
+            public void dataResult(String apiType, Object dto, Page page, int status) {
+
+            }
+
+            @Override
+            public void errorResult(String apiType, int code, String msg) {
+
+            }
+        });
         mzApiRequestGoods = new MZApiRequest();
         //商品列表回调
         mzApiRequestGoods.setResultListener(new MZApiDataListener() {
             @Override
-            public void dataResult(String s, Object o) {
+            public void dataResult(String s, Object o, Page page, int status) {
                 MZGoodsListExternalDto mzGoodsListExternalDto = (MZGoodsListExternalDto) o;
                 mGoodsListDtos = (ArrayList<MZGoodsListDto>) mzGoodsListExternalDto.getList();
                 if (mGoodsListDtos.size() > 0) {
@@ -209,7 +286,7 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
             }
 
             @Override
-            public void monitorInformErrer(String type, int state, String msg) {
+            public void monitorInformError(String type, int state, String msg) {
 
             }
         } , WatchBottomFragment.class.getSimpleName());
@@ -236,6 +313,46 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
     @Override
     public int getLayoutId() {
         return R.layout.fragment_watchbottom;
+    }
+
+    private void initSign(){
+        if (signInfoBean == null) return;
+        if (signInfoBean.isIs_sign()){
+            mIvSignIn.setImageResource(R.mipmap.icon_mz_signed);
+        }else {
+            mIvSignIn.setImageResource(R.mipmap.icon_mz_sign_in);
+        }
+        if (signInfoBean.isIs_force() &&
+                signInfoBean.getIs_expired() == 0
+                && signInfoBean.getRedirect_sign() == 1
+                && signInfoBean.getDelay_time()==0
+                && !signInfoBean.isIs_sign()
+                && signInfoBean.getStatus() == 1) {
+                showSignDialog();
+        }else if(signInfoBean.isIs_force()
+                && signInfoBean.getRedirect_sign() == 1
+                && signInfoBean.getDelay_time()>0
+                && !signInfoBean.isIs_sign()){
+            if(PreferencesUtils.loadPrefBoolean(mActivity,mPlayInfoDto.getTicket_id() +signInfoBean.getSign_id() + mPlayInfoDto.getUnique_id(),false)){
+                showSignDialog();
+            }else {
+                countdownSign(signInfoBean.getDelay_time()*6000);
+            }
+        }
+    }
+
+    private void countdownSign(long l) {
+        signCountDown = new CountDownTimer(l, 1000) {
+            @Override
+            public void onTick(long l) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                showSignDialog();
+            }
+        }.start();
     }
 
     //商品循环显示倒计时
@@ -285,7 +402,6 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
                 if (mGoodsListDtos.size() > 0) {
                     mPlayerGoodsLayout.setVisibility(View.VISIBLE);
                     if (!isLooping) {
-//                        GoodsCountDown goodsCountDown = new GoodsCountDown(10000 * 5000, 5000);
                         goodsCountDown.start();
                         isLooping = true;
                     }
@@ -354,7 +470,7 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
                     mPraiseRequest.createRequest(mActivity, MZApiRequest.API_TYPE_ROOT_PRAISE);
                     mPraiseRequest.setResultListener(new MZApiDataListener() {
                         @Override
-                        public void dataResult(String s, Object o) {
+                        public void dataResult(String s, Object o, Page page, int status) {
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -396,6 +512,10 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
         }
         if (view.getId() == R.id.rl_playerfragment_send_chat) { //点击发送消息
             if (!TextUtils.isEmpty(MyUserInfoPresenter.getInstance().getUserInfo().getUniqueID())) {
+                if (mPlayInfoDto.isDisable_chat()){
+                    Toast.makeText(mActivity, "主播开启了全体禁言", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (mPlayInfoDto.getUser_status() == 1) {
                     ActivityUtils.startLandscapeTransActivity(mActivity);
                 } else if (mPlayInfoDto.getUser_status() == 3) {
@@ -406,11 +526,57 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
             }
         }
         if (view.getId() == R.id.iv_player_fragment_goods) { //点击商店
-//            if (mGoodsListDtos != null && mGoodsListDtos.size() > 0) {
             showGoodsDialog();
-//            } else {
-//                Toast.makeText(mActivity, "暂无商品", Toast.LENGTH_SHORT).show();
-//            }
         }
+        if (view.getId() == R.id.iv_vote){ //投票
+            assert getFragmentManager() != null;
+            VoteDialogFragment voteDialogFragment = (VoteDialogFragment) getFragmentManager().findFragmentByTag("VOTEDIALOGFRAGMENT");
+            if (null == voteDialogFragment) {
+                voteDialogFragment = VoteDialogFragment.newInstance(mPlayInfoDto);
+            }
+            if (!voteDialogFragment.isAdded() && !voteDialogFragment.isVisible() && !voteDialogFragment.isRemoving()) {
+                voteDialogFragment.show(getFragmentManager(), "VOTEDIALOGFRAGMENT");
+            }
+        }
+        if (view.getId() == R.id.iv_sign_in){
+            if (signInfoBean == null)return;
+            if (signInfoBean.getIs_expired() == 1) {
+                ToastUtils.popUpToast("签到过期无法签到");
+            } else {
+                if (!signInfoBean.isIs_sign()) {
+                    if (signInfoBean.getStatus() == 1) {
+                        if (signCountDown != null)
+                            signCountDown.cancel();
+                        showSignDialog();
+                    } else if (signInfoBean.getStatus() == 0) {
+                        ToastUtils.popUpToast("签到活动未开始");
+                    } else {
+                        ToastUtils.popUpToast("签到活动已结束");
+                    }
+                } else {
+                    showSignDialog();
+                }
+            }
+        }
+    }
+
+    public void showSignDialog(){
+        if (signInfoBean == null || mActivity == null || signDialogShowing)
+            return;
+        final SignInWebFragment signInWebFragment = new SignInWebFragment(mActivity , mPlayInfoDto , signInfoBean);
+        signInWebFragment.setSignInOutSideDismiss(false);
+        signInWebFragment.setOnDismissListener(new SignInWebFragment.OnDismissListener() {
+            @Override
+            public void onDismiss(boolean isSign) {
+                signDialogShowing = false;
+                signInWebFragment.onDestroy();
+                if (isSign){
+                    mIvSignIn.setImageResource(R.mipmap.icon_mz_signed);
+                }
+            }
+        });
+        PreferencesUtils.savePrefBoolean(mActivity,mPlayInfoDto.getTicket_id() +signInfoBean.getSign_id() + mPlayInfoDto.getUnique_id(),true);
+        signInWebFragment.showAtLocation(mActivity.findViewById(android.R.id.content), Gravity.CENTER, 0, 0);
+        signDialogShowing = true;
     }
 }

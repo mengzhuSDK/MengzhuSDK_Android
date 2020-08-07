@@ -21,10 +21,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mengzhu.live.sdk.business.dto.StaticStateDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatMessageDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatTextDto;
-import com.mengzhu.sdk.R;
-import com.mengzhu.live.sdk.business.dto.StaticStateDto;
 import com.mengzhu.live.sdk.business.dto.chat.impl.ChatMegTxtDto;
 import com.mengzhu.live.sdk.business.dto.play.ChatConfDto;
 import com.mengzhu.live.sdk.business.presenter.IBasePresenterLinstener;
@@ -32,6 +31,7 @@ import com.mengzhu.live.sdk.business.presenter.chat.ChatMessageObserver;
 import com.mengzhu.live.sdk.business.presenter.chat.ChatPresenter;
 import com.mengzhu.live.sdk.core.utils.KeyBoardUtils;
 import com.mengzhu.live.sdk.ui.chat.MZChatManager;
+import com.mengzhu.sdk.R;
 import com.mzmedia.utils.String_Utils;
 
 import tv.mengzhu.core.frame.coreutils.Device;

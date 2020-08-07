@@ -1,6 +1,5 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <tv.mengzhu.restreaming.push.StreamLiveCameraView
@@ -218,6 +217,14 @@
 
 
     </android.support.design.widget.AppBarLayout>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/audio_anim_view"
+        android:layout_width="match_parent"
+        android:layout_height="210dp"
+        android:layout_marginTop="106dp"
+        android:visibility="gone"
+        app:lottie_rawRes="@raw/wave" />
 
     <RelativeLayout
         android:layout_width="match_parent"

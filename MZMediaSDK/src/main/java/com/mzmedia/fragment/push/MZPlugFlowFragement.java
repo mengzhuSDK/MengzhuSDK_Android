@@ -6,7 +6,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.UserManager;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
@@ -23,7 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mengzhu.sdk.R;
+import com.airbnb.lottie.LottieAnimationView;
 import com.mengzhu.live.sdk.business.dto.MZOnlineUserListDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatMessageDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatTextDto;
@@ -35,6 +35,7 @@ import com.mengzhu.live.sdk.ui.api.MZApiDataListener;
 import com.mengzhu.live.sdk.ui.api.MZApiRequest;
 import com.mengzhu.live.sdk.ui.chat.MZChatManager;
 import com.mengzhu.live.sdk.ui.chat.MZChatMessagerListener;
+import com.mengzhu.sdk.R;
 import com.mzmedia.IPushClickListener;
 import com.mzmedia.fragment.PlayerChatListFragment;
 import com.mzmedia.presentation.dto.LiveConfigDto;
@@ -83,6 +84,7 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
     private ConstraintLayout mConstraintLayout; //倒计时布局
     private LinearLayout mConfigGroup; //配置按钮组
     private LinearLayout mConfigGroup_h; //横屏配置按钮组
+    private LottieAnimationView audio_anim_view; // 声波动画
     private ImageView mIvPushVoice; //静音
     private ImageView mIvPushFlash; //闪光灯
     private ImageView mIvPushMirror; //镜像
@@ -120,7 +122,10 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
     private FragmentTransaction fragmentTransaction;
     private boolean isMirror,isFlash,isVoice,isBeauty = true,isAllChat;
     private int screen;
-    public static MZPlugFlowFragement newInstance(String pushUrl, String ticket_id, int screen, PlayInfoDto dto, LiveConfigDto liveConfigDto) {
+
+    private boolean isAudioPush = false;
+
+    public static MZPlugFlowFragement newInstance(String pushUrl, String ticket_id, int screen, PlayInfoDto dto, LiveConfigDto liveConfigDto , boolean isAudioPush) {
 
         Bundle args = new Bundle();
         args.putString("push_url",pushUrl);
@@ -128,6 +133,7 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
         args.putInt("screen",screen);
         args.putSerializable("playinfoDto",dto);
         args.putSerializable("liveConfig",liveConfigDto);
+        args.putBoolean("isAudioPush" , isAudioPush);
         MZPlugFlowFragement fragment = new MZPlugFlowFragement();
         fragment.setArguments(args);
         return fragment;
@@ -138,6 +144,7 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
         pushUrl = getArguments().getString("push_url");
         ticketId = getArguments().getString("ticketId");
         screen = getArguments().getInt("screen");
+        isAudioPush = getArguments().getBoolean("isAudioPush" , false);
         mPlayInfoDto = (PlayInfoDto) getArguments().getSerializable("playinfoDto");
         mLiveConfigDto = (LiveConfigDto) getArguments().getSerializable("liveConfig");
 
@@ -190,6 +197,7 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
         mViewToolbar = rootView.findViewById(R.id.push_v_live_toolbar);
         mTvKb = rootView.findViewById(R.id.tv_plug_fragment_kb);
         mTvLiveTime = rootView.findViewById(R.id.tv_plug_fragment_time);
+        audio_anim_view = rootView.findViewById(R.id.audio_anim_view);
         return rootView;
     }
 
@@ -200,7 +208,7 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
         streamAVOption = new StreamAVOption();
         streamAVOption.streamUrl = pushUrl;
         mzPushManager = new MZPushManager(getActivity(),streamAVOption);
-        mzPushManager.initPushLive(streamLiveCameraView);
+        mzPushManager.initPushLive(streamLiveCameraView , isAudioPush);
         mzApiRequestOnline = new MZApiRequest();
         mzApiRequestStopLive = new MZApiRequest();
         mzApiRequestBanChat = new MZApiRequest();
@@ -214,6 +222,14 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
             params.topMargin = 12;
             mPushKborTimeLayout.setLayoutParams(params);
             mPushKborTimeLayout.invalidate();
+        }
+
+        if (isAudioPush){
+            audio_anim_view.setVisibility(View.VISIBLE);
+            mIvPushFlash.setVisibility(View.GONE); //闪光灯
+            mIvPushMirror.setVisibility(View.GONE); //镜像
+            mIvPushBeauty.setVisibility(View.GONE); //美颜
+            mPushIvCut.setVisibility(View.INVISIBLE);
         }
 
         initData();
@@ -297,10 +313,13 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
         mPushIvShare.setOnClickListener(this);
         mPushTvOnline.setOnClickListener(this);
         mPushIvAvatar.setOnClickListener(this);
+        mPushOnlinePersonIv1.setOnClickListener(this);
+        mPushOnlinePersonIv2.setOnClickListener(this);
+        mPushOnlinePersonIv3.setOnClickListener(this);
         //结束推流直播
         mzApiRequestStopLive.setResultListener(new MZApiDataListener() {
             @Override
-            public void dataResult(String s, Object o) {
+            public void dataResult(String s, Object o, Page page, int status) {
                 if(mIPushClickListener!=null){
                     mIPushClickListener.onStopLive();
                 }
@@ -314,7 +333,8 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
         //在线人数列表回调
         mzApiRequestOnline.setResultListener(new MZApiDataListener() {
             @Override
-            public void dataResult(String apiType, Object dto) {
+            public void dataResult(String apiType, Object dto, Page page, int status) {
+                personAvatars.clear();
                 boolean isContainsMe = false;
                 List<MZOnlineUserListDto> mzOnlineUserListDto = (List<MZOnlineUserListDto>) dto;
                 for (int i = 0; i < mzOnlineUserListDto.size(); i++) {
@@ -333,7 +353,6 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
                     userListDto.setNickname(userInfoDto.getNickname());
                     personAvatars.add(userListDto);
                 }
-                mPushTvOnline.setText(personAvatars.size() + "");
                 initOnlineAvatar();
             }
 
@@ -345,7 +364,7 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
         //全体禁言回调
         mzApiRequestAllChat.setResultListener(new MZApiDataListener() {
             @Override
-            public void dataResult(String s, Object o) {
+            public void dataResult(String s, Object o, Page page, int status) {
                 mIvPushAllChat.setImageResource(isAllChat?R.mipmap.mz_icon_allchat_on:R.mipmap.mz_icon_allchat_default);
                 mIvPushAllChat_h.setImageResource(isAllChat?R.mipmap.mz_icon_allchat_on:R.mipmap.mz_icon_allchat_default);
             }
@@ -358,7 +377,7 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
         //单体禁言回调
         mzApiRequestBanChat.setResultListener(new MZApiDataListener() {
             @Override
-            public void dataResult(String s, Object o) {
+            public void dataResult(String s, Object o, Page page, int status) {
                 if(mIPushClickListener!=null){
                     mIPushClickListener.onALLBanChat();
                 }
@@ -383,8 +402,6 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
         mzApiRequestAllChat.createRequest(getActivity(),MZApiRequest.API_TYPE_ROOM_ALLOWCHATALL);
         //请求在线人数api
         mzApiRequestOnline.startData(MZApiRequest.API_TYPE_ONLINE_USER_LIST, true, ticketId);
-        isAllChat = mLiveConfigDto.getAllBanChat()==0;
-        mzApiRequestAllChat.startData(MZApiRequest.API_TYPE_ROOM_ALLOWCHATALL,mPlayInfoDto.getTicket_id(),mPlayInfoDto.getChannel_id(),isAllChat?0:1);
     }
 
     private class MZPushStreamListener implements PushStreamingListener {
@@ -399,7 +416,16 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
             if(!isBackStage){ //防止切换前后台推流回调导致多次执行逻辑操作
                 startTime();
                 setConfig();
+                audio_anim_view.loop(true);
+                audio_anim_view.playAnimation();
             }
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    isAllChat = mLiveConfigDto.getAllBanChat()==0;
+                    mzApiRequestAllChat.startData(MZApiRequest.API_TYPE_ROOM_ALLOWCHATALL,mPlayInfoDto.getTicket_id(),mPlayInfoDto.getChannel_id(),isAllChat?0:1);
+                }
+            } , 1000);
             Toast.makeText(mActivity,"start="+result,Toast.LENGTH_SHORT).show();
         }
         //推流错误
@@ -412,6 +438,7 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
         @Override
         public void onCloseConnectionResult(int result) {
             if(!isBackStage){
+                audio_anim_view.cancelAnimation();
                 //请求结束推流直播
                 mzApiRequestStopLive.startData(MZApiRequest.API_TYPE_LIVE_STOP,ticketId);
             }
@@ -530,8 +557,9 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
                 mIPushClickListener.onShare(mPlayInfoDto);
             }
         }
-        if(v.getId() == R.id.push_tv_playerfragment_person){
-            PersonListPopupWindow personListPopupWindow = new PersonListPopupWindow(mActivity , mPlayInfoDto.getTicket_id());
+        if(v.getId() == R.id.push_tv_playerfragment_person || v.getId() == R.id.push_civ_activity_live_online_person1
+                || v.getId() == R.id.push_civ_activity_live_online_person2 || v.getId() == R.id.push_civ_activity_live_online_person3){
+            PersonListPopupWindow personListPopupWindow = new PersonListPopupWindow(mActivity , mPlayInfoDto);
             personListPopupWindow.showAtLocation(mPushLiveContent , Gravity.CENTER , 0 , 0);
             personListPopupWindow.setOnPersonListClickCallBack(new PersonListPopupWindow.PersonListClickedCallBack() {
                 @Override
@@ -600,10 +628,13 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
             switch (s) {
                 case ChatMessageObserver.ONLINE_TYPE: {//上下线消息
                     ChatOnlineDto mChatOnline = (ChatOnlineDto) mBase;
-//                    mTotalPerson = mChatOnline.getConcurrent_user();
-                    mPushChatOnlineView.startOnline(getActivity(), mChatMessage);
-
-                    try {
+                    mTotalPerson = mPushTvOnline.getText().toString();
+                    mPushChatOnlineView.startOnline(mActivity, mChatMessage);
+                    long popular = Integer.parseInt(mPlayInfoDto.getPopular()) + mChatOnline.getLast_pv();
+                    mPlayInfoDto.setPopular(popular + "");
+                    //加载人气
+                    mPushTvPopular.setText("人气" + String_Utils.convert2W0_0(popular + ""));
+                    if (String_Utils.isNumeric(mTotalPerson) && mChatOnline.getIs_hidden() != 1 && !personAvatars.isEmpty()) {
                         boolean isContainsMe = false;
                         for (int i = 0; i < personAvatars.size(); i++) {
                             if (personAvatars.get(i).getUid().equals(mChatMessage.getText().getUser_id())){
@@ -621,29 +652,30 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
                             dto.setRole_name(mChatOnline.getRole());
                             dto.setNickname(mChatText.getUser_name());
                             personAvatars.add(dto);
+                            initOnlineAvatar();
+                            int current = Integer.valueOf(mTotalPerson) + 1;
+                            mPushTvOnline.setText(String_Utils.convert2W0_0(current + ""));
                         }
-                        current++;
-                        mPushTvOnline.setText(String_Utils.convert2W0_0(current + ""));
-                        initOnlineAvatar();
-                    } catch (Exception e) {
                     }
                     break;
                 }
                 case ChatMessageObserver.OFFLINE_TYPE:
-                    ChatOnlineDto mChatOnline = (ChatOnlineDto) mBase;
-//                    mTotalPerson = mChatOnline.getConcurrent_user();
-                    current--;
-                    try {
+                    mTotalPerson =mPushTvOnline.getText().toString();
+                    if (String_Utils.isNumeric(mTotalPerson) && !personAvatars.isEmpty()) {
+                        int current = Integer.valueOf(mTotalPerson) - 1;
                         mPushTvOnline.setText(String_Utils.convert2W0_0(current + ""));
+
                         Iterator<MZOnlineUserListDto> iterator = personAvatars.iterator();
-                        while (iterator.hasNext()){
+                        while (iterator.hasNext()) {
                             MZOnlineUserListDto userListDto = iterator.next();
-                            if (userListDto.getUid().equals(mChatText.getUser_id())){
+                            if (userListDto.getUid().equals(mChatText.getUser_id()) && !mChatText.getUser_id().equals(mPlayInfoDto.getChat_uid())) {
                                 iterator.remove();
                             }
                         }
                         initOnlineAvatar();
-                    } catch (Exception e) {
+                    }
+                    if (personAvatars.size() < 4){
+                        mzApiRequestOnline.startData(MZApiRequest.API_TYPE_ONLINE_USER_LIST, true, ticketId);
                     }
                     break;
                 case ChatMessageObserver.CMD_TYPE:
@@ -680,7 +712,12 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
             }
         }
         @Override
-        public void monitorInformErrer(String s, int i, String s1) {}
+        public void monitorInformError(String s, int i, String s1) {}
+
+        @Override
+        public void monitorInformResult(String type, Object obj, Object extend) {
+
+        }
     }
     /**
      *初始化右侧观看用户的头像
@@ -732,7 +769,7 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
             mIvPushVoice_h.setImageResource(isVoice?R.mipmap.mz_icon_voice_on:R.mipmap.mz_icon_voice_default);
             mzPushManager.StartorStopAudio(isVoice);
         }
-        if(mLiveConfigDto.isCblater()){
+        if (mLiveConfigDto.isCblater()) {
             mzPushManager.swapCamera();
         }
         mzPushManager.reSetVideoBitrate(mLiveConfigDto.getBitrate());
@@ -751,8 +788,10 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
             timer.cancel();
             timer = null;
         }
-        if(mActivity!=null){
-            MZChatManager.getInstance(mActivity).destroyChat();
+        //请求结束推流直播
+        mzApiRequestStopLive.startData(MZApiRequest.API_TYPE_LIVE_STOP,ticketId);
+        if(mzPushManager!=null){
+            mzPushManager.destroy();
         }
     }
 }

@@ -24,11 +24,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.mengzhu.live.sdk.business.dto.AnchorInfoDto;
 import com.mengzhu.live.sdk.business.dto.MZGoodsListDto;
 import com.mengzhu.live.sdk.business.dto.MZGoodsListExternalDto;
 import com.mengzhu.live.sdk.business.dto.MZOnlineUserListDto;
-import com.mengzhu.live.sdk.business.dto.StaticStateDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatMessageDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatTextDto;
 import com.mengzhu.live.sdk.business.dto.chat.RightBean;
@@ -37,7 +37,6 @@ import com.mengzhu.live.sdk.business.dto.chat.impl.ChatCompleteDto;
 import com.mengzhu.live.sdk.business.dto.chat.impl.ChatMegTxtDto;
 import com.mengzhu.live.sdk.business.dto.chat.impl.ChatOnlineDto;
 import com.mengzhu.live.sdk.business.dto.play.PlayInfoDto;
-import com.mengzhu.live.sdk.business.dto.play.UserInfoDto;
 import com.mengzhu.live.sdk.business.presenter.chat.ChatMessageObserver;
 import com.mengzhu.live.sdk.business.presenter.chat.ChatPresenter;
 import com.mengzhu.live.sdk.core.MZSDKInitManager;
@@ -45,6 +44,9 @@ import com.mengzhu.live.sdk.core.SDKInitListener;
 import com.mengzhu.live.sdk.ui.api.MZApiDataListener;
 import com.mengzhu.live.sdk.ui.api.MZApiRequest;
 import com.mengzhu.live.sdk.ui.chat.MZChatManager;
+import com.mengzhu.live.sdk.ui.chat.MZChatMessagerListener;
+import com.mengzhu.live.sdk.ui.widgets.ChannelDlnaDialogFragment;
+import com.mengzhu.live.sdk.ui.widgets.popupwindow.SpeedBottomDialogFragment;
 import com.mengzhu.sdk.R;
 import com.mzmedia.IPlayerClickListener;
 import com.mzmedia.utils.ActivityUtils;
@@ -56,7 +58,6 @@ import com.mzmedia.widgets.LoveLayout;
 import com.mzmedia.widgets.player.PlayerGoodsPushView;
 import com.mzmedia.widgets.player.PlayerGoodsView;
 import com.mzmedia.widgets.popupwindow.PersonListPopupWindow;
-import com.mzmedia.widgets.popupwindow.SpeedBottomDialogFragment;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -68,6 +69,7 @@ import java.util.List;
 import tv.mengzhu.core.frame.coreutils.DensityUtil;
 import tv.mengzhu.core.frame.coreutils.PreferencesUtils;
 import tv.mengzhu.core.module.model.dto.BaseDto;
+import tv.mengzhu.core.wrap.netwock.Page;
 import tv.mengzhu.core.wrap.user.modle.UserDto;
 import tv.mengzhu.core.wrap.user.presenter.MyUserInfoPresenter;
 import tv.mengzhu.dlna.DLNAController;
@@ -76,7 +78,6 @@ import tv.mengzhu.sdk.danmaku.ui.widget.DanmakuView;
 import tv.mengzhu.sdk.module.IMZPlayerManager;
 import tv.mengzhu.sdk.module.MZPlayerManager;
 import tv.mengzhu.sdk.module.MZPlayerView;
-import tv.mengzhu.sdk.module.MZVideoView;
 import tv.mengzhu.sdk.module.PlayerEventListener;
 import tv.mengzhu.sdk.module.player.PlayerController;
 
@@ -92,7 +93,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
     private static String CLASSNAME = PlayerFragment.class.getSimpleName();
     private MZPlayerManager mManager;
     private MZPlayerView mzPlayerView;
-    private MZVideoView mzVideoView;
     private AppBarLayout mAppBarLayout;
     private CircleImageView mIvAvatar; //头像
     private CircleImageView mOnlinePersonIv1, mOnlinePersonIv2, mOnlinePersonIv3; //在线人数头像
@@ -106,9 +106,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
     private ImageView mIvConfig; //配置
     private ImageView mIvShare; //分享
     public ImageView mIvLike; //点赞
-    private ImageView mIvSpeed; //倍速
-    private ImageView mIvDLAN; //投屏
-    private ImageView mIvLiveDLAN;
     private TextView mTvReport;
     private TextView mTvDanmakuSwtich;
     private LinearLayout mConfigLayout; //举报 弹幕 设置
@@ -125,7 +122,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
     private String mVideoUrl; //观看地址
     private UserDto mUserDto; //主播信息
     private String mUid;
-//    private String mAppid;
+    //    private String mAppid;
 //    private String mAvatr;
 //    private String mNickName;
 //    private String mAccountNo;
@@ -149,12 +146,12 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
     private GoodsCountDown goodsCountDown;
     private MZGoodsListDto presentGoodsListDto;
     private MZApiRequest mPraiseRequest;
-    private boolean isPraise=true;
+    private boolean isPraise = true;
 
     private int liveStatus; //直播状态
 
     private int mSpeedIndex = 1; //倍速值索引
-    private float[] speeds = new float[]{0.75f , 1 , 1.25f , 1.5f , 2};
+    private float[] speeds = new float[]{0.75f, 1, 1.25f, 1.5f, 2};
     SpeedBottomDialogFragment speedDialog;
 
     private DLNAController controller; //投屏控制
@@ -176,7 +173,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mUserDto = new UserDto();
-            mUserDto.setAppid( getArguments().getString(APP_ID));
+            mUserDto.setAppid(getArguments().getString(APP_ID));
             mUserDto.setAvatar(getArguments().getString(AVATAR));
             mUserDto.setNickname(getArguments().getString(NICKNAME));
             mUserDto.setUniqueID(getArguments().getString(UNIQUE_ID));
@@ -224,7 +221,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         mTvDanmakuSwtich = rootView.findViewById(R.id.tv_playerfragment_danmaku_switch);
         mLoveLayout = rootView.findViewById(R.id.love_playerfragment_layout);
         mzPlayerView = rootView.findViewById(R.id.video_playerfragment_view);
-        mzVideoView = mzPlayerView.getMZVideoView();
         mAppBarLayout = rootView.findViewById(R.id.sv_activity_content_appbar);
         mRlChatAndBottom = rootView.findViewById(R.id.rl_activity_chat_bottom);
         mRlSendChat = rootView.findViewById(R.id.rl_playerfragment_send_chat);
@@ -235,13 +231,15 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         mGoodsIv = rootView.findViewById(R.id.iv_player_fragment_goods);
         mChatOnlineView = rootView.findViewById(R.id.player_chat_list_online_view);
         mLiveContent = rootView.findViewById(R.id.tv_activity_broadcast_live_over);
-        mIvSpeed = mzPlayerView.findViewById(R.id.iv_video_bottom_bar_speed_select);
-        mIvDLAN = mzPlayerView.findViewById(R.id.iv_video_bottom_bar_tv);
-        mIvLiveDLAN = mzPlayerView.findViewById(R.id.iv_live_bottom_bar_tv);
         DanmakuView danmakuView = mzPlayerView.findViewById(R.id.sv_danmaku);
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) danmakuView.getLayoutParams();
-        params.topMargin = DensityUtil.dip2px(mActivity , 68);
+        params.topMargin = DensityUtil.dip2px(mActivity, 68);
         danmakuView.setLayoutParams(params);
+
+        LottieAnimationView audioView = mzPlayerView.findViewById(R.id.mz_audio_anim_view);
+        RelativeLayout.LayoutParams audioViewParams = (RelativeLayout.LayoutParams) audioView.getLayoutParams();
+        audioViewParams.topMargin = DensityUtil.dip2px(mActivity, 128);
+        audioView.setLayoutParams(audioViewParams);
         return rootView;
     }
 
@@ -279,20 +277,20 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
 
     @SuppressLint("SetTextI18n")
     private void initView() {
-        mzPlayerView._hideAllView(false , false);
+        mzPlayerView._hideAllView(false, false);
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(getActivity()));
         mChatFragment = new PlayerChatListFragment();
         goodsCountDown = new GoodsCountDown(10000 * 5000, 5000);
         mManager = new MZPlayerManager();
-        mzPlayerView.setIsCanTouch(false);
+        mManager.init(mzPlayerView);
     }
 
     /**
      * 设置控制栏不自动隐藏
      */
-    public void setControllerNoAutoGone(){
+    public void setControllerNoAutoGone() {
         if (mzPlayerView != null)
-        mzPlayerView.setDEFAULT_HIDE_TIMEOUT(Integer.MAX_VALUE);
+            mzPlayerView.setDEFAULT_HIDE_TIMEOUT(Integer.MAX_VALUE);
     }
 
     private void initListener() {
@@ -307,9 +305,9 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         mIvClose.setOnClickListener(this);
         mRlSendChat.setOnClickListener(this);
         mGoodsIv.setOnClickListener(this);
-        mIvSpeed.setOnClickListener(this);
-        mIvDLAN.setOnClickListener(this);
-        mIvLiveDLAN.setOnClickListener(this);
+        mOnlinePersonIv1.setOnClickListener(this);
+        mOnlinePersonIv2.setOnClickListener(this);
+        mOnlinePersonIv3.setOnClickListener(this);
 
         mPlayerGoodsPushLayout.setOnGoodsPushItemClickListener(new PlayerGoodsView.OnGoodsItemClickListener() {
             @Override
@@ -328,13 +326,22 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
             }
         });
         //各类型消息回调
-        ChatMessageObserver.getInstance().register(new ChatMessageObserver.MesInformMonitorCallback() {
+        MZChatManager.getInstance(mActivity).registerListener(CLASSNAME, new MZChatMessagerListener() {
+            @Override
+            public void dataResult(Object obj, Page page, int status) {
+
+            }
+
+            @Override
+            public void errorResult(int code, String msg) {
+
+            }
 
             @Override
             public void monitorInformResult(String type, Object obj, Object extend) {
                 if (ChatMessageObserver.MESSAGE_TYPE.equals(type) && !(boolean) extend) { //文本消息 弹幕
-                    if (mPlayInfoDto.isInputDanmuku() && PreferencesUtils.loadPrefBoolean(mActivity , PreferencesUtils.DANMAKU_SWITCH_KEY , true))
-                    receiveSendDanmaku(obj);
+                    if (mPlayInfoDto.isInputDanmuku() && PreferencesUtils.loadPrefBoolean(mActivity, PreferencesUtils.DANMAKU_SWITCH_KEY, true))
+                        receiveSendDanmaku(obj);
                 }
             }
 
@@ -352,48 +359,51 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
                         mPlayInfoDto.setPopular(popular + "");
                         //加载人气
                         mTvPopular.setText("人气" + String_Utils.convert2W0_0(popular + ""));
-                        if (String_Utils.isNumeric(mTotalPerson)) {
+                        if (String_Utils.isNumeric(mTotalPerson) && mChatOnline.getIs_hidden() != 1 && !personAvatars.isEmpty()) {
                             boolean isContainsMe = false;
                             for (int i = 0; i < personAvatars.size(); i++) {
-                                if (personAvatars.get(i).getUid().equals(mChatMessage.getText().getUser_id())){
+                                if (personAvatars.get(i).getUid().equals(mChatMessage.getText().getUser_id())) {
                                     isContainsMe = true;
                                 }
                             }
-                            if (isContainsMe){
+                            if (isContainsMe) {
                                 break;
                             }
-                            int current = Integer.valueOf(mTotalPerson) + 1;
-                            try {
-                                mTvOnline.setText(String_Utils.convert2W0_0(current + ""));
-                                if (Long.parseLong(mChatMessage.getText().getUser_id()) < Long.parseLong("5000000000")) {
-                                    MZOnlineUserListDto dto = new MZOnlineUserListDto();
-                                    dto.setUid(mChatMessage.getText().getUser_id());
-                                    dto.setAvatar(mChatText.getAvatar());
-                                    dto.setIs_gag(mChatOnline.getIs_gag());
-                                    dto.setRole_name(mChatOnline.getRole());
-                                    dto.setNickname(mChatText.getUser_name());
-                                    personAvatars.add(dto);
-                                }
+                            if (Long.parseLong(mChatMessage.getText().getUser_id()) < Long.parseLong("5000000000")) {
+                                MZOnlineUserListDto dto = new MZOnlineUserListDto();
+                                dto.setUid(mChatMessage.getText().getUser_id());
+                                dto.setAvatar(mChatText.getAvatar());
+                                dto.setIs_gag(mChatOnline.getIs_gag());
+                                dto.setRole_name(mChatOnline.getRole());
+                                dto.setNickname(mChatText.getUser_name());
+                                personAvatars.add(dto);
                                 initOnlineAvatar();
-                            } catch (Exception e) {
+                                int current = Integer.valueOf(mTotalPerson) + 1;
+                                mTvOnline.setText(String_Utils.convert2W0_0(current + ""));
                             }
                         }
                         break;
                     }
                     case ChatMessageObserver.OFFLINE_TYPE:
-                        mTotalPerson =mTvOnline.getText().toString();
-                        int current = Integer.valueOf(mTotalPerson) - 1;
-                        try {
+                        mTotalPerson = mTvOnline.getText().toString();
+                        if (String_Utils.isNumeric(mTotalPerson) && !personAvatars.isEmpty()) {
+                            int current = Integer.valueOf(mTotalPerson) - 1;
+                            if (current <= 0) {
+                                current = 1;
+                            }
                             mTvOnline.setText(String_Utils.convert2W0_0(current + ""));
+
                             Iterator<MZOnlineUserListDto> iterator = personAvatars.iterator();
-                            while (iterator.hasNext()){
+                            while (iterator.hasNext()) {
                                 MZOnlineUserListDto userListDto = iterator.next();
-                                if (userListDto.getUid().equals(mChatText.getUser_id())){
+                                if (userListDto.getUid().equals(mChatText.getUser_id()) && !mChatText.getUser_id().equals(mPlayInfoDto.getChat_uid())) {
                                     iterator.remove();
                                 }
                             }
                             initOnlineAvatar();
-                        } catch (Exception e) {
+                        }
+                        if (personAvatars.size() < 4) {
+                            mzApiRequestOnline.startData(MZApiRequest.API_TYPE_ONLINE_USER_LIST, true, ticketId);
                         }
                         break;
                     case ChatMessageObserver.COMPLETE:
@@ -461,13 +471,39 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
                                 //主播离开
                                 mRlLiveOver.setVisibility(View.VISIBLE);
                                 mLiveContent.setText("主播暂时离开，\n稍等一下马上回来");
-                                mzVideoView.pause();
+                                mManager.stop();
+                                mManager.reset();
                                 break;
-                            case "*liveEnd":
+                            case ChatCmdDto.LIVE_END:
                                 //直播结束
                                 mRlLiveOver.setVisibility(View.VISIBLE);
                                 mLiveContent.setText("直播已结束");
-                                mzVideoView.stopPlayback();
+                                mManager.stop();
+                                break;
+                            case ChatCmdDto.KICK_OUT:
+                            case ChatCmdDto.LIVE_PUBLISH_PAUSE:
+                                break;
+                            case ChatCmdDto.LIVE_PUBLISH_START:
+                                mRlLiveOver.setVisibility(View.GONE);
+                                if (TextUtils.isEmpty(mPlayInfoDto.getVideo().getUrl())) {
+                                    mzApiRequest.startData(MZApiRequest.API_TYPE_PLAY_INFO, ticketId);
+                                } else {
+                                    mManager.reset();
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            mManager.reload();
+                                        }
+                                    }, 500);
+                                }
+                                break;
+                            case ChatCmdDto.LIVE_CHANNEL_START:
+                                if (ticketId.equals(mChatCmd.getTicket_id()))
+                                    mzApiRequest.startData(MZApiRequest.API_TYPE_PLAY_INFO, ticketId);
+                                mRlLiveOver.setVisibility(View.GONE);
+                                break;
+                            case ChatCmdDto.DO_SWITCH_PAGE:
+                                mChatCmd.getWebinar_id();
                                 break;
                             case ChatPresenter.WEBINAR_VIEW_CONFIG_UPDATE: //弹幕，禁言，防录屏,等配置开关
                                 updateConfigs(mChatCmd.getWebinar_content());
@@ -478,10 +514,10 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
             }
 
             @Override
-            public void monitorInformErrer(String s, int i, String s1) {
+            public void monitorInformError(String s, int i, String s1) {
 
             }
-        } ,CLASSNAME);
+        });
 
         mzApiRequest = new MZApiRequest();
         mzApiRequestOnline = new MZApiRequest();
@@ -493,18 +529,19 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         //在线人数列表回调
         mzApiRequestOnline.setResultListener(new MZApiDataListener() {
             @Override
-            public void dataResult(String apiType, Object dto) {
+            public void dataResult(String apiType, Object dto, Page page, int status) {
+                personAvatars.clear();
                 boolean isContainsMe = false;
                 List<MZOnlineUserListDto> mzOnlineUserListDto = (List<MZOnlineUserListDto>) dto;
                 for (int i = 0; i < mzOnlineUserListDto.size(); i++) {
                     if (Long.parseLong(mzOnlineUserListDto.get(i).getUid()) < Long.parseLong("5000000000")) {
                         personAvatars.add(mzOnlineUserListDto.get(i));
                     }
-                    if (mzOnlineUserListDto.get(i).getUid().equals(mPlayInfoDto.getChat_uid())){
+                    if (mzOnlineUserListDto.get(i).getUid().equals(mPlayInfoDto.getChat_uid())) {
                         isContainsMe = true;
                     }
                 }
-                if (!isContainsMe){
+                if (!isContainsMe) {
                     MZOnlineUserListDto userListDto = new MZOnlineUserListDto();
                     UserDto userInfoDto = MyUserInfoPresenter.getInstance().getUserInfo();
                     userListDto.setUid(mPlayInfoDto.getChat_uid());
@@ -512,7 +549,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
                     userListDto.setNickname(userInfoDto.getNickname());
                     personAvatars.add(userListDto);
                 }
-                mTvOnline.setText(personAvatars.size() + "");
                 initOnlineAvatar();
 
             }
@@ -525,7 +561,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         //商品列表回调
         mzApiRequestGoods.setResultListener(new MZApiDataListener() {
             @Override
-            public void dataResult(String s, Object o) {
+            public void dataResult(String s, Object o, Page page, int status) {
                 MZGoodsListExternalDto mzGoodsListExternalDto = (MZGoodsListExternalDto) o;
                 mGoodsListDtos = (ArrayList<MZGoodsListDto>) mzGoodsListExternalDto.getList();
                 if (mGoodsListDtos.size() > 0) {
@@ -544,9 +580,9 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         //主播信息回调
         mzApiRequestAnchorInfo.setResultListener(new MZApiDataListener() {
             @Override
-            public void dataResult(String s, Object o) {
+            public void dataResult(String s, Object o, Page page, int status) {
                 anchorInfoDto = (AnchorInfoDto) o;
-                if (mListener != null){
+                if (mListener != null) {
                     mListener.resultAnchorInfo(anchorInfoDto);
                 }
                 mTvNickName.setText(anchorInfoDto.getNickname());
@@ -572,14 +608,14 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         boolean isSelf = megTxtDto.getUniqueID().equals(MyUserInfoPresenter.getInstance().getUserInfo().getUniqueID());
         if (isSelf) {
             mzPlayerView.setDanmakuCustomTextColor(getResources().getColor(R.color.color_fff45c));
-            mzPlayerView.sendDanmaku(mChatText.getUser_name() + ":  " + megTxtDto.getText(), liveStatus == 1,  mChatText.getAvatar(), new DanmakuViewCacheStuffer(mActivity, mzPlayerView.getDanmakuView()));
+            mzPlayerView.sendDanmaku(mChatText.getUser_name() + ":  " + megTxtDto.getText(), liveStatus == 1, mChatText.getAvatar(), new DanmakuViewCacheStuffer(mActivity, mzPlayerView.getDanmakuView()));
         } else {
             mzPlayerView.setDanmakuCustomTextColor(getResources().getColor(R.color.white));
-            mzPlayerView.sendDanmaku(mChatText.getUser_name() + ":  " + megTxtDto.getText(),liveStatus == 1 ,  mChatText.getAvatar(), new DanmakuViewCacheStuffer(mActivity, mzPlayerView.getDanmakuView()));
+            mzPlayerView.sendDanmaku(mChatText.getUser_name() + ":  " + megTxtDto.getText(), liveStatus == 1, mChatText.getAvatar(), new DanmakuViewCacheStuffer(mActivity, mzPlayerView.getDanmakuView()));
         }
     }
 
-    class ChatAvatarClick implements PlayerChatListFragment.OnChatAvatarClickListener{
+    class ChatAvatarClick implements PlayerChatListFragment.OnChatAvatarClickListener {
 
         @Override
         public void onChatAvatarClick(ChatTextDto dto) {
@@ -604,14 +640,55 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
 
     //需要加载该fragment的activity实现点击回调接口
     private IPlayerClickListener mListener;
-    private PlayerEventListener mPlayerEventListener;
+    private PlayerEventListener mPlayerEventListener = new PlayerEventListener() {
+        @Override
+        public void hideAllEvent() {
+            PlayerFragment.this.showAllEvent();
+        }
+
+        @Override
+        public void showAllEvent() {
+            PlayerFragment.this.hideAllEvent();
+        }
+
+        @Override
+        public void onBackClick(boolean isBack) {
+
+        }
+
+        @Override
+        public void onPausePlayer() {
+            MZChatManager.getInstance(mActivity).sendMessageEndEvent(ticketId);
+        }
+
+        @Override
+        public void onStartPlayer() {
+            MZChatManager.getInstance(mActivity).sendMessagePlayEvent(ticketId, speeds[mSpeedIndex] + "");
+        }
+
+        @Override
+        public void onForbid(boolean isForbid) {
+
+        }
+
+        @Override
+        public void onSwitchFullBtnClick(int orientation) {
+
+        }
+
+        @Override
+        public void onTvClick() {
+            showDlanDialog();
+        }
+
+        @Override
+        public void onSpeedClick() {
+            showSpeedSelectDialog();
+        }
+    };
 
     public void setIPlayerClickListener(IPlayerClickListener listener) {
         mListener = listener;
-    }
-
-    public void setPlayerEventListener(PlayerEventListener mPlayerEventListener){
-        this.mPlayerEventListener = mPlayerEventListener;
     }
 
     @Override
@@ -628,10 +705,11 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
             }
 
         }
-        if (view.getId() == R.id.tv_playerfragment_person) { //点击在线人数
+        if (view.getId() == R.id.tv_playerfragment_person || view.getId() == R.id.civ_activity_live_online_person1
+                || view.getId() == R.id.civ_activity_live_online_person2 || view.getId() == R.id.civ_activity_live_online_person3) { //点击在线人数
             if (mListener != null) {
-                PersonListPopupWindow personListPopupWindow = new PersonListPopupWindow(mActivity , mPlayInfoDto.getTicket_id());
-                personListPopupWindow.showAtLocation(mzPlayerView , Gravity.CENTER , 0 , 0);
+                PersonListPopupWindow personListPopupWindow = new PersonListPopupWindow(mActivity, mPlayInfoDto);
+                personListPopupWindow.showAtLocation(mzPlayerView, Gravity.CENTER, 0, 0);
                 personListPopupWindow.setOnPersonListClickCallBack(new PersonListPopupWindow.PersonListClickedCallBack() {
                     @Override
                     public void onPersonItemClicked(MZOnlineUserListDto onlineUserListDto) {
@@ -645,15 +723,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
                 mListener.onCloseClick(mPlayInfoDto);
             }
         }
-        if (view.getId() == R.id.iv_video_bottom_bar_speed_select){ //点击倍速
-            showSpeedSelectDialog();
-        }
-        if (view.getId() == R.id.iv_video_bottom_bar_tv){ //点击投屏
-            showDlanDialog();
-        }
-        if (view.getId() == R.id.iv_live_bottom_bar_tv){ //点击投屏
-            showDlanDialog();
-        }
+
         if (view.getId() == R.id.iv_playerfragment_config) { //点击底部三个点显示举报
             isConfig = !isConfig;
             mIvConfig.setImageResource(isConfig ? R.mipmap.gm_icon_config_true : R.mipmap.mz_icon_config);
@@ -665,14 +735,14 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
             }
         }
         if (view.getId() == R.id.tv_playerfragment_danmaku_switch) { //点击弹幕开关
-            if (PreferencesUtils.loadPrefBoolean(mActivity  ,PreferencesUtils.DANMAKU_SWITCH_KEY, true)){
-                PreferencesUtils.savePrefBoolean(mActivity , PreferencesUtils.DANMAKU_SWITCH_KEY , false);
+            if (PreferencesUtils.loadPrefBoolean(mActivity, PreferencesUtils.DANMAKU_SWITCH_KEY, true)) {
+                PreferencesUtils.savePrefBoolean(mActivity, PreferencesUtils.DANMAKU_SWITCH_KEY, false);
                 Drawable drawableLeft = getResources().getDrawable(R.mipmap.ic_danmaku_closed);
-                mTvDanmakuSwtich.setCompoundDrawablesWithIntrinsicBounds(drawableLeft , null , null , null);
-            }else {
-                PreferencesUtils.savePrefBoolean(mActivity , PreferencesUtils.DANMAKU_SWITCH_KEY , true);
+                mTvDanmakuSwtich.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, null, null, null);
+            } else {
+                PreferencesUtils.savePrefBoolean(mActivity, PreferencesUtils.DANMAKU_SWITCH_KEY, true);
                 Drawable drawableLeft = getResources().getDrawable(R.mipmap.ic_danmaku_open);
-                mTvDanmakuSwtich.setCompoundDrawablesWithIntrinsicBounds(drawableLeft , null , null , null);
+                mTvDanmakuSwtich.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, null, null, null);
             }
         }
         if (view.getId() == R.id.iv_playerfragment_share) { //点击分享
@@ -682,12 +752,12 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         }
         if (view.getId() == R.id.iv_playerfragment_zan) { //点击点赞
             if (mListener != null) {
-                if(mPraiseRequest==null){
-                    mPraiseRequest=new MZApiRequest();
-                    mPraiseRequest.createRequest(mActivity,MZApiRequest.API_TYPE_ROOT_PRAISE);
+                if (mPraiseRequest == null) {
+                    mPraiseRequest = new MZApiRequest();
+                    mPraiseRequest.createRequest(mActivity, MZApiRequest.API_TYPE_ROOT_PRAISE);
                     mPraiseRequest.setResultListener(new MZApiDataListener() {
                         @Override
-                        public void dataResult(String s, Object o) {
+                        public void dataResult(String s, Object o, Page page, int status) {
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -696,7 +766,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
-                                    isPraise=true;
+                                    isPraise = true;
                                 }
                             }).start();
 
@@ -712,15 +782,15 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
-                                    isPraise=true;
+                                    isPraise = true;
                                 }
                             }).start();
                         }
                     });
                 }
-                if(isPraise){
-                    mPraiseRequest.startData(MZApiRequest.API_TYPE_ROOT_PRAISE,ticketId,mPlayInfoDto.getChannel_id(),1,mPlayInfoDto.getChat_uid());
-                    isPraise=false;
+                if (isPraise) {
+                    mPraiseRequest.startData(MZApiRequest.API_TYPE_ROOT_PRAISE, ticketId, mPlayInfoDto.getChannel_id(), 1, mPlayInfoDto.getChat_uid());
+                    isPraise = false;
                 }
                 mListener.onLikeClick(mPlayInfoDto, mIvLike);
             }
@@ -729,6 +799,10 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         }
         if (view.getId() == R.id.rl_playerfragment_send_chat) { //点击发送消息
             if (!TextUtils.isEmpty(MyUserInfoPresenter.getInstance().getUserInfo().getUniqueID())) {
+                if (mPlayInfoDto.isDisable_chat()) {
+                    Toast.makeText(mActivity, "主播开启了全体禁言", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (mPlayInfoDto.getUser_status() == 1) {
                     ActivityUtils.startLandscapeTransActivity(mActivity);
                 } else if (mPlayInfoDto.getUser_status() == 3) {
@@ -752,34 +826,46 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
      */
     @SuppressLint("WrongConstant")
     @Override
-    public void dataResult(String s, Object o) {
+    public void dataResult(String s, Object o, Page page, int status) {
         mPlayInfoDto = (PlayInfoDto) o;
         updateConfigs(mPlayInfoDto.getRight());
+        liveStatus = mPlayInfoDto.getStatus();
         //获取播放地址
         mVideoUrl = mPlayInfoDto.getVideo().getUrl();
         if (!TextUtils.isEmpty(mVideoUrl)) {
-            controller= DLNAController.getInstance(mActivity.getApplication());
+            controller = DLNAController.getInstance(mActivity.getApplication());
             controller.initPresenter(mActivity.getApplication());
             controller.registerListener(mActivity.getClass().getSimpleName(), new DLNAListener());
             RemoteItem itemurl1 = new RemoteItem("name", "1111", "wwwww",
                     0, "0", "", mVideoUrl);
             controller.setUrl(itemurl1);
-            liveStatus = mPlayInfoDto.getStatus();
             int liveType = PlayerController.TYPE_LIVE;
-            if (liveStatus == 2){
+            if (liveStatus == 2) {
                 liveType = PlayerController.TYPE_VIDEO;
             }
-            mManager.init(mzPlayerView).setBroadcastType(liveType,false).setMediaQuality(IMZPlayerManager.MZ_MEDIA_QUALITY_HIGH);
-            if (mPlayerEventListener != null){
+            mManager.setBroadcastType(liveType, mPlayInfoDto.getLive_type() == 1).setMediaQuality(IMZPlayerManager.MZ_MEDIA_QUALITY_HIGH);
+            if (mPlayerEventListener != null) {
                 mManager.setEventListener(mPlayerEventListener);
             }
             mManager.setVideoPath(mVideoUrl);
             mManager.showPreviewImage(mPlayInfoDto.getCover());
             mManager.setIsOpenRandom(true);
-            mManager.setRandomData("test");
+            mManager.setRandomData("test", 80, getResources().getColor(R.color.color_3F95FD));
             mzPlayerView.enableDanmaku(true);
-            mzPlayerView.hideFullBtn();
+            mzPlayerView.hideFullIV();
             mManager.start();
+            MZChatManager.getInstance(mActivity).setPlayinfo(mPlayInfoDto);
+            MZChatManager.getInstance(mActivity).sendMessagePlayEvent(ticketId, speeds[mSpeedIndex] + "");
+        } else {
+            if (liveStatus == 3) {
+                mRlLiveOver.setVisibility(View.VISIBLE);
+                mLiveContent.setText("主播暂时离开，\n稍等一下马上回来");
+            } else {
+                mzPlayerView.showPreviewImage(mPlayInfoDto.getCover());
+            }
+        }
+        if (liveStatus != 2 && mPlayInfoDto.getLive_type() == 1) {
+            mzPlayerView.hideDlnaIV();
         }
         //请求在线人数api
         mzApiRequestOnline.startData(MZApiRequest.API_TYPE_ONLINE_USER_LIST, true, ticketId);
@@ -790,13 +876,15 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         //加载直播状态
         initLiveStatus();
         //添加聊天fragment
+        if (mChatFragment.isAdded()) {
+            return;
+        }
+        mTvOnline.setText(mPlayInfoDto.getWebinar_onlines() + "");
         Bundle bundle = new Bundle();
         bundle.putBoolean(PlayerChatListFragment.PLAY_TYPE_KEY, true);
         bundle.putSerializable(PlayerChatListFragment.PLAY_INFO_KEY, mPlayInfoDto);
         mChatFragment.setArguments(bundle);
         getChildFragmentManager().beginTransaction().replace(R.id.layout_activity_live_broadcast_chat, mChatFragment).commitAllowingStateLoss();
-        //请求历史消息api
-//        MZChatManager.getInstance(mActivity).startHistory((PlayInfoDto) o);
 
     }
 
@@ -866,13 +954,13 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
     /**
      * 更新配置消息
      */
-    private void updateConfigs(List<RightBean> rightBeans){
+    private void updateConfigs(List<RightBean> rightBeans) {
         for (int i = 0; i < rightBeans.size(); i++) {
             boolean isOpen = rightBeans.get(i).getIs_open() == 1;
             switch (rightBeans.get(i).getType()) {
                 case PlayInfoDto.DISABLE_CHAT: //禁言
                     mPlayInfoDto.setDisable_chat(isOpen);
-                    StaticStateDto.getInstance().setForbidPublicMsg(isOpen);
+//                    StaticStateDto.getInstance().setForbidPublicMsg(isOpen);
                     break;
                 case PlayInfoDto.BARRAGE:
                     mPlayInfoDto.setInputDanmuku(isOpen);
@@ -882,6 +970,18 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
                         mPlayInfoDto.setRecordScreen(isOpen);
                         mzPlayerView.setIsOpenRandom(isOpen);
                     }
+                    break;
+                case PlayInfoDto.VOTE:
+                    mPlayInfoDto.setVoteShow(isOpen);
+                    break;
+                case PlayInfoDto.SIGN:
+                    mPlayInfoDto.setSignShow(isOpen);
+                    break;
+                case PlayInfoDto.DOCUMENTS:
+                    mPlayInfoDto.setDocumentShow(isOpen);
+                    break;
+                case PlayInfoDto.CHAT_HISTORY:
+                    mPlayInfoDto.setHide_chat_history(isOpen);
                     break;
             }
         }
@@ -917,51 +1017,20 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
                 }
             }
         });
-        goodsListPopupWindow.showAtLocation(mzVideoView, Gravity.BOTTOM, 0, 0);
-    }
-
-    /**
-     * 获取观看者昵称
-     *
-     * @return
-     */
-    public String getUserNickName() {
-        return MyUserInfoPresenter.getInstance().getUserInfo().getNickname();
-    }
-
-    /**
-     * 获取观看者Uid
-     *
-     * @return
-     */
-    public String getUserUid() {
-        return MyUserInfoPresenter.getInstance().getUserInfo().getUid();
-    }
-
-    /**
-     * 获取观看者头像地址
-     *
-     * @return
-     */
-    public String getUserAvatar() {
-        return MyUserInfoPresenter.getInstance().getUserInfo().getAvatar();
+        goodsListPopupWindow.showAtLocation(mzPlayerView, Gravity.BOTTOM, 0, 0);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ChatMessageObserver.getInstance().cancelRegister(CLASSNAME);
-        MZChatManager.getInstance(mActivity).destroyChat();
+        MZChatManager.getInstance(mActivity).removeListener(CLASSNAME);
+        MZChatManager.destroyChat();
         //释放飘心资源
         if (null != mLoveLayout) {
             mLoveLayout.removeView();
         }
         mManager.onDestroy();
-        //关闭播放器
-        if (null != mzVideoView) {
-            mzVideoView.destroy();
-        }
-        if (controller != null){
+        if (controller != null) {
             controller.onDestroy();
             controller.unRegisterListener(mActivity.getClass().getSimpleName());
         }
@@ -981,21 +1050,21 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
     }
 
 
-    public void hideAllEvent(){
-        mzPlayerView.setIsCanTouch(true);
-        mAppBarLayout.setVisibility(View.GONE);
-        mRlChatAndBottom.setVisibility(View.GONE);
+    public void hideAllEvent() {
+        if (liveStatus == 2) {
+            mzPlayerView.setIsCanTouch(true);
+            mRlChatAndBottom.setVisibility(View.GONE);
+        }
     }
 
-    public void showAllEvent(){
-        mzPlayerView.setIsCanTouch(false);
+    public void showAllEvent() {
+        mzPlayerView.setIsCanTouch(true);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mAppBarLayout.setVisibility(View.VISIBLE);
                 mRlChatAndBottom.setVisibility(View.VISIBLE);
             }
-        } , 500);
+        }, 500);
     }
 
     private void initBanChat(boolean isBan) {
@@ -1012,39 +1081,43 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         }
     }
 
-    private void initLiveStatus(){
-        if (liveStatus == 2){
+    private void initLiveStatus() {
+        if (liveStatus == 2) {
             mTvLiveType.setBackgroundResource(R.drawable.shape_video_type_ball);
             mTVLiveTypeText.setText("回放");
-        }else {
+        } else if (liveStatus == 1) {
             mTvLiveType.setBackgroundResource(R.drawable.shape_live_type_ball);
             mTVLiveTypeText.setText("直播");
+        } else if (liveStatus == 0) {
+            mTvLiveType.setBackgroundResource(R.drawable.shape_video_type_ball);
+            mTVLiveTypeText.setText("未开播");
         }
     }
 
     private void showSpeedSelectDialog() {
-        speedDialog = new SpeedBottomDialogFragment(mActivity , false);
-        speedDialog.showAtLocation(mzPlayerView , mSpeedIndex);
+        speedDialog = new SpeedBottomDialogFragment(mActivity, false);
+        speedDialog.showAtLocation(mzPlayerView, mSpeedIndex);
         speedDialog.setOnSelectSpeedListener(new SpeedBottomDialogFragment.OnSelectSpeedListener() {
             @Override
             public void OnSelectSpeed(int type) {
                 mSpeedIndex = type;
+                MZChatManager.getInstance(mActivity).sendMessageChangeSpeedEvent(ticketId, speeds[mSpeedIndex] + "");
                 mzPlayerView.setSpeed(speeds[mSpeedIndex]);
-                switch (type){
+                switch (type) {
                     case 0:
-                        mIvSpeed.setImageResource(R.mipmap.icon_speed_075);
+                        mzPlayerView.setSpeedDrawable(getResources().getDrawable(R.mipmap.icon_speed_075));
                         break;
                     case 1:
-                        mIvSpeed.setImageResource(R.mipmap.icon_speed_100);
+                        mzPlayerView.setSpeedDrawable(getResources().getDrawable(R.mipmap.icon_speed_100));
                         break;
                     case 2:
-                        mIvSpeed.setImageResource(R.mipmap.icon_speed_125);
+                        mzPlayerView.setSpeedDrawable(getResources().getDrawable(R.mipmap.icon_speed_125));
                         break;
                     case 3:
-                        mIvSpeed.setImageResource(R.mipmap.icon_speed_150);
+                        mzPlayerView.setSpeedDrawable(getResources().getDrawable(R.mipmap.icon_speed_150));
                         break;
                     case 4:
-                        mIvSpeed.setImageResource(R.mipmap.icon_speed_200);
+                        mzPlayerView.setSpeedDrawable(getResources().getDrawable(R.mipmap.icon_speed_200));
                         break;
                 }
             }
@@ -1052,9 +1125,9 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
     }
 
     //开始投屏
-    public void startDlan(){
+    public void startDlan() {
         if (controller != null)
-        controller.onExecute(DLNAController.PLAYER_DLNA);
+            controller.onExecute(DLNAController.PLAYER_DLNA);
     }
 
     /**
@@ -1064,9 +1137,16 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
 
         try {
             assert getFragmentManager() != null;
-            ChannelDlanDialogFragment dlanDialogFragment = (ChannelDlanDialogFragment) getFragmentManager().findFragmentByTag("DLANDIALOGFRAGMENT");
+            ChannelDlnaDialogFragment dlanDialogFragment = (ChannelDlnaDialogFragment) getFragmentManager().findFragmentByTag("DLANDIALOGFRAGMENT");
             if (null == dlanDialogFragment) {
-                dlanDialogFragment = ChannelDlanDialogFragment.newInstance(new PlayInfoDto() , controller);
+                ChannelDlnaDialogFragment.Builder builder = new ChannelDlnaDialogFragment.Builder(mActivity);
+                builder.setOnDeviceItemSelectListener(new ChannelDlnaDialogFragment.OnDeviceItemSelectListener() {
+                    @Override
+                    public void onSelectDevice() {
+                        startDlan();
+                    }
+                });
+                dlanDialogFragment = builder.build();
             }
             if (!dlanDialogFragment.isAdded() && !dlanDialogFragment.isVisible() && !dlanDialogFragment.isRemoving()) {
                 dlanDialogFragment.show(getFragmentManager(), "DLANDIALOGFRAGMENT");
@@ -1088,42 +1168,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
 
 
         }
-    }
-
-    public void loginCallback(UserDto dto){
-        MyUserInfoPresenter.getInstance().saveUserinfo(dto);
-        MZApiRequest apiRequest = new MZApiRequest();
-        apiRequest.createRequest(mActivity, MZApiRequest.API_TYPE_PLAY_INFO);
-        apiRequest.startData(MZApiRequest.API_TYPE_PLAY_INFO, ticketId);
-        apiRequest.setResultListener(new MZApiDataListener() {
-            @Override
-            public void dataResult(String s, Object o) {
-                mPlayInfoDto = (PlayInfoDto) o;
-                //获取播放地址
-                mVideoUrl = mPlayInfoDto.getVideo().getHttp_url();
-                //是否禁言
-                initBanChat(mPlayInfoDto.getUser_status() == 3);
-                MZChatManager.getInstance(mActivity).destroyChat();
-                if(mChatFragment!=null) {
-                    getChildFragmentManager().beginTransaction().remove(mChatFragment).commit();
-                }
-                mChatFragment = new PlayerChatListFragment();
-                Bundle bundle = new Bundle();
-                bundle.putBoolean(PlayerChatListFragment.PLAY_TYPE_KEY, true);
-                bundle.putSerializable(PlayerChatListFragment.PLAY_INFO_KEY, mPlayInfoDto);
-                mChatFragment.setArguments(bundle);
-                getChildFragmentManager().beginTransaction().replace(R.id.layout_activity_live_broadcast_chat, mChatFragment).commitAllowingStateLoss();
-                mChatFragment.setOnChatAvatarClickListener(new ChatAvatarClick());
-                if(mChatFragment!=null) {
-                    mChatFragment.setmPlayInfoDto(mPlayInfoDto);
-                }
-            }
-
-            @Override
-            public void errorResult(String s, int i, String s1) {
-
-            }
-        });
     }
 
 }

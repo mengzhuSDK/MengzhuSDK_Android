@@ -20,6 +20,7 @@ import com.mzmedia.IPushClickListener;
 import com.mzmedia.fragment.push.MZPlugFlowFragement;
 import com.mzmedia.presentation.dto.LiveConfigDto;
 import com.mzmedia.utils.MUIImmerseUtils;
+
 import tv.mengzhu.core.wrap.user.presenter.MyUserInfoPresenter;
 
 public class PusherActivity  extends AppCompatActivity implements IPushClickListener {
@@ -33,6 +34,9 @@ public class PusherActivity  extends AppCompatActivity implements IPushClickList
     private boolean cbbeauty,cblater,cbAudio,cbAllBanChat;
     private String liveTk,ticketId,fps,time;
     private LiveConfigDto liveConfigDto;
+
+    private boolean isAudioPush = false;
+
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,6 +56,7 @@ public class PusherActivity  extends AppCompatActivity implements IPushClickList
         setTheme(R.style.AppCompatTheme);
         setContentView(R.layout.test_push_layout);
 
+        isAudioPush = getIntent().getBooleanExtra("isAudioPush" , false);
         bitrate = getIntent().getIntExtra("bitrate",0);
         liveTk = getIntent().getStringExtra("live_tk");
         ticketId = getIntent().getStringExtra("ticketId");
@@ -89,7 +94,7 @@ public class PusherActivity  extends AppCompatActivity implements IPushClickList
         mPlayInfoDto.setChannel_id(startBroadcastInfoDto.getChannel_id());
         mPlayInfoDto.setChat_uid(startBroadcastInfoDto.getChat_conf().getChat_uid());
         mzPlugFlowFragement = MZPlugFlowFragement.newInstance(startBroadcastInfoDto.getPush_url(),startBroadcastInfoDto.getTicket_id()
-                ,screen,mPlayInfoDto,liveConfigDto);
+                ,screen,mPlayInfoDto,liveConfigDto , isAudioPush);
         mFragmentManager.beginTransaction().replace(R.id.layout_push, mzPlugFlowFragement).commitAllowingStateLoss();
         mzPlugFlowFragement.setPushClickListener(this);
     }
