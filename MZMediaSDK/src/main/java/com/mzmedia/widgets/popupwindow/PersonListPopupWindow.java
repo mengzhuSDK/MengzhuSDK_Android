@@ -30,9 +30,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import java.util.ArrayList;
 import java.util.List;
 
-import tv.mengzhu.core.wrap.netwock.Page;
 import tv.mengzhu.core.wrap.user.modle.UserDto;
 import tv.mengzhu.core.wrap.user.presenter.MyUserInfoPresenter;
+import tv.mengzhu.core.wrap.netwock.Page;
 
 
 /**

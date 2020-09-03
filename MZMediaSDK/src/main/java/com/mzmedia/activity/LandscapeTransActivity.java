@@ -31,12 +31,17 @@ import com.mengzhu.live.sdk.business.presenter.chat.ChatMessageObserver;
 import com.mengzhu.live.sdk.business.presenter.chat.ChatPresenter;
 import com.mengzhu.live.sdk.core.utils.KeyBoardUtils;
 import com.mengzhu.live.sdk.ui.chat.MZChatManager;
+import com.mengzhu.live.sdk.ui.widgets.emoji.EmojiPagerAdapter;
+import com.mengzhu.live.sdk.ui.widgets.emoji.EmojiUtils;
 import com.mengzhu.sdk.R;
 import com.mzmedia.utils.String_Utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import tv.mengzhu.core.frame.coreutils.Device;
-import tv.mengzhu.core.wrap.netwock.Page;
 import tv.mengzhu.core.wrap.user.presenter.MyUserInfoPresenter;
+import tv.mengzhu.core.wrap.netwock.Page;
 
 /**
  * Created by DELL on 2016/7/13.
@@ -115,7 +120,7 @@ public class LandscapeTransActivity extends Activity implements View.OnClickList
 //        mAtUid = mIntent.getStringExtra(RequestParamConstants.UID);
 //        mAtTicketId = mIntent.getStringExtra(RequestParamConstants.TICKET_ID);
 //        mPlayinfo = (PlayInfoDto) mIntent.getSerializableExtra(TransActivity.PLAYINFO);
-//        initEmoji();
+        initEmoji();
 //        et_input.addTextChangedListener(new Testlistener(et_input, 100));
 
         //设置输入长度
@@ -240,6 +245,15 @@ public class LandscapeTransActivity extends Activity implements View.OnClickList
             //            case R.id.mz_activity_input_danmuku:
 //                danmukuControl(mInputDanmukuIv);
 //                break;
+        } else if (id == R.id.mz_activity_input_emoji) {
+            num = 1;
+            if (!isShowEmoji) {
+                showEmoji();
+                isShowEmoji = true;
+            } else {
+                showKeyboard();
+                isShowEmoji = false;
+            }
         }
     }
 
@@ -344,15 +358,15 @@ public class LandscapeTransActivity extends Activity implements View.OnClickList
     }
 
 
-//    public void initEmoji() {
-//        List emoji = EmojiUtils.getExpressionRes(90);
-//        List<View> views = new ArrayList<View>();
-//        for (int i = 1; i <= 4; i++) {// 20*5
-//            View view = EmojiUtils.getGridChildView(this, i, emoji, et_input);
-//            views.add(view);
-//        }
-//        mVpEmoji.setAdapter(new EmojiPagerAdapter(views));
-//    }
+    public void initEmoji() {
+        List emoji = EmojiUtils.getExpressionRes(90);
+        List<View> views = new ArrayList<View>();
+        for (int i = 1; i <= 4; i++) {// 20*5
+            View view = EmojiUtils.getGridChildView(this, i, emoji, et_input);
+            views.add(view);
+        }
+        mVpEmoji.setAdapter(new EmojiPagerAdapter(views));
+    }
 
     class AtPushListener implements IBasePresenterLinstener {
 
@@ -367,20 +381,20 @@ public class LandscapeTransActivity extends Activity implements View.OnClickList
         }
     }
 
-//    private void showEmoji() {
-//        KeyBoardUtils.closeKeybord(et_input, this);
-//        new Handler() {//延时0.2秒显示表情
-//            @Override
-//            public void handleMessage(Message msg) {
-//                super.handleMessage(msg);
-//                mActivityInputEmoji.setImageResource(R.drawable.icon_input_keyboard);
-//                mVpEmoji.setVisibility(View.VISIBLE);
-//            }
-//        }.sendEmptyMessageDelayed(1, 200);
-//    }
+    private void showEmoji() {
+        KeyBoardUtils.closeKeybord(et_input, this);
+        new Handler() {//延时0.2秒显示表情
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                mActivityInputEmoji.setImageResource(R.mipmap.icon_keybord);
+                mVpEmoji.setVisibility(View.VISIBLE);
+            }
+        }.sendEmptyMessageDelayed(1, 200);
+    }
 
     private void showKeyboard() {
-//        mActivityInputEmoji.setImageResource(R.drawable.icon_input_emoji);
+        mActivityInputEmoji.setImageResource(R.mipmap.icon_emoji);
         mVpEmoji.setVisibility(View.GONE);
         new Handler() {//延时0.2秒显示表情
             @Override

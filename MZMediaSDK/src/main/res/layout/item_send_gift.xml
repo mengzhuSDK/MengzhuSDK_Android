@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/dimen_96"
+    android:layout_height="@dimen/dimen_118"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/layout_item_gift"
+        android:layout_width="@dimen/dimen_90"
+        android:layout_height="@dimen/dimen_118"
+        android:background="@drawable/bg_item_gift_select">
+
+        <ImageView
+            android:id="@+id/iv_item_gift_icon_label"
+            android:layout_width="@dimen/dimen_68"
+            android:layout_height="@dimen/dimen_46"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dimen_14"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:id="@+id/tv_item_gift_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/iv_item_gift_icon_label"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dimen_8"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="礼物"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_14sp" />
+
+        <TextView
+            android:id="@+id/tv_item_gift_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_item_gift_name"
+            android:layout_centerHorizontal="true"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="998"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_10sp" />
+    </RelativeLayout>
+
+</LinearLayout>

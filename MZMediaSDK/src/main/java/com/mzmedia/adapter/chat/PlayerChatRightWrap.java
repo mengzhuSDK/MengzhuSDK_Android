@@ -3,11 +3,14 @@ package com.mzmedia.adapter.chat;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mengzhu.live.sdk.business.dto.chat.ChatMessageDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatTextDto;
+import com.mengzhu.live.sdk.business.dto.chat.impl.ChatCompleteDto;
 import com.mengzhu.live.sdk.business.dto.chat.impl.ChatMegTxtDto;
 import com.mengzhu.live.sdk.business.presenter.chat.ChatMessageObserver;
 import com.mengzhu.sdk.R;
@@ -33,11 +36,14 @@ public class PlayerChatRightWrap extends BaseViewObtion {
     public View createView(Object o, int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             mHolder = new ViewHolder();
-            convertView = View.inflate(mContext, isHalfPlayer?R.layout.mz_halfplayer_chat_right_item : R.layout.mz_player_chat_right_item, null);
+            convertView = View.inflate(mContext, isHalfPlayer ? R.layout.mz_halfplayer_chat_right_item : R.layout.mz_player_chat_right_item, null);
             mHolder.mPlayerChatRightLayout = convertView.findViewById(R.id.player_chat_right_layout);
             mHolder.mPlayerChatRightIcon = convertView.findViewById(R.id.player_chat_right_icon);
             mHolder.mPlayerChatRightContent = convertView.findViewById(R.id.player_chat_right_content);
             mHolder.mPlayerChatRightUsername = convertView.findViewById(R.id.player_chat_right_username);
+            mHolder.mPlayerGiftLayout = convertView.findViewById(R.id.player_chat_gift_layout);
+            mHolder.mPlayerGiftIcon = convertView.findViewById(R.id.player_chat_gift_icon);
+            mHolder.mPlayerGiftNum = convertView.findViewById(R.id.player_chat_gift_num);
             convertView.setTag(mHolder);
         } else {
             mHolder = (ViewHolder) convertView.getTag();
@@ -49,25 +55,21 @@ public class PlayerChatRightWrap extends BaseViewObtion {
     public void updateView(Object o, int position, View convertView) {
         ChatMessageDto dto = (ChatMessageDto) o;
         ViewHolder holder = (ViewHolder) convertView.getTag();
-        if (mHolder != null && dto != null && dto.getText().getEvent().equals(ChatMessageObserver.MESSAGE_TYPE)) {
-            ChatTextDto textDto = dto.getText();
-            ChatMegTxtDto megTxtDto = (ChatMegTxtDto) textDto.getBaseDto();
-            if (megTxtDto != null) {
-                holder.mPlayerChatRightContent.setText(megTxtDto.getText());
-                holder.mPlayerChatRightUsername.setText(textDto.getUser_name() + ": ");
-//                String_Utils.handlerContent(megTxtDto.getText(), holder.mPlayerChatRightContent, R.color.mz_at_name_color);
-                holder.mPlayerChatRightContent.setText(megTxtDto.getText());
-                ImageLoader.getInstance().displayImage(megTxtDto.getAvatar() + String_Utils.getPictureSizeAvatar(), holder.mPlayerChatRightIcon, new DisplayImageOptions.Builder()
-                        .showStubImage(R.mipmap.icon_default_avatar)
-                        .showImageForEmptyUri(R.mipmap.icon_default_avatar)
-                        .showImageOnFail(R.mipmap.icon_default_avatar)
-                        .cacheInMemory(true)
-                        .cacheOnDisc(true)
-                        .displayer(new RoundedBitmapDisplayer(20))
-                        .build());
-                holder.mPlayerChatRightLayout.setOnClickListener(new OnItemtClick(textDto));
-            }
-        }
+        ChatTextDto textDto = dto.getText();
+        holder.mPlayerChatRightUsername.setText(textDto.getUser_name() + ": ");
+        holder.mPlayerChatRightLayout.setOnClickListener(new OnItemtClick(textDto));
+        ImageLoader.getInstance().displayImage(textDto.getAvatar() + String_Utils.getPictureSizeAvatar(), holder.mPlayerChatRightIcon, new DisplayImageOptions.Builder()
+                .showStubImage(R.mipmap.icon_default_avatar)
+                .showImageForEmptyUri(R.mipmap.icon_default_avatar)
+                .showImageOnFail(R.mipmap.icon_default_avatar)
+                .cacheInMemory(true)
+                .cacheOnDisc(true)
+                .displayer(new RoundedBitmapDisplayer(20))
+                .build());
+
+        ChatMegTxtDto megTxtDto = (ChatMegTxtDto) textDto.getBaseDto();
+        mHolder.mPlayerGiftLayout.setVisibility(View.GONE);
+        String_Utils.handlerContent(megTxtDto.getText(), holder.mPlayerChatRightContent, R.color.mz_at_name_color);
     }
 
     class ViewHolder {
@@ -75,6 +77,9 @@ public class PlayerChatRightWrap extends BaseViewObtion {
         CircularImage mPlayerChatRightIcon;
         TextView mPlayerChatRightContent;
         TextView mPlayerChatRightUsername;
+        RelativeLayout mPlayerGiftLayout;
+        ImageView mPlayerGiftIcon;
+        TextView mPlayerGiftNum;
     }
 
     private boolean isLandscape;
@@ -99,39 +104,6 @@ public class PlayerChatRightWrap extends BaseViewObtion {
         @Override
         public void onClick(View view) {
 
-//            if (mDto.getUser_id().equals(LoginSystemManage.getInstance().getUserID())) {
-//                ToastUtils.popUpToast("这是我自己");
-//                return;
-//            }
-
-//            if (((Activity) mContext).getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE&&!isLandscape) {
-//                ((Activity) mContext).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//            }
-//            mUserInfoPopup = new UserInfoPopupWindow(mContext);
-//            mUserInfoPopup.loadInfoData(mDto.getUser_id());
-//            mUserInfoPopup.setListener(new UserInfoPopupWindow.onAttentionClickListener() {
-//                @Override
-//                public void onAttentionClicked() {
-//                }
-//
-//                @Override
-//                public void onHomeClicked() {
-//                    if (((Activity) mContext).getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-//                        if(!isLandscape) {
-//                            ((Activity) mContext).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//                            ActivityUtils.goOtherUserInfoActivity(((Activity) mContext), mDto.getUser_id());
-//                            mUserInfoPopup.dismiss();
-//                        }else {
-//                            ToastUtils.showShortToast(mContext,mContext.getString(R.string.living_broadcast_home_hint));
-//                        }
-//                    }else {
-//                        ActivityUtils.goOtherUserInfoActivity(((Activity) mContext), mDto.getUser_id());
-//                        mUserInfoPopup.dismiss();
-//                    }
-//
-//                }
-//            });
-//            mUserInfoPopup.showAtLocation(view, Gravity.CENTER, 0, 0);
         }
     }
 }

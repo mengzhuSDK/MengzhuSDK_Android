@@ -4,29 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.AppCompatCheckBox;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.RadioGroup;
-import android.widget.Toast;
 
-import com.mengzhu.live.sdk.business.dto.push.StartBroadcastInfoDto;
-import com.mengzhu.live.sdk.business.dto.push.StartCreateDto;
-import com.mengzhu.live.sdk.core.utils.DateUtils;
-import com.mengzhu.live.sdk.ui.api.MZApiDataListener;
-import com.mengzhu.live.sdk.ui.api.MZApiRequest;
-import com.mzmedia.fragment.HalfPlayerFragment;
-import com.mzmedia.fragment.PlayerFragment;
+import com.mengzhu.live.sdk.business.model.Paths;
 
-import java.net.URLEncoder;
-
-import tv.mengzhu.core.frame.coreutils.JurisdictionUtils;
 import tv.mengzhu.core.frame.coreutils.URLParamsUtils;
-import tv.mengzhu.core.wrap.netwock.Page;
-import tv.mengzhu.core.wrap.user.modle.UserDto;
-import tv.mengzhu.core.wrap.user.presenter.MyUserInfoPresenter;
 
 
 /**

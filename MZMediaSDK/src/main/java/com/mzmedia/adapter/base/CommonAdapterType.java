@@ -11,6 +11,7 @@ import java.util.List;
 
 import tv.mengzhu.core.module.model.dto.BaseItemDto;
 
+
 public class CommonAdapterType<T extends BaseItemDto> extends BaseAdapter {
 
 	protected SparseArray<BaseViewObtion<T>> mViewObtains = new SparseArray<BaseViewObtion<T>>();
@@ -133,6 +134,9 @@ public class CommonAdapterType<T extends BaseItemDto> extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		mPosition=position;
 		BaseViewObtion<T> obtain = mViewObtains.get(getItemViewType(position));
+		if (obtain == null){
+			return new View(mActivity);
+		}
 		if (convertView == null) {
 			convertView = mViewObtains.get(getItemViewType(position))
 					.createView(getItem(position), position, convertView, parent);

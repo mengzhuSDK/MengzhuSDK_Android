@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.mengzhu.live.sdk.core.utils.DateUtils;
 import com.mengzhu.live.sdk.core.utils.DensityUtil;
 import com.mengzhu.live.sdk.core.utils.SpannableClickable;
+import com.mengzhu.live.sdk.ui.widgets.emoji.EmojiUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
@@ -37,6 +38,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import tv.mengzhu.core.frame.coreutils.DeviceUtil;
+import tv.mengzhu.core.module.base.InitApplication;
 
 public class String_Utils {
     public static final float MUL = 1.0f;
@@ -1345,12 +1347,12 @@ public class String_Utils {
                         else
                             break;
                     }
-                    tvContent.setText(builder, TextView.BufferType.SPANNABLE);
+                    tvContent.setText(EmojiUtils.getEmojiText(InitApplication.getInstance().getApplication(), builder), TextView.BufferType.SPANNABLE);
                 } else {
-                    tvContent.setText( content, TextView.BufferType.SPANNABLE);
+                    tvContent.setText(EmojiUtils.getEmojiText(InitApplication.getInstance().getApplication(), content), TextView.BufferType.SPANNABLE);
                 }
             } else {
-                tvContent.setText( content, TextView.BufferType.SPANNABLE);
+                tvContent.setText(EmojiUtils.getEmojiText(InitApplication.getInstance().getApplication(), content), TextView.BufferType.SPANNABLE);
             }
         }
     }
