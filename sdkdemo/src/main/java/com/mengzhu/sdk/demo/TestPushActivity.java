@@ -1,6 +1,7 @@
 package com.mengzhu.sdk.demo;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,20 +10,17 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioGroup;
-
 import com.mengzhu.live.sdk.business.dto.push.StartBroadcastInfoDto;
 import com.mengzhu.live.sdk.business.dto.push.StartCreateDto;
 import com.mengzhu.live.sdk.core.utils.DateUtils;
 import com.mengzhu.live.sdk.ui.api.MZApiDataListener;
 import com.mengzhu.live.sdk.ui.api.MZApiRequest;
-
 import java.net.URLEncoder;
-
 import tv.mengzhu.core.frame.coreutils.JurisdictionUtils;
 import tv.mengzhu.core.frame.coreutils.URLParamsUtils;
-import tv.mengzhu.core.wrap.netwock.Page;
 import tv.mengzhu.core.wrap.user.modle.UserDto;
 import tv.mengzhu.core.wrap.user.presenter.MyUserInfoPresenter;
+import tv.mengzhu.core.wrap.netwock.Page;
 
 public class TestPushActivity extends Activity {
 
@@ -30,20 +28,24 @@ public class TestPushActivity extends Activity {
     private EditText appId;
     private EditText fps;
     private EditText livetk;
+    private EditText tv_ticket_id;
     private EditText time;
     private AppCompatCheckBox cbbeauty, cblater, cbAudio, cbAllBanChat;
     private RadioGroup radioGroup;
     private int screen;
-    private int bitrate = 500 * 1000;
+    private int bitrate = 500 * 1024;
     private MZApiRequest mzLiveCreateApiRequest;
     private MZApiRequest mzLiveStreamApiRequest;
 
     private boolean isAudioPush = false;
 
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_push);
+        progressDialog = new ProgressDialog(this);
         mzLiveCreateApiRequest = new MZApiRequest();
         mzLiveStreamApiRequest = new MZApiRequest();
         mzLiveCreateApiRequest.createRequest(TestPushActivity.this, MZApiRequest.API_TYPE_LIVE_CREATE);
@@ -86,6 +88,7 @@ public class TestPushActivity extends Activity {
         cblater = findViewById(R.id.cb_later);
         cbAudio = findViewById(R.id.cb_audio);
         livetk = findViewById(R.id.live_tk);
+        tv_ticket_id = findViewById(R.id.tv_ticket_id);
         fps = findViewById(R.id.fps);
         time = findViewById(R.id.time);
         radioGroup = findViewById(R.id.test_group);
@@ -127,11 +130,12 @@ public class TestPushActivity extends Activity {
         //demo示例
         if (!TextUtils.isEmpty(livetk.getText().toString())) {
             mzLiveStreamApiRequest.setResultListener(new TestPushActivity.StartStream());
+            progressDialog.show();
             mzLiveStreamApiRequest.startData(MZApiRequest.API_TYPE_LIVE_STREAM,
                     URLEncoder.encode(livetk.getText().toString()),
-                    appId.getText().toString(),
+                    unique_id.getText().toString(),
                     URLEncoder.encode("T丶????"),
-                    URLEncoder.encode("http://s1.t.zmengzhu.com/upload/img/50/6d/506da693ecb2cf6f2fd0e3e92656dde4.png"), live_type);
+                    URLEncoder.encode("http://s1.t.zmengzhu.com/upload/img/50/6d/506da693ecb2cf6f2fd0e3e92656dde4.png"), tv_ticket_id.getText().toString());
         } else {
             final int finalLive_type = live_type;
             mzLiveCreateApiRequest.setResultListener(new MZApiDataListener() {
@@ -139,12 +143,13 @@ public class TestPushActivity extends Activity {
                 public void dataResult(String s, Object o, Page page, int status) {
                     StartCreateDto dto = (StartCreateDto) o;
                     livetk.setText(dto.getLive_tk());
+                    tv_ticket_id.setText(dto.getTicket_id());
                     mzLiveStreamApiRequest.setResultListener(new TestPushActivity.StartStream());
                     mzLiveStreamApiRequest.startData(MZApiRequest.API_TYPE_LIVE_STREAM,
                             URLEncoder.encode(dto.getLive_tk()),
-                            appId.getText().toString(),
+                            unique_id.getText().toString(),
                             URLEncoder.encode("T丶????"),
-                            URLEncoder.encode("http://s1.t.zmengzhu.com/upload/img/50/6d/506da693ecb2cf6f2fd0e3e92656dde4.png"), finalLive_type);
+                            URLEncoder.encode("http://s1.t.zmengzhu.com/upload/img/50/6d/506da693ecb2cf6f2fd0e3e92656dde4.png"), dto.getTicket_id());
                 }
 
                 @Override
@@ -162,6 +167,7 @@ public class TestPushActivity extends Activity {
 
         @Override
         public void dataResult(String s, Object o, Page page, int status) {
+            progressDialog.dismiss();
             StartBroadcastInfoDto dto = (StartBroadcastInfoDto) o;
             Intent intent = new Intent(TestPushActivity.this, PusherActivity.class);
             intent.putExtra("pushDto", dto);
@@ -180,7 +186,7 @@ public class TestPushActivity extends Activity {
 
         @Override
         public void errorResult(String s, int i, String s1) {
-
+            progressDialog.dismiss();
         }
     }
 }

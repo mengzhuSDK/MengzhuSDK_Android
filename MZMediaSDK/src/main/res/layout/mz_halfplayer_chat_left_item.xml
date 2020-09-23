@@ -30,34 +30,63 @@
         android:layout_toRightOf="@id/player_chat_avatar_layout"
         android:ellipsize="end"
         android:lineSpacingExtra="2dp"
-        android:maxEms="6"
         android:maxWidth="225.0dip"
+        android:maxEms="6"
         android:singleLine="true"
         android:text="name"
         android:textColor="#94a5dd"
         android:textSize="12sp" />
 
-    <TextView
-        android:id="@+id/player_chat_content"
-        android:background="@drawable/bg_chat_left_item_content"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/player_chat_username"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="6dp"
-        android:layout_toRightOf="@id/player_chat_avatar_layout"
-        android:clickable="true"
-        android:ellipsize="end"
-        android:focusable="true"
-        android:lineSpacingExtra="2dp"
-        android:maxLines="5"
-        android:paddingBottom="8dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="8dp"
         android:layout_marginRight="@dimen/dimen_17"
-        android:text="content"
-        android:textColor="@color/white"
-        android:textSize="14sp" />
+        android:layout_toRightOf="@id/player_chat_avatar_layout"
+        android:background="@drawable/bg_chat_left_item_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingTop="8dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="8dp">
+
+        <TextView
+            android:id="@+id/player_chat_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:ellipsize="end"
+            android:focusable="true"
+            android:lineSpacingExtra="2dp"
+            android:maxLines="5"
+            android:text="content"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+        <RelativeLayout
+            android:id="@+id/player_chat_gift_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/player_chat_gift_icon"
+                android:layout_width="@dimen/dimen_36"
+                android:layout_height="@dimen/dimen_24"
+                android:layout_marginLeft="@dimen/dimen_4"
+                android:layout_marginRight="@dimen/dimen_4" />
+
+            <TextView
+                android:id="@+id/player_chat_gift_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/player_chat_gift_icon"
+                android:textColor="@color/white"
+                android:textSize="13sp" />
+        </RelativeLayout>
+    </LinearLayout>
 
 </RelativeLayout>

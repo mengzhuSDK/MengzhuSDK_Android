@@ -7,26 +7,30 @@
         android:id="@+id/video_playerfragment_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
     <RelativeLayout
         android:id="@+id/rl_activity_broadcast_live_over"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone">
+
         <ImageView
             android:id="@+id/iv_activity_broadcast_live_over"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#000000"/>
+            android:background="#000000" />
+
         <TextView
             android:id="@+id/tv_activity_broadcast_live_over"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:textColor="@color/white"
-            android:textSize="20sp"
+            android:gravity="center_horizontal"
             android:text="主播暂时离开，\n稍等一下马上回来"
-            android:gravity="center_horizontal"/>
+            android:textColor="@color/white"
+            android:textSize="20sp" />
     </RelativeLayout>
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/sv_activity_content_appbar"
         android:layout_width="match_parent"
@@ -89,10 +93,10 @@
                             android:id="@+id/tv_playerfragment_livetype_tag"
                             android:layout_width="3dp"
                             android:layout_height="3dp"
-                            android:gravity="center"
                             android:background="@drawable/shape_video_type_ball"
-                            app:layout_constraintLeft_toLeftOf="@id/tv_playerfragment_nickname"
+                            android:gravity="center"
                             app:layout_constraintBottom_toBottomOf="@id/tv_playerfragment_livetype"
+                            app:layout_constraintLeft_toLeftOf="@id/tv_playerfragment_nickname"
                             app:layout_constraintTop_toTopOf="@id/tv_playerfragment_livetype" />
 
                         <TextView
@@ -100,12 +104,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:maxLines="1"
-                            android:text="回放"
                             android:paddingLeft="2dp"
                             android:paddingRight="5dp"
+                            android:text="回放"
                             android:textColor="@color/white"
                             android:textSize="10sp"
-                            app:layout_constraintLeft_toRightOf= "@id/tv_playerfragment_livetype_tag"
+                            app:layout_constraintLeft_toRightOf="@id/tv_playerfragment_livetype_tag"
                             app:layout_constraintTop_toBottomOf="@id/tv_playerfragment_nickname" />
 
                         <TextView
@@ -115,8 +119,8 @@
                             android:ellipsize="end"
                             android:maxEms="5"
                             android:maxLines="1"
-                            android:text="人气--"
                             android:paddingLeft="5dp"
+                            android:text="人气--"
                             android:textColor="@color/white"
                             android:textSize="10sp"
                             app:layout_constraintLeft_toRightOf="@id/tv_playerfragment_line"
@@ -128,10 +132,10 @@
                             android:layout_height="8dp"
                             android:background="@color/white"
                             android:gravity="center"
-                            app:layout_constraintTop_toTopOf="@id/tv_playerfragment_livetype"
                             app:layout_constraintBottom_toBottomOf="@id/tv_playerfragment_livetype"
                             app:layout_constraintLeft_toRightOf="@id/tv_playerfragment_livetype"
-                            app:layout_constraintTop_toBottomOf="@id/tv_playerfragment_nickname" />
+                            app:layout_constraintTop_toBottomOf="@id/tv_playerfragment_nickname"
+                            app:layout_constraintTop_toTopOf="@id/tv_playerfragment_livetype" />
 
                         <TextView
                             android:id="@+id/tv_playerfragment_attention"
@@ -271,8 +275,6 @@
         </LinearLayout>
 
 
-
-
         <ImageView
             android:id="@+id/iv_activity_live_broadcast_push"
             android:layout_width="wrap_content"
@@ -297,18 +299,18 @@
 
             <TextView
                 android:id="@+id/iv_player_fragment_goods"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/dimen_44"
+                android:layout_height="@dimen/dimen_44"
+                android:background="@mipmap/gm_icon_goods"
                 android:gravity="center_horizontal"
                 android:paddingTop="21dp"
-                android:textColor="@color/white"
-                android:background="@mipmap/gm_icon_goods" />
+                android:textColor="@color/white" />
 
             <RelativeLayout
                 android:id="@+id/rl_playerfragment_send_chat"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_44"
-                android:layout_marginLeft="14dp"
+                android:layout_marginLeft="12dp"
                 android:layout_marginRight="8dp"
                 android:layout_toLeftOf="@+id/iv_playerfragment_config"
                 android:layout_toRightOf="@+id/iv_player_fragment_goods"
@@ -319,10 +321,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="@string/talk_to_up"
                     android:drawablePadding="@dimen/dimen_8"
+                    android:text="@string/talk_to_up"
                     android:textColor="@color/crop_99FFFFFF"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
                 <ImageView
                     android:layout_width="match_parent"
@@ -336,16 +338,23 @@
                 android:id="@+id/iv_playerfragment_config"
                 android:layout_width="@dimen/dimen_44"
                 android:layout_height="@dimen/dimen_44"
-                android:layout_marginRight="12dp"
-                android:layout_toLeftOf="@+id/iv_playerfragment_share"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@+id/iv_playerfragment_gift"
                 android:src="@mipmap/mz_icon_config" />
 
+            <ImageView
+                android:id="@+id/iv_playerfragment_gift"
+                android:layout_width="@dimen/dimen_44"
+                android:layout_height="@dimen/dimen_44"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@+id/iv_playerfragment_share"
+                android:src="@mipmap/mz_icon_gift" />
 
             <ImageView
                 android:id="@+id/iv_playerfragment_share"
                 android:layout_width="44dp"
                 android:layout_height="44dp"
-                android:layout_marginRight="12dp"
+                android:layout_marginRight="10dp"
                 android:layout_toLeftOf="@+id/iv_playerfragment_zan"
                 android:src="@mipmap/gm_icon_share" />
 
@@ -372,7 +381,7 @@
             android:layout_height="78dp"
             android:layout_above="@+id/rl_activity_live_broadcast_bottom_group"
             android:layout_alignParentRight="true"
-            android:layout_marginEnd="110dp"
+            android:layout_marginEnd="168dp"
             android:layout_marginBottom="4dp"
             android:background="@drawable/bg_video_config_layout"
             android:orientation="vertical"
@@ -393,9 +402,9 @@
                 android:id="@+id/tv_playerfragment_report"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dimen_10"
                 android:layout_marginLeft="@dimen/dimen_10"
                 android:layout_marginRight="@dimen/dimen_10"
+                android:layout_marginBottom="@dimen/dimen_10"
                 android:drawableLeft="@mipmap/icon_repot"
                 android:gravity="center"
                 android:text="举报"

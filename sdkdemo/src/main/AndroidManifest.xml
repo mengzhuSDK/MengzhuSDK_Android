@@ -40,6 +40,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".HalfPlayerActivity"
+            android:windowSoftInputMode="stateUnspecified|adjustPan"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity android:name=".TestDownloadActivity" />

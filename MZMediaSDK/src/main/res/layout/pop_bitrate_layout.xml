@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/ll_bitrate_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_item_chaoqing"
+            android:layout_width="@dimen/dimen_66"
+            android:layout_height="@dimen/dimen_44"
+            android:layout_marginLeft="@dimen/dimen_10"
+            android:src="@mipmap/mz_item_chaoqing" />
+
+        <ImageView
+            android:id="@+id/iv_item_gaoqing"
+            android:layout_width="@dimen/dimen_66"
+            android:layout_height="@dimen/dimen_44"
+            android:layout_marginLeft="@dimen/dimen_10"
+            android:src="@mipmap/mz_item_gaoqing" />
+
+        <ImageView
+            android:id="@+id/iv_item_biaoqing"
+            android:layout_width="@dimen/dimen_66"
+            android:layout_height="@dimen/dimen_44"
+            android:layout_marginLeft="@dimen/dimen_10"
+            android:src="@mipmap/mz_item_biaoqing" />
+    </LinearLayout>
+
+</LinearLayout>

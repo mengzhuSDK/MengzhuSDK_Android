@@ -27,6 +27,12 @@
             android:hint="填写live_tk" />
 
         <EditText
+            android:id="@+id/tv_ticket_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="填写ticket_id" />
+
+        <EditText
             android:id="@+id/fps"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

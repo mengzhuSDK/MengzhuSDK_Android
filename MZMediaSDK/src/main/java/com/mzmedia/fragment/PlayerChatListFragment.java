@@ -21,6 +21,8 @@ import com.mengzhu.live.sdk.ui.chat.MZChatManager;
 import com.mengzhu.live.sdk.ui.chat.MZChatMessagerListener;
 import com.mengzhu.sdk.R;
 import com.mzmedia.adapter.base.CommonAdapterType;
+import com.mzmedia.adapter.chat.PlayerChatGiftLeftWrap;
+import com.mzmedia.adapter.chat.PlayerChatGiftRightWrap;
 import com.mzmedia.adapter.chat.PlayerChatLeltWrap;
 import com.mzmedia.adapter.chat.PlayerChatNoticeWrap;
 import com.mzmedia.adapter.chat.PlayerChatRightWrap;
@@ -42,6 +44,8 @@ public class PlayerChatListFragment extends BaseFragement implements MZChatMessa
     private PlayerChatLeltWrap mLeltWrap;
     private PlayerChatRightWrap mRightWrap;
     private PlayerChatNoticeWrap mNoticeWrap;
+    private PlayerChatGiftLeftWrap mGiftLeftWrap;
+    private PlayerChatGiftRightWrap mGiftRightWrap;
     //    private ChatPresenter mChatPresenter;
     private WithScrollChangeScrollView mPayerScroll;
     public static final String PLAY_TYPE_KEY = "play_type_key";
@@ -91,14 +95,22 @@ public class PlayerChatListFragment extends BaseFragement implements MZChatMessa
         mAdapter = new CommonAdapterType(getActivity());
         mLeltWrap = new PlayerChatLeltWrap(getActivity());
         mRightWrap = new PlayerChatRightWrap(getActivity());
-        mNoticeWrap=new PlayerChatNoticeWrap(getActivity());
+        mNoticeWrap = new PlayerChatNoticeWrap(getActivity());
+        mGiftLeftWrap = new PlayerChatGiftLeftWrap(getActivity());
+        mGiftRightWrap = new PlayerChatGiftRightWrap(getActivity());
         mRightWrap.setIsLandscape(isPush);
         mRightWrap.setHalfPlayer(isHalfPlayer);
         mLeltWrap.setIsLandscape(isPush);
         mLeltWrap.setHalfPlayer(isHalfPlayer);
+        mGiftLeftWrap.setIsLandscape(isPush);
+        mGiftLeftWrap.setHalfPlayer(isHalfPlayer);
+        mGiftRightWrap.setIsLandscape(isPush);
+        mGiftRightWrap.setHalfPlayer(isHalfPlayer);
         mAdapter.addViewObtains(ChatMessageDto.CHAT_LELT_WRAP, mLeltWrap);
         mAdapter.addViewObtains(ChatMessageDto.CHAT_RRIGHT_WRAP, mRightWrap);
-        mAdapter.addViewObtains(ChatMessageDto.CHAT_NOTICE_WRAP,mNoticeWrap);
+        mAdapter.addViewObtains(ChatMessageDto.CHAT_NOTICE_WRAP, mNoticeWrap);
+        mAdapter.addViewObtains(ChatMessageDto.CHAT_GIFT_LEFT, mGiftLeftWrap);
+        mAdapter.addViewObtains(ChatMessageDto.CHAT_GIFT_RIGHT, mGiftRightWrap);
         mListView.setAdapter(mAdapter);
         mListView.setAddViewListener(new MyAddViewListener());
         if (isVoiceChat) {
@@ -110,7 +122,7 @@ public class PlayerChatListFragment extends BaseFragement implements MZChatMessa
             public void onScroll(int scrollY) {
                 if (scrollY == 0) {
 //                    if (!isNoMore) {
-                        MZChatManager.getInstance(mActivity).nextHistory("20");
+                    MZChatManager.getInstance(mActivity).nextHistory("20");
 //                    }
                 }
             }
@@ -131,7 +143,7 @@ public class PlayerChatListFragment extends BaseFragement implements MZChatMessa
 //                        mListView.addItemView(list.get(j));
 //                    }
 //            } else {
-                mListView.addItemView(list.get(j));
+            mListView.addItemView(list.get(j));
 //            }
 //            }
         }
@@ -216,20 +228,24 @@ public class PlayerChatListFragment extends BaseFragement implements MZChatMessa
         mLeltWrap.setOnChatIconClickListener(new PlayerChatLeltWrap.OnChatIconClickListener() {
             @Override
             public void onChatIconClick(ChatTextDto dto) {
-                if(mOnChatAvatarClickListener!=null){
+                if (mOnChatAvatarClickListener != null) {
                     mOnChatAvatarClickListener.onChatAvatarClick(dto);
                 }
             }
         });
 
     }
+
     private OnChatAvatarClickListener mOnChatAvatarClickListener;
-    public interface OnChatAvatarClickListener{
+
+    public interface OnChatAvatarClickListener {
         void onChatAvatarClick(ChatTextDto dto);
     }
-    public void setOnChatAvatarClickListener(OnChatAvatarClickListener listener){
+
+    public void setOnChatAvatarClickListener(OnChatAvatarClickListener listener) {
         mOnChatAvatarClickListener = listener;
     }
+
     @Override
     public void loadData() {
         if (isPush) {

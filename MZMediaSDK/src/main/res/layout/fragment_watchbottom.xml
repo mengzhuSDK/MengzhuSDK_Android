@@ -20,14 +20,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
             android:layout_marginBottom="50dp"
             android:orientation="vertical">
+
             <FrameLayout
-                android:layout_weight="1"
                 android:layout_width="match_parent"
-                android:layout_height="0dp">
+                android:layout_height="0dp"
+                android:layout_weight="1">
                 <!--聊天信息-->
                 <!-- 适配p9不显示商品view weight设为1-->
                 <FrameLayout
@@ -46,8 +47,8 @@
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dimen_11"
-                android:layout_marginLeft="@dimen/dimen_12">
+                android:layout_marginLeft="@dimen/dimen_12"
+                android:layout_marginBottom="@dimen/dimen_11">
 
                 <com.mzmedia.widgets.player.PlayerGoodsPushView
                     android:id="@+id/live_broadcast_goods_push_view"
@@ -68,8 +69,8 @@
             android:layout_height="78dp"
             android:layout_above="@+id/rl_activity_live_broadcast_bottom_group"
             android:layout_alignParentRight="true"
+            android:layout_marginEnd="168dp"
             android:layout_marginBottom="4dp"
-            android:layout_marginEnd="110dp"
             android:background="@drawable/bg_video_config_layout"
             android:orientation="vertical"
             android:visibility="gone">
@@ -89,9 +90,9 @@
                 android:id="@+id/tv_playerfragment_report"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dimen_10"
                 android:layout_marginLeft="@dimen/dimen_10"
                 android:layout_marginRight="@dimen/dimen_10"
+                android:layout_marginBottom="@dimen/dimen_10"
                 android:drawableLeft="@mipmap/icon_repot"
                 android:gravity="center"
                 android:text="举报"
@@ -107,23 +108,31 @@
             android:layout_toEndOf="@+id/iv_activity_live_broadcast_push"
             android:layout_toRightOf="@+id/iv_activity_live_broadcast_push"
             android:orientation="horizontal"
-            android:paddingBottom="12dp"
             android:paddingLeft="12dp"
-            android:paddingRight="12dp">
+            android:paddingRight="12dp"
+            android:paddingBottom="12dp">
 
             <ImageView
                 android:id="@+id/iv_playerfragment_config"
                 android:layout_width="@dimen/dimen_44"
                 android:layout_height="@dimen/dimen_44"
-                android:layout_marginRight="12dp"
-                android:layout_toLeftOf="@+id/iv_playerfragment_share"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@+id/iv_playerfragment_gift"
                 android:src="@mipmap/mz_icon_config" />
+
+            <ImageView
+                android:id="@+id/iv_playerfragment_gift"
+                android:layout_width="@dimen/dimen_44"
+                android:layout_height="@dimen/dimen_44"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@+id/iv_playerfragment_share"
+                android:src="@mipmap/mz_icon_gift" />
 
             <ImageView
                 android:id="@+id/iv_playerfragment_share"
                 android:layout_width="44dp"
                 android:layout_height="44dp"
-                android:layout_marginRight="12dp"
+                android:layout_marginRight="10dp"
                 android:layout_toLeftOf="@+id/iv_playerfragment_zan"
                 android:src="@mipmap/gm_icon_share" />
 
@@ -146,11 +155,11 @@
                 android:layout_toRightOf="@+id/iv_player_fragment_goods"
                 android:orientation="vertical">
 
-                <ImageView
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0.5dp"
                     android:layout_alignParentBottom="true"
-                    android:src="@drawable/bg_gm_live_senf_line" />
+                    android:background="@drawable/bg_gm_live_senf_line" />
 
                 <TextView
                     android:id="@+id/tv_playerfragment_chat"
@@ -160,13 +169,13 @@
                     android:drawablePadding="@dimen/dimen_8"
                     android:text="@string/talk_to_up"
                     android:textColor="@color/crop_99FFFFFF"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
             </RelativeLayout>
 
             <TextView
                 android:id="@+id/iv_player_fragment_goods"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/dimen_44"
+                android:layout_height="@dimen/dimen_44"
                 android:background="@mipmap/gm_icon_goods"
                 android:gravity="center_horizontal"
                 android:paddingTop="21dp"
@@ -187,8 +196,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/dimen_20"
             android:layout_marginTop="@dimen/dimen_20"
+            android:layout_marginRight="@dimen/dimen_20"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
@@ -196,16 +205,16 @@
                 android:id="@+id/iv_sign_in"
                 android:layout_width="@dimen/dimen_44"
                 android:layout_height="@dimen/dimen_44"
-                android:visibility="gone"
-                android:src="@mipmap/icon_mz_sign_in" />
+                android:src="@mipmap/icon_mz_sign_in"
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/iv_vote"
                 android:layout_width="@dimen/dimen_44"
                 android:layout_height="@dimen/dimen_44"
                 android:layout_marginTop="@dimen/dimen_12"
-                android:visibility="gone"
-                android:src="@mipmap/icon_mz_vote" />
+                android:src="@mipmap/icon_mz_vote"
+                android:visibility="gone" />
         </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>

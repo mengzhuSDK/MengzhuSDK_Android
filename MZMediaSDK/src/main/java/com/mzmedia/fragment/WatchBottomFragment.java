@@ -11,7 +11,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +30,7 @@ import com.mengzhu.live.sdk.ui.api.MZApiRequest;
 import com.mengzhu.live.sdk.ui.widgets.popupwindow.SignInWebFragment;
 import com.mengzhu.sdk.R;
 import com.mzmedia.IPlayerClickListener;
+import com.mzmedia.fragment.gift.SendGiftDialogFragment;
 import com.mzmedia.utils.ActivityUtils;
 import com.mzmedia.widgets.ChatOnlineView;
 import com.mzmedia.widgets.LoveLayout;
@@ -41,8 +41,8 @@ import java.util.ArrayList;
 
 import tv.mengzhu.core.frame.coreutils.PreferencesUtils;
 import tv.mengzhu.core.module.model.dto.BaseDto;
-import tv.mengzhu.core.wrap.netwock.Page;
 import tv.mengzhu.core.wrap.user.presenter.MyUserInfoPresenter;
+import tv.mengzhu.core.wrap.netwock.Page;
 
 /**
  * 观看端 互动fragment
@@ -55,6 +55,7 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
     public static final String PLAY_INFO_KEY = "PLAY_INFO_KEY";
 
     private ImageView mIvConfig; //配置
+    private ImageView mIvGift; //礼物
     private ImageView mIvShare; //分享
     public ImageView mIvLike; //点赞
     private TextView mTvReport;
@@ -94,6 +95,8 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
     private ContentBean signInfoBean;
     private CountDownTimer signCountDown;
     private boolean signDialogShowing = false;
+
+    SendGiftDialogFragment giftDialogFragment;
 
     public void setIPlayerClickListener(IPlayerClickListener listener) {
         mListener = listener;
@@ -146,6 +149,7 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
         }
 
         mIvConfig = (ImageView) findViewById(R.id.iv_playerfragment_config);
+        mIvGift = (ImageView) findViewById(R.id.iv_playerfragment_gift);
         mIvShare = (ImageView) findViewById(R.id.iv_playerfragment_share);
         mIvLike = (ImageView) findViewById(R.id.iv_playerfragment_zan);
         mConfigLayout = (LinearLayout) findViewById(R.id.iv_playerfragment_config_layout);
@@ -176,7 +180,7 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
     public void initData() {
         mChatFragment = new PlayerChatListFragment();
         //是否禁言
-        initBanChat(mPlayInfoDto.getUser_status() == 3);
+        initBanChat(mPlayInfoDto.getUser_status() == 3 || mPlayInfoDto.getUser_status() == 2);
 
         //添加聊天fragment
         Bundle bundle = new Bundle();
@@ -210,6 +214,7 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
         mIvConfig.setOnClickListener(this);
         mIvShare.setOnClickListener(this);
         mIvLike.setOnClickListener(this);
+        mIvGift.setOnClickListener(this);
         mTvReport.setOnClickListener(this);
         mTvDanmakuSwtich.setOnClickListener(this);
         mRlSendChat.setOnClickListener(this);
@@ -557,6 +562,16 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
                     showSignDialog();
                 }
             }
+        }
+        if (view.getId() == R.id.iv_playerfragment_gift){
+            showSendGiftDialog();
+        }
+    }
+
+    public void showSendGiftDialog(){
+        if (mPlayInfoDto != null){
+            giftDialogFragment = SendGiftDialogFragment.newInstance(mPlayInfoDto);
+            giftDialogFragment.show(getFragmentManager() , "gift_dialog");
         }
     }
 

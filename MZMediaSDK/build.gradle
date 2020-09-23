@@ -53,10 +53,10 @@ dependencies {
     implementation 'com.android.support:cardview-v7:28.0.0'
     api 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 
-    api 'tv.mengzhu.core:MZCoreLibrary:2.2.0'
+    api 'tv.mengzhu.core:MZCoreLibrary:2.3.0'
     api 'tv.mengzhu.dlna:MZDLNAlibrary:2.2.0'
-    api 'tv.mengzhu.restreaming:MZPushFlowSDK:2.2.0'
-    api 'com.mengzhu.sdk.download:MZDownload:2.2.0'
-    api 'com.mengzhu.live.sdk:MZLiveSDK:2.2.0'
-    api 'tv.mengzhu.sdk:MZPlayer:2.2.0'
+    api 'tv.mengzhu.restreaming:MZPushFlowSDK:2.3.0'
+    api 'com.mengzhu.sdk.download:MZDownload:2.3.0'
+    api 'com.mengzhu.live.sdk:MZLiveSDK:2.3.0'
+    api 'tv.mengzhu.sdk:MZPlayer:2.3.0'
 }

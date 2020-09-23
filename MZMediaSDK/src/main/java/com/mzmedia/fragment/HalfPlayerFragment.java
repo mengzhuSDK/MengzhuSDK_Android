@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
@@ -32,6 +33,7 @@ import com.mengzhu.live.sdk.business.dto.chat.ChatMessageDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatTextDto;
 import com.mengzhu.live.sdk.business.dto.chat.RightBean;
 import com.mengzhu.live.sdk.business.dto.chat.impl.ChatCmdDto;
+import com.mengzhu.live.sdk.business.dto.chat.impl.ChatCompleteDto;
 import com.mengzhu.live.sdk.business.dto.chat.impl.ChatMegTxtDto;
 import com.mengzhu.live.sdk.business.dto.chat.impl.ChatOnlineDto;
 import com.mengzhu.live.sdk.business.dto.play.PlayInfoDto;
@@ -69,9 +71,9 @@ import java.util.List;
 
 import tv.mengzhu.core.frame.coreutils.PreferencesUtils;
 import tv.mengzhu.core.module.model.dto.BaseDto;
-import tv.mengzhu.core.wrap.netwock.Page;
 import tv.mengzhu.core.wrap.user.modle.UserDto;
 import tv.mengzhu.core.wrap.user.presenter.MyUserInfoPresenter;
+import tv.mengzhu.core.wrap.netwock.Page;
 import tv.mengzhu.dlna.DLNAController;
 import tv.mengzhu.dlna.entity.RemoteItem;
 import tv.mengzhu.sdk.module.IMZPlayerManager;
@@ -89,6 +91,9 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
     public static final String UNIQUE_ID = "unique_id";
     public static final String TICKET_ID = "ticket_id";
     private static String CLASSNAME = HalfPlayerFragment.class.getSimpleName();
+    private static String GIFT_KEY = "gift";
+    private static String KICK_OUT_KEY = "kick_out";
+    private static String NEW_REPLY = "new_reply";
     private MZPlayerManager mManager;
     private FrameLayout mVideoFrame;
     private MZPlayerView mzPlayerView;
@@ -106,7 +111,6 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
     private TextView mLiveContent; //蒙层提示文字
 
     private String mVideoUrl; //观看地址
-    private UserDto mUserDto; //主播信息
     private String mUid;
     private LinearLayout mBottomLayout;
     private MagicIndicator mMagicIndicator;
@@ -128,6 +132,7 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
 
     private WatchBottomFragment mWatchBottomFragment;
     private ViewDocumentFragment mViewDocumentFragment;
+    private BottomQAFragment mBottomQAFragment;
 
     private boolean isLandSpace; //横竖屏标识
 
@@ -160,16 +165,10 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mUserDto = new UserDto();
-            mUserDto.setAppid(getArguments().getString(APP_ID));
-            mUserDto.setAvatar(getArguments().getString(AVATAR));
-            mUserDto.setNickname(getArguments().getString(NICKNAME));
-            mUserDto.setUniqueID(getArguments().getString(UNIQUE_ID));
             ticketId = getArguments().getString(TICKET_ID);
         }
 
         //保存观看用户信息
-//        MyUserInfoPresenter.getInstance().saveUserinfo(mUserDto);
         MZSDKInitManager.getInstance().initLive();
         MZSDKInitManager.getInstance().registerInitListener(new SDKInitListener() {
             @Override
@@ -453,7 +452,6 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
                                 mLiveContent.setText("直播已结束");
                                 mManager.stop();
                                 break;
-                            case ChatCmdDto.KICK_OUT:
                             case ChatCmdDto.LIVE_PUBLISH_PAUSE:
                                 break;
                             case ChatCmdDto.LIVE_PUBLISH_START:
@@ -487,6 +485,11 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
                             case ChatPresenter.WEBINAR_VIEW_CONFIG_UPDATE: //弹幕，禁言，防录屏,等配置开关
                                 updateConfigs(mChatCmd.getWebinar_content());
                                 break;
+                            case ChatPresenter.NEW_REPLY: //问答回复消息
+                                if (mBottomQAFragment != null && mBottomQAFragment.isAdded()){
+                                    mBottomQAFragment.setNewsInfo(mChatCmd.getCount());
+                                }
+                                break;
                         }
                         break;
                 }
@@ -495,6 +498,27 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
             @Override
             public void monitorInformError(String s, int i, String s1) {
 
+            }
+        });
+
+        MZChatManager.getInstance(getActivity()).registerListener(GIFT_KEY, new ChatMessageObserver.MesGiftCallback() {
+            @Override
+            public void monitorGiftResult(ChatMessageDto chatMessageDto) {
+                Log.e("Gift", "monitorGiftResult: " + ((ChatCompleteDto)chatMessageDto.getText().getBaseDto()).getName());
+            }
+        });
+
+        MZChatManager.getInstance(getActivity()).registerListener(KICK_OUT_KEY, new ChatMessageObserver.MesKickOutCallback() {
+            @Override
+            public void monitorKickOutResult(ChatMessageDto chatMessageDto) {
+                Log.e("Kick_out", "monitorKickOutResult: " + ((ChatCmdDto)chatMessageDto.getText().getBaseDto()).getType());
+            }
+        });
+
+        MZChatManager.getInstance(getActivity()).registerListener(NEW_REPLY, new ChatMessageObserver.MesReplyCallback() {
+            @Override
+            public void monitorReplyResult(ChatMessageDto chatMessageDto) {
+                Log.e("new_reply", "monitorReplyResult: " + ((ChatCmdDto)chatMessageDto.getText().getBaseDto()).getCount());
             }
         });
 
@@ -673,6 +697,10 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
     @Override
     public void dataResult(String s, Object o, Page page, int status) {
         mPlayInfoDto = (PlayInfoDto) o;
+        UserDto userDto = MyUserInfoPresenter.getInstance().getUserInfo();
+        userDto.setUid(mPlayInfoDto.getChat_uid());
+        MyUserInfoPresenter.getInstance().saveUserinfo(userDto);
+
         updateConfigs(mPlayInfoDto.getRight());
         liveStatus = mPlayInfoDto.getStatus();
         //获取播放地址
@@ -739,6 +767,11 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
             mTabTitleList.add("文档");
             mTabFragmentList.add(mViewDocumentFragment);
         }
+
+        mBottomQAFragment = BottomQAFragment.newInstance(mPlayInfoDto);
+        mTabTitleList.add("问答");
+        mTabFragmentList.add(mBottomQAFragment);
+
         initMagicIndicator(mVpContainer);
         mTitleBarAdapter.setDataList(mTabTitleList);
         mTitleBarAdapter.notifyDataSetChanged();
@@ -833,6 +866,9 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
     public void onDestroyView() {
         super.onDestroyView();
         MZChatManager.getInstance(mActivity).removeListener(CLASSNAME);
+        MZChatManager.getInstance(getActivity()).removeListener(GIFT_KEY);
+        MZChatManager.getInstance(getActivity()).removeListener(KICK_OUT_KEY);
+        MZChatManager.getInstance(getActivity()).removeListener(NEW_REPLY);
         MZChatManager.destroyChat();
         mManager.onDestroy();
         if (controller != null) {
@@ -894,6 +930,7 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
         speedDialog = new SpeedBottomDialogFragment(mActivity, isLandSpace);
         speedDialog.showAtLocation(mzPlayerView, mSpeedIndex);
         speedDialog.setOnSelectSpeedListener(new SpeedBottomDialogFragment.OnSelectSpeedListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void OnSelectSpeed(int type) {
                 mSpeedIndex = type;
