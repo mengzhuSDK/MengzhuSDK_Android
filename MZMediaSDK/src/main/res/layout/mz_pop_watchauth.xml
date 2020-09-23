@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00000000">
+
+    <LinearLayout
+        android:id="@+id/content_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/ll_white_list_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_white_list_tip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_38"
+                android:layout_marginTop="@dimen/dimen_195"
+                android:layout_marginRight="@dimen/dimen_38"
+                android:gravity="center_horizontal"
+                android:lineSpacingExtra="@dimen/dimen_10"
+                android:text="该视频设置了观看权限\n您没有权限观看，请联系管理员获取"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dimen_16sp" />
+
+            <TextView
+                android:id="@+id/tv_white_list_back"
+                android:layout_width="@dimen/dimen_94"
+                android:layout_height="@dimen/dimen_30"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dimen_20"
+                android:background="@drawable/mz_shape_auth_back"
+                android:gravity="center"
+                android:text="原路返回"
+                android:textColor="@color/color_a0acbf"
+                android:textSize="@dimen/dimen_16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_f_code_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_f_code_tip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_38"
+                android:layout_marginTop="@dimen/dimen_195"
+                android:layout_marginRight="@dimen/dimen_38"
+                android:gravity="center_horizontal"
+                android:lineSpacingExtra="@dimen/dimen_10"
+                android:text="该视频设置了F码\n请输入正确F码观看"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dimen_16sp" />
+
+            <EditText
+                android:id="@+id/etv_f_code"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_36"
+                android:layout_marginLeft="@dimen/dimen_54"
+                android:layout_marginTop="@dimen/dimen_30"
+                android:layout_marginRight="@dimen/dimen_54"
+                android:background="@drawable/mz_shape_f_code_edit"
+                android:gravity="center_vertical"
+                android:hint="请输入F码"
+                android:paddingLeft="@dimen/dimen_10"
+                android:paddingRight="@dimen/dimen_10"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white_60"
+                android:textSize="@dimen/dimen_16sp" />
+
+            <TextView
+                android:id="@+id/tv_f_code_submit"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_36"
+                android:layout_marginLeft="@dimen/dimen_54"
+                android:layout_marginTop="@dimen/dimen_20"
+                android:layout_marginRight="@dimen/dimen_54"
+                android:background="@drawable/mz_shape_f_code_submit"
+                android:gravity="center"
+                android:text="确定"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dimen_16sp" />
+
+            <TextView
+                android:id="@+id/tv_f_code_back"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dimen_30"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dimen_40"
+                android:gravity="center"
+                android:text="原路返回"
+                android:textColor="@color/color_ff1f60"
+                android:textSize="@dimen/dimen_14sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <com.mengzhu.live.sdk.ui.widgets.MzStateView
+        android:id="@+id/mz_state_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</RelativeLayout>

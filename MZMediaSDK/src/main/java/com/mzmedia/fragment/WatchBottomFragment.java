@@ -11,6 +11,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +28,8 @@ import com.mengzhu.live.sdk.business.presenter.chat.ChatMessageObserver;
 import com.mengzhu.live.sdk.core.utils.ToastUtils;
 import com.mengzhu.live.sdk.ui.api.MZApiDataListener;
 import com.mengzhu.live.sdk.ui.api.MZApiRequest;
+
+import com.mengzhu.live.sdk.ui.widgets.popupwindow.MZLottoWebFragment;
 import com.mengzhu.live.sdk.ui.widgets.popupwindow.SignInWebFragment;
 import com.mengzhu.sdk.R;
 import com.mzmedia.IPlayerClickListener;
@@ -41,6 +44,7 @@ import java.util.ArrayList;
 
 import tv.mengzhu.core.frame.coreutils.PreferencesUtils;
 import tv.mengzhu.core.module.model.dto.BaseDto;
+import tv.mengzhu.core.wrap.library.utils.CommonUtil;
 import tv.mengzhu.core.wrap.user.presenter.MyUserInfoPresenter;
 import tv.mengzhu.core.wrap.netwock.Page;
 
@@ -74,6 +78,7 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
     private LinearLayout mFuncLayout;
     private ImageView mIvVote;
     private ImageView mIvSignIn;
+    private ImageView mIvDraw; //抽奖入口
 
     private MZApiRequest mzApiRequestGoods;
     private MZApiRequest mPraiseRequest;
@@ -93,8 +98,10 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
     private IPlayerClickListener mListener;
 
     private ContentBean signInfoBean;
+    private ContentBean lottoBean;
     private CountDownTimer signCountDown;
     private boolean signDialogShowing = false;
+    private String anchorUid;
 
     SendGiftDialogFragment giftDialogFragment;
 
@@ -167,11 +174,15 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
         mFuncLayout = (LinearLayout) findViewById(R.id.ll_func_layout);
         mIvVote = (ImageView) findViewById(R.id.iv_vote);
         mIvSignIn = (ImageView) findViewById(R.id.iv_sign_in);
+        mIvDraw = (ImageView) findViewById(R.id.iv_draw);
         if (mPlayInfoDto.isVoteShow()){
             mIvVote.setVisibility(View.VISIBLE);
         }
         if (mPlayInfoDto.isSignShow()){
             mIvSignIn.setVisibility(View.VISIBLE);
+        }
+        if(mPlayInfoDto.isLottoShow()){
+            mIvDraw.setVisibility(View.VISIBLE);
         }
         goodsCountDown = new GoodsCountDown(10000 * 5000, 5000);
     }
@@ -194,6 +205,9 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
             if ("sign".equals(mPlayInfoDto.getRight().get(i).getType())){
                 signInfoBean = mPlayInfoDto.getRight().get(i).getContent();
             }
+            if ("prize".equals(mPlayInfoDto.getRight().get(i).getType())){
+                lottoBean = mPlayInfoDto.getRight().get(i).getContent();
+            }
         }
         initSign();
     }
@@ -207,6 +221,7 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
         if (!playInfoDto.isSignShow()){
             mIvSignIn.setVisibility(View.GONE);
         }
+        mIvDraw.setVisibility(playInfoDto.isLottoShow()?View.VISIBLE:View.GONE);
     }
 
     @Override
@@ -221,6 +236,7 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
         mGoodsIv.setOnClickListener(this);
         mIvVote.setOnClickListener(this);
         mIvSignIn.setOnClickListener(this);
+        mIvDraw.setOnClickListener(this);
 
         mPlayerGoodsPushLayout.setOnGoodsPushItemClickListener(new PlayerGoodsView.OnGoodsItemClickListener() {
             @Override
@@ -563,6 +579,11 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
                 }
             }
         }
+        if(view.getId() == R.id.iv_draw){
+            if(!CommonUtil.isFastDoubleClick()){
+                showLottoDialog();
+            }
+        }
         if (view.getId() == R.id.iv_playerfragment_gift){
             showSendGiftDialog();
         }
@@ -594,4 +615,20 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
         signInWebFragment.showAtLocation(mActivity.findViewById(android.R.id.content), Gravity.CENTER, 0, 0);
         signDialogShowing = true;
     }
+
+    /**
+     * 抽奖弹窗
+     */
+    public void showLottoDialog(){
+        MZLottoWebFragment lottoWebFragment = new MZLottoWebFragment(mActivity,lottoBean,"抽奖");
+        lottoWebFragment.setLottoOutSideDismiss(true);
+        lottoWebFragment.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+
+            }
+        });
+        lottoWebFragment.showAtLocation(mActivity.findViewById(android.R.id.content), Gravity.CENTER, 0, 0);
+    }
+
 }

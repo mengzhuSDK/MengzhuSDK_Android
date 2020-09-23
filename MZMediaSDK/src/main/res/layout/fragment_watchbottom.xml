@@ -209,12 +209,18 @@
                 android:visibility="gone" />
 
             <ImageView
-                android:id="@+id/iv_vote"
+            android:id="@+id/iv_vote"
+            android:layout_width="@dimen/dimen_44"
+            android:layout_height="@dimen/dimen_44"
+            android:src="@mipmap/icon_mz_vote"
+            android:visibility="gone" />
+            <ImageView
+                android:id="@+id/iv_draw"
                 android:layout_width="@dimen/dimen_44"
                 android:layout_height="@dimen/dimen_44"
                 android:layout_marginTop="@dimen/dimen_12"
-                android:src="@mipmap/icon_mz_vote"
-                android:visibility="gone" />
+                android:src="@mipmap/icon_mz_lotto"
+                android:visibility="gone"/>
         </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>

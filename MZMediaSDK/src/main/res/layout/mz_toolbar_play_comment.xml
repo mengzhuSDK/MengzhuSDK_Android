@@ -5,12 +5,36 @@
     android:background="@color/white"
     android:orientation="horizontal">
 
+    <LinearLayout
+        android:id="@+id/ll_is_only_anchor"
+        android:layout_width="@dimen/dimen_106"
+        android:layout_height="@dimen/dimen_48"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dimen_15"
+            android:text="只看老师"
+            android:textColor="@color/color_7a7a7a"
+            android:textSize="@dimen/dimen_12sp" />
+
+        <ImageView
+            android:id="@+id/iv_is_only_anchor_icon"
+            android:layout_width="@dimen/dimen_28"
+            android:layout_height="@dimen/dimen_16"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dimen_5"
+            android:src="@drawable/selector_vote_check" />
+    </LinearLayout>
+
     <RelativeLayout
         android:layout_width="0dp"
-        android:layout_weight="1"
         android:layout_height="@dimen/dimen_48"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="@dimen/dimen_15"
+        android:layout_weight="1"
         android:background="@color/white"
         android:focusable="false"
         android:gravity="center_vertical"

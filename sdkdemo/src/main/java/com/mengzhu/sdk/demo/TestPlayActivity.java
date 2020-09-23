@@ -23,7 +23,9 @@ public class TestPlayActivity extends Activity {
 
     private EditText ticketId;
     private EditText unique_id;
-    private EditText appId;
+    private EditText user_name;
+    private EditText user_avatar;
+    private EditText user_phone;
 
     public static final String nickName = "Android用户" + TestActivity.unique_id_test;
     public static final String avatar = "http://pic1.zhimg.com/80/v2-efbee011404d77cf7ae75bac0f439755_720w.jpg";
@@ -37,12 +39,22 @@ public class TestPlayActivity extends Activity {
 
         ticketId = findViewById(R.id.ticket_id);
         unique_id = findViewById(R.id.account_no);
-        appId = findViewById(R.id.app_id);
+        user_name = findViewById(R.id.user_name);
+        user_avatar = findViewById(R.id.user_avatar);
+        user_phone = findViewById(R.id.user_phone);
+
+        findViewById(R.id.iv_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
 
         ticketId.setText(TestActivity.ticket_Id);
         unique_id.setText(TestActivity.unique_id_test);
-        appId.setText(TestActivity.app_id);
+        user_name.setText(nickName);
+        user_avatar.setText(avatar);
         URLParamsUtils.setSecretKey(TestActivity.secretKey);
 
         progressDialog = new ProgressDialog(this);
@@ -69,12 +81,16 @@ public class TestPlayActivity extends Activity {
                     intent.putExtra(HalfPlayerFragment.TICKET_ID, ticketId.getText().toString());
                 }
                 intent.putExtra(HalfPlayerFragment.UNIQUE_ID, unique_id.getText().toString());
-                if (!TextUtils.isEmpty(appId.getText().toString())) {
-                    intent.putExtra(HalfPlayerFragment.APP_ID, appId.getText().toString());
-                }
-                if (!TextUtils.isEmpty(ticketId.getText().toString()) && !TextUtils.isEmpty(appId.getText().toString())) {
+                    intent.putExtra(HalfPlayerFragment.APP_ID, TestActivity.app_id);
+                if (!TextUtils.isEmpty(ticketId.getText().toString())) {
                     intent.putExtra(HalfPlayerFragment.NICKNAME, nickName);
                     intent.putExtra(HalfPlayerFragment.AVATAR, avatar);
+                    if (TextUtils.isEmpty(user_phone.getText().toString())){
+                        //默认手机号
+                        intent.putExtra("phone" , "18688888888");
+                    }else {
+                        intent.putExtra("phone" , user_phone.getText().toString());
+                    }
                     startActivity(intent);
                 } else {
                     Toast.makeText(TestPlayActivity.this, "所有id不能为空", Toast.LENGTH_SHORT).show();
@@ -112,12 +128,16 @@ public class TestPlayActivity extends Activity {
                     intent.putExtra(HalfPlayerFragment.TICKET_ID, ticketId.getText().toString());
                 }
                 intent.putExtra(HalfPlayerFragment.UNIQUE_ID, unique_id.getText().toString());
-                if (!TextUtils.isEmpty(appId.getText().toString())) {
-                    intent.putExtra(HalfPlayerFragment.APP_ID, appId.getText().toString());
-                }
-                if (!TextUtils.isEmpty(ticketId.getText().toString()) && !TextUtils.isEmpty(appId.getText().toString())) {
+                intent.putExtra(HalfPlayerFragment.APP_ID, TestActivity.app_id);
+                if (!TextUtils.isEmpty(ticketId.getText().toString())) {
                     intent.putExtra(HalfPlayerFragment.NICKNAME, nickName);
                     intent.putExtra(HalfPlayerFragment.AVATAR, avatar);
+                    if (TextUtils.isEmpty(user_phone.getText().toString())){
+                        //默认手机号
+                        intent.putExtra("phone" , "18688888888");
+                    }else {
+                        intent.putExtra("phone" , user_phone.getText().toString());
+                    }
                     startActivity(intent);
                 } else {
                     Toast.makeText(TestPlayActivity.this, "所有id不能为空", Toast.LENGTH_SHORT).show();

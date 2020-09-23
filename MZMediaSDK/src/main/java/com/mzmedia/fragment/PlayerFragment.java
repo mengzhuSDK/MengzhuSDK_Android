@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.android.exoplayer.util.PlayerControl;
 import com.mengzhu.live.sdk.business.dto.AnchorInfoDto;
 import com.mengzhu.live.sdk.business.dto.MZGoodsListDto;
 import com.mengzhu.live.sdk.business.dto.MZGoodsListExternalDto;
@@ -50,7 +51,10 @@ import com.mengzhu.live.sdk.ui.chat.MZChatMessagerListener;
 import com.mengzhu.live.sdk.ui.widgets.ChannelDlnaDialogFragment;
 import com.mengzhu.live.sdk.ui.widgets.popupwindow.SpeedBottomDialogFragment;
 import com.mengzhu.sdk.R;
+import com.mengzhu.sdk.download.util.SharePreUtil;
+import com.mengzhu.sdk.download.util.TextUtil;
 import com.mzmedia.IPlayerClickListener;
+import com.mzmedia.activity.LandscapeTransActivity;
 import com.mzmedia.fragment.gift.SendGiftDialogFragment;
 import com.mzmedia.utils.ActivityUtils;
 import com.mzmedia.utils.String_Utils;
@@ -600,6 +604,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
                     mListener.resultAnchorInfo(anchorInfoDto);
                 }
                 mTvNickName.setText(anchorInfoDto.getNickname());
+                MZChatManager.getInstance(mActivity).setAnchorUid(anchorInfoDto.getUid());
                 ImageLoader.getInstance().displayImage(anchorInfoDto.getAvatar() + String_Utils.getPictureSizeAvatar(), mIvAvatar, avatarOptions);
             }
 
@@ -619,12 +624,18 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         ChatMessageDto mChatMessage = (ChatMessageDto) obj;
         ChatTextDto mChatText = mChatMessage.getText();
         ChatMegTxtDto megTxtDto = (ChatMegTxtDto) mChatText.getBaseDto();
-        boolean isSelf = megTxtDto.getUniqueID().equals(MyUserInfoPresenter.getInstance().getUserInfo().getUniqueID());
+        boolean isSelf;
+        if (TextUtils.isEmpty(megTxtDto.getUniqueID())){
+            isSelf = false;
+        }else {
+            isSelf = megTxtDto.getUniqueID().equals(MyUserInfoPresenter.getInstance().getUserInfo().getUniqueID());
+        }
         if (isSelf) {
             mzPlayerView.setDanmakuCustomTextColor(getResources().getColor(R.color.color_fff45c));
             mzPlayerView.sendDanmaku(mChatText.getUser_name() + ":  " + megTxtDto.getText(), liveStatus == 1, mChatText.getAvatar(), new DanmakuViewCacheStuffer(mActivity, mzPlayerView.getDanmakuView()));
         } else {
             mzPlayerView.setDanmakuCustomTextColor(getResources().getColor(R.color.white));
+            if (!MZChatManager.getInstance(mActivity).isOnlyAnchor())
             mzPlayerView.sendDanmaku(mChatText.getUser_name() + ":  " + megTxtDto.getText(), liveStatus == 1, mChatText.getAvatar(), new DanmakuViewCacheStuffer(mActivity, mzPlayerView.getDanmakuView()));
         }
     }

@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.BaseAdapter;
 
 import com.mzmedia.adapter.base.CommonAdapterType;
-import com.mzmedia.widgets.LinearLayoutListView.ViewCache;
 
 import tv.mengzhu.core.module.model.dto.BaseItemDto;
 
@@ -20,8 +19,6 @@ import tv.mengzhu.core.module.model.dto.BaseItemDto;
 public class PlayerChatLayout extends android.widget.LinearLayout {
 	private BaseAdapter adapter;
 	private OnClickListener onClickListener = null;
-	private int counts;
-	private ViewCache mCache;
 	private boolean isConstant = false;
 
 	public void setConstant(boolean isConstant) {
@@ -38,20 +35,16 @@ public class PlayerChatLayout extends android.widget.LinearLayout {
 	public void fillLinearLayout() {
 		int count = adapter.getCount();
 		removeAllViews();
-		counts = 0;
+		mChildCount = 0;
 		View v = null;
 		for (int i = 0; i < count; i++) {
-			View contentView = mCache.getCache();
-			v = adapter.getView(i, contentView, null);
-			if (contentView == null) {
-				mCache.putCache(contentView);
-			}
+			v = adapter.getView(i, null, null);
 			v.setOnClickListener(this.onClickListener);
 //			onClickListener.onClick(v);
 			v.setId(i);
 			addView(v, i);
-			counts++;
 		}
+		mChildCount = count;
 	}
 
 	private AddViewListener mListener;
@@ -68,14 +61,8 @@ public class PlayerChatLayout extends android.widget.LinearLayout {
 
 	public void addItemView(BaseItemDto dto) {
 		int count = adapter.getCount();
-		counts = 0;
 		View v = null;
-		View contentView = mCache.getCache();
-		((CommonAdapterType) adapter).addBean(dto);
-		v = adapter.getView(mChildCount, contentView, null);
-		if (contentView == null) {
-			mCache.putCache(contentView);
-		}
+		v = adapter.getView(mChildCount, null, null);
 //        v.setOnClickListener(this.onClickListener);
 		v.setId(mChildCount);
 		if (!isConstant) {
@@ -136,21 +123,19 @@ public class PlayerChatLayout extends android.widget.LinearLayout {
 	 * @since 2.6
 	 */
 	public void removeMore() {
-		View view = getChildAt(counts - 1);
-		if (getChildAt(counts) != null) {
-			removeViewAt(counts);
+		View view = getChildAt(mChildCount - 1);
+		if (getChildAt(mChildCount) != null) {
+			removeViewAt(mChildCount);
 		}
 	}
 
 	public PlayerChatLayout(Context context) {
 		super(context);
-		mCache = new ViewCache();
 		setOrientation(VERTICAL);
 	}
 
 	public PlayerChatLayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		mCache = new ViewCache();
 		setOrientation(VERTICAL);
 	}
 

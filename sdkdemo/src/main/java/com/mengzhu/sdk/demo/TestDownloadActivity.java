@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.mengzhu.sdk.download.MZDownloadManager;
 import com.mengzhu.sdk.download.controller.scheduler.M3U8PeerTaskListener;
@@ -39,6 +40,12 @@ public class TestDownloadActivity extends Activity implements NormalTaskListener
         setContentView(R.layout.download_test_layout);
         mListView=findViewById(R.id.download_list);
 
+        findViewById(R.id.iv_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         MZDownloadManager.getInstance().init(this);
         mAdapter=new TestDownloadAdapter(this);
         mListView.setAdapter(mAdapter);
@@ -88,7 +95,7 @@ public class TestDownloadActivity extends Activity implements NormalTaskListener
             @Override
             public void onClick(View view) {
                 sort=sort==1?2:1;
-                ((Button)view).setText(sort==1?"降序":"升序");
+                ((TextView)view).setText(sort==1?"降序":"升序");
                 mAdapter.setSort(sort);
                 mAdapter.notifyDataSetChanged();
             }

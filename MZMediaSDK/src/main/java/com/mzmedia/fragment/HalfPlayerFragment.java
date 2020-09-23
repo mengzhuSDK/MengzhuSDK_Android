@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import com.mengzhu.live.sdk.business.dto.AnchorInfoDto;
 import com.mengzhu.live.sdk.business.dto.MZOnlineUserListDto;
+import com.mengzhu.live.sdk.business.dto.ad.MZAdRollAdvertDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatMessageDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatTextDto;
 import com.mengzhu.live.sdk.business.dto.chat.RightBean;
@@ -42,14 +43,18 @@ import com.mengzhu.live.sdk.business.presenter.chat.ChatPresenter;
 import com.mengzhu.live.sdk.core.MZSDKInitManager;
 import com.mengzhu.live.sdk.core.SDKInitListener;
 import com.mengzhu.live.sdk.core.utils.DensityUtil;
+import com.mengzhu.live.sdk.core.utils.ToastUtils;
 import com.mengzhu.live.sdk.ui.api.MZApiDataListener;
 import com.mengzhu.live.sdk.ui.api.MZApiRequest;
 import com.mengzhu.live.sdk.ui.chat.MZChatManager;
 import com.mengzhu.live.sdk.ui.chat.MZChatMessagerListener;
 import com.mengzhu.live.sdk.ui.fragment.ViewDocumentFragment;
 import com.mengzhu.live.sdk.ui.widgets.ChannelDlnaDialogFragment;
+import com.mengzhu.live.sdk.ui.widgets.MZADBannerView;
 import com.mengzhu.sdk.R;
+import com.mengzhu.sdk.download.util.SharePreUtil;
 import com.mzmedia.IPlayerClickListener;
+import com.mzmedia.activity.LandscapeTransActivity;
 import com.mzmedia.adapter.base.WatchTitleBarAdapter;
 import com.mzmedia.utils.String_Utils;
 import com.mzmedia.widgets.CircleImageView;
@@ -76,11 +81,14 @@ import tv.mengzhu.core.wrap.user.presenter.MyUserInfoPresenter;
 import tv.mengzhu.core.wrap.netwock.Page;
 import tv.mengzhu.dlna.DLNAController;
 import tv.mengzhu.dlna.entity.RemoteItem;
+import tv.mengzhu.sdk.business.dto.ad.MZPlayAdVideoDto;
 import tv.mengzhu.sdk.module.IMZPlayerManager;
 import tv.mengzhu.sdk.module.MZPlayerManager;
 import tv.mengzhu.sdk.module.MZPlayerView;
 import tv.mengzhu.sdk.module.PlayerEventListener;
 import tv.mengzhu.sdk.module.player.PlayerController;
+import tv.mengzhu.sdk.module.player.callback.OnADClickListener;
+import tv.mengzhu.sdk.module.player.callback.OnADCountDownListener;
 
 public class HalfPlayerFragment extends Fragment implements View.OnClickListener, MZApiDataListener {
 
@@ -149,6 +157,8 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
 
     private List<HashMap<String, Fragment>> bottomTabs = new ArrayList<>();
 
+    private MZADBannerView mzADBannerView; //滚动广告banner
+
     public static HalfPlayerFragment newInstance(String Appid, String avatar, String nickName, String unique_id, String ticketId) {
         HalfPlayerFragment fragment = new HalfPlayerFragment();
         Bundle args = new Bundle();
@@ -210,6 +220,7 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
         mBottomLayout = rootView.findViewById(R.id.video_halfplayerfragment_bottom_layout);
         mMagicIndicator = rootView.findViewById(R.id.video_halfplayerfragment_bottom_tab);
         mVpContainer = rootView.findViewById(R.id.vp_halffragment_watch_bottom);
+        mzADBannerView = rootView.findViewById(R.id.banner_halfplayerfragment_ad);
         return rootView;
     }
 
@@ -272,7 +283,6 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
         mManager.init(mzPlayerView);
     }
 
-
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -309,6 +319,7 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
 
         mMagicIndicator.setVisibility(View.GONE);
         hideBottomUIMenu();
+        mzADBannerView.setVisibility(View.GONE);
     }
 
     public void changePortrait() {
@@ -327,6 +338,8 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
         mBottomLayout.setLayoutParams(bottomLayoutParams);
 
         mMagicIndicator.setVisibility(View.VISIBLE);
+
+        mzADBannerView.changePortrait();
     }
 
     /**
@@ -354,6 +367,15 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
         mOnlinePersonIv1.setOnClickListener(this);
         mOnlinePersonIv2.setOnClickListener(this);
         mOnlinePersonIv3.setOnClickListener(this);
+
+
+        mzADBannerView.loadData(ticketId);
+        mzADBannerView.setOnMZRollADItemClickListener(new MZADBannerView.OnMZRollADItemClickListener() {
+            @Override
+            public void onItemClickListener(MZAdRollAdvertDto mzAdRollAdvertDto) {
+                Log.e("TAG", "onItemClickListener: " + mzAdRollAdvertDto.getType());
+            }
+        });
 
         //各类型消息回调
         MZChatManager.getInstance(mActivity).registerListener(CLASSNAME, new MZChatMessagerListener() {
@@ -568,6 +590,8 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
                 if (mListener != null) {
                     mListener.resultAnchorInfo(anchorInfoDto);
                 }
+                // 传值主播UID 用于只看主播功能
+                MZChatManager.getInstance(mActivity).setAnchorUid(anchorInfoDto.getUid());
                 mTvNickName.setText(anchorInfoDto.getNickname());
                 ImageLoader.getInstance().displayImage(anchorInfoDto.getAvatar() + String_Utils.getPictureSizeAvatar(), mIvAvatar, avatarOptions);
             }
@@ -585,12 +609,18 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
         ChatMessageDto mChatMessage = (ChatMessageDto) obj;
         ChatTextDto mChatText = mChatMessage.getText();
         ChatMegTxtDto megTxtDto = (ChatMegTxtDto) mChatText.getBaseDto();
-        boolean isSelf = megTxtDto.getUniqueID().equals(MyUserInfoPresenter.getInstance().getUserInfo().getUniqueID());
+        boolean isSelf;
+        if (TextUtils.isEmpty(megTxtDto.getUniqueID())){
+            isSelf = false;
+        }else {
+            isSelf = megTxtDto.getUniqueID().equals(MyUserInfoPresenter.getInstance().getUserInfo().getUniqueID());
+        }
         if (isSelf) {
             mzPlayerView.setDanmakuCustomTextColor(getResources().getColor(R.color.color_fff45c));
         } else {
             mzPlayerView.setDanmakuCustomTextColor(getResources().getColor(R.color.white));
         }
+        if (!MZChatManager.getInstance(mActivity).isOnlyAnchor())
         mzPlayerView.sendDanmaku(mChatText.getUser_name() + ":  " + megTxtDto.getText(), liveStatus == 1, mChatText.getAvatar(), new DanmakuViewCacheStuffer(mActivity, mzPlayerView.getDanmakuView()));
     }
 
@@ -720,6 +750,47 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
             if (mPlayerEventListener != null) {
                 mManager.setEventListener(mPlayerEventListener);
             }
+            //广告需要
+            mManager.setVideo_advert(mPlayInfoDto.getVideo_advert());
+            mManager.setTicket_id(ticketId);
+            //广告需要
+            //广告设置
+            mManager.setTVSkipText("点击跳过广告");
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT , RelativeLayout.LayoutParams.WRAP_CONTENT);
+            layoutParams.topMargin = 100;
+            mManager.setTVSkipLayoutParams(layoutParams);
+            mManager.setIsCanPlayVideo(true); //默认为true
+            mManager.setOnADClickListener(new OnADClickListener() {
+                @Override
+                public void onSkipClick(MZPlayAdVideoDto videoAdvertDto) {
+                    ToastUtils.popUpToast("点击跳过");
+                }
+
+                @Override
+                public void onADVideoClick(MZPlayAdVideoDto videoAdvertDto) {
+                    ToastUtils.popUpToast("点击视频");
+                    mManager.pauseADCountDown();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mManager.resumeADCountDown();
+                        }
+                    } , 10000);
+                }
+            });
+            mManager.setOnADCountDownListener(new OnADCountDownListener() {
+                @Override
+                public void onCountDown(long countDownTime) {
+                    Log.e("Tag", "onCountDown: " + countDownTime);
+                }
+
+                @Override
+                public void onCountDownEnd(MZPlayAdVideoDto videoAdvertDto) {
+                    ToastUtils.popUpToast("视频广告倒计时结束");
+//                    mManager.start();
+                }
+            });
+            //广告设置
             mManager.setVideoPath(mVideoUrl);
             mManager.showPreviewImage(mPlayInfoDto.getCover());
             mManager.setIsOpenRandom(true);
@@ -729,6 +800,11 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
             MZChatManager.getInstance(mActivity).setPlayinfo(mPlayInfoDto);
             MZChatManager.getInstance(mActivity).sendMessagePlayEvent(ticketId, speeds[mSpeedIndex] + "");
         } else {
+            //广告需要
+            mzPlayerView.setVideo_advert(mPlayInfoDto.getVideo_advert());
+            mzPlayerView.setTicket_id(ticketId);
+            //广告需要
+            mzPlayerView.onlyStartAD();
             if (liveStatus == 3) {
                 mRlLiveOver.setVisibility(View.VISIBLE);
                 mLiveContent.setText("主播暂时离开，\n稍等一下马上回来");
@@ -779,7 +855,6 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
         mAdapter = new TabPagerAdapter(getChildFragmentManager(), mTabFragmentList);
         mVpContainer.setOffscreenPageLimit(mTabFragmentList.size());
         mVpContainer.setAdapter(mAdapter);
-
         mVpContainer.setCurrentItem(0);
     }
 
@@ -985,6 +1060,9 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
                     break;
                 case PlayInfoDto.DOCUMENTS:
                     mPlayInfoDto.setDocumentShow(isOpen);
+                    break;
+                case PlayInfoDto.PRIZE:
+                    mPlayInfoDto.setLottoShow(isOpen);
                     break;
                 case PlayInfoDto.CHAT_HISTORY:
                     mPlayInfoDto.setHide_chat_history(isOpen);
