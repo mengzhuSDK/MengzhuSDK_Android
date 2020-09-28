@@ -1,12 +1,16 @@
 package com.mengzhu.sdk.demo;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -56,6 +60,8 @@ public class TestPushActivity extends Activity {
     private boolean isAudioPush = false;
 
     private ProgressDialog progressDialog;
+
+    int live_type = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -181,7 +187,6 @@ public class TestPushActivity extends Activity {
         MyUserInfoPresenter.getInstance().saveUserinfo(dto);
         URLParamsUtils.setSecretKey(TestActivity.secretKey);
 
-        int live_type = 0;
         if (isAudioPush) {
             live_type = 1;
         }
@@ -212,12 +217,21 @@ public class TestPushActivity extends Activity {
 
                 @Override
                 public void errorResult(String s, int i, String s1) {
-
+                    Log.e("Lujie", "errorResult: " + s1);
                 }
             });
-            //debug模式下提供此api用于测试
-            mzLiveCreateApiRequest.startData(MZApiRequest.API_TYPE_LIVE_CREATE,
-                    "直播活动描述" + DateUtils.stringToDateNoymds(System.currentTimeMillis() + ""), TestActivity.channel_id, live_type, screen == 2 ? "0" : "1", "http://s1.t.zmengzhu.com/upload/img/50/6d/506da693ecb2cf6f2fd0e3e92656dde4.png", "test" + DateUtils.stringToDateNoymds(System.currentTimeMillis() + ""));
+            AlertDialog.Builder builder = new AlertDialog.Builder(TestPushActivity.this);
+            builder.setTitle("提示");
+            builder.setMessage("此创建活动功能API接口权限所属于服务端，提供此功能为了便于demo演示。如接入时考虑数据安全等因素建议通过服务访问API并将live_tk、ticket_id传入SDK进行推流。");
+            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //debug模式下提供此api用于测试
+                    mzLiveCreateApiRequest.startData(MZApiRequest.API_TYPE_LIVE_CREATE,
+                            "直播活动描述" + DateUtils.stringToDateNoymds(System.currentTimeMillis() + ""), TestActivity.channel_id, live_type, screen == 2 ? "0" : "1", "http://s1.t.zmengzhu.com/upload/img/50/6d/506da693ecb2cf6f2fd0e3e92656dde4.png", "test" + DateUtils.stringToDateNoymds(System.currentTimeMillis() + ""));
+                }
+            });
+            builder.show();
         }
     }
 
