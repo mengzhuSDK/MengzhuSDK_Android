@@ -70,4 +70,4 @@ MZMediaSDK包含一个最简单的使用demo，开发者可导出查看。
     -keep class org.fourthline.cling.**{*;}
     //接入上传需要
     -dontwarn okio.**
--   dontwarn org.apache.commons.codec.binary.**
+    -dontwarn org.apache.commons.codec.binary.**
