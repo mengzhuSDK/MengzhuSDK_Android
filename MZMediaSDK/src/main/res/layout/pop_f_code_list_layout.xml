@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1a000000"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/ll_list_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="413dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bg_palyer_goods_dialog"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_44">
+
+            <TextView
+                android:id="@+id/tv_cancel"
+                style="@style/bottom_watch_dialog_title_style"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:paddingLeft="@dimen/dimen_10"
+                android:paddingRight="@dimen/dimen_10"
+                android:text="取消" />
+
+            <TextView
+                android:id="@+id/tv_select"
+                style="@style/bottom_watch_dialog_title_style"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:paddingLeft="@dimen/dimen_10"
+                android:paddingRight="@dimen/dimen_10"
+                android:text="确定" />
+
+            <TextView
+                style="@style/mz_public_bg_line_style"
+                android:layout_alignParentBottom="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ListView
+                android:id="@+id/list_listview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <com.mengzhu.live.sdk.ui.widgets.MzStateView
+                android:id="@+id/mz_state_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

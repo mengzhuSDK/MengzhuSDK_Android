@@ -23,6 +23,7 @@ import com.mzmedia.utils.MUIImmerseUtils;
 
 import tv.mengzhu.core.wrap.user.presenter.MyUserInfoPresenter;
 
+
 public class PusherActivity  extends AppCompatActivity implements IPushClickListener {
     private FragmentManager mFragmentManager;
     private MZPlugFlowFragement mzPlugFlowFragement;

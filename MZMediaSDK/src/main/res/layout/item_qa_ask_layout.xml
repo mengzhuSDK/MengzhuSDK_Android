@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_000000"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_34"
+            android:layout_marginLeft="@dimen/dimen_16"
+            android:layout_marginTop="@dimen/dimen_12"
+            android:layout_marginRight="@dimen/dimen_16">
+
+            <tv.mengzhu.sdk.widgets.CircleImageView
+                android:id="@+id/item_ask_avatar"
+                android:layout_width="@dimen/dimen_32"
+                android:layout_height="@dimen/dimen_32"
+                android:layout_marginRight="@dimen/dimen_2" />
+
+            <TextView
+                android:id="@+id/item_ask_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@id/item_ask_avatar"
+                android:textColor="@color/color_ff2145"
+                android:textSize="@dimen/dimen_12sp" />
+
+            <TextView
+                android:id="@+id/item_ask_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_toRightOf="@id/item_ask_avatar"
+                android:textColor="@color/color_c8c7cc"
+                android:textSize="@dimen/dimen_12sp" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/item_ask_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimen_16"
+            android:layout_marginTop="@dimen/dimen_6"
+            android:layout_marginRight="@dimen/dimen_16"
+            android:paddingBottom="@dimen/dimen_12"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_14sp" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/group_divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_10" />
+</LinearLayout>

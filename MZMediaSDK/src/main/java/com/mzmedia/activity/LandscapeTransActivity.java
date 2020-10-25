@@ -3,10 +3,12 @@ package com.mzmedia.activity;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.text.Selection;
 import android.text.Spannable;
@@ -31,18 +33,26 @@ import com.mengzhu.live.sdk.business.presenter.chat.ChatMessageObserver;
 import com.mengzhu.live.sdk.business.presenter.chat.ChatPresenter;
 import com.mengzhu.live.sdk.core.utils.KeyBoardUtils;
 import com.mengzhu.live.sdk.ui.chat.MZChatManager;
+import com.mengzhu.live.sdk.ui.widgets.emoji.EmojiPagerAdapter;
+import com.mengzhu.live.sdk.ui.widgets.emoji.EmojiUtils;
 import com.mengzhu.sdk.R;
+import com.mengzhu.sdk.download.util.SharePreUtil;
 import com.mzmedia.utils.String_Utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import tv.mengzhu.core.frame.coreutils.Device;
-import tv.mengzhu.core.wrap.netwock.Page;
 import tv.mengzhu.core.wrap.user.presenter.MyUserInfoPresenter;
+import tv.mengzhu.core.wrap.netwock.Page;
 
 /**
  * Created by DELL on 2016/7/13.
  */
 public class LandscapeTransActivity extends Activity implements View.OnClickListener, IBasePresenterLinstener {
     private TextView tv_send;
+    private LinearLayout ll_is_only_anchor;
+    private ImageView iv_is_only_anchor_icon;
     private EditText et_input;
     private LinearLayout rl_trans;
     private int[] mWidthAndHeights;
@@ -67,6 +77,8 @@ public class LandscapeTransActivity extends Activity implements View.OnClickList
 //    private ImageView mInputDanmukuIv;
     private int isDanmuku;
     private MZChatManager manager;
+
+    private boolean isOnlyAnchor = false;
 
     public interface SendMsgInterface {
         public void sendTransMsg(String msg);
@@ -100,6 +112,8 @@ public class LandscapeTransActivity extends Activity implements View.OnClickList
         et_input = (EditText) findViewById(R.id.et_input);
         tv_send = (TextView) findViewById(R.id.tv_send);
         rl_trans = (LinearLayout) findViewById(R.id.rl_trans);
+        ll_is_only_anchor = findViewById(R.id.ll_is_only_anchor);
+        iv_is_only_anchor_icon = findViewById(R.id.iv_is_only_anchor_icon);
         mActivityInputEmoji = (ImageView) findViewById(R.id.mz_activity_input_emoji);
 //        mInputDanmukuIv = (ImageView) findViewById(R.id.mz_activity_input_danmuku);
         mToken = (ChatConfDto) mIntent.getSerializableExtra(TRANS_TOKEN);
@@ -115,7 +129,7 @@ public class LandscapeTransActivity extends Activity implements View.OnClickList
 //        mAtUid = mIntent.getStringExtra(RequestParamConstants.UID);
 //        mAtTicketId = mIntent.getStringExtra(RequestParamConstants.TICKET_ID);
 //        mPlayinfo = (PlayInfoDto) mIntent.getSerializableExtra(TransActivity.PLAYINFO);
-//        initEmoji();
+        initEmoji();
 //        et_input.addTextChangedListener(new Testlistener(et_input, 100));
 
         //设置输入长度
@@ -135,6 +149,7 @@ public class LandscapeTransActivity extends Activity implements View.OnClickList
         tv_send.setOnClickListener(this);
         mActivityInputEmoji.setOnClickListener(this);
         et_input.setOnClickListener(this);
+        ll_is_only_anchor.setOnClickListener(this);
         et_input.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -196,6 +211,12 @@ public class LandscapeTransActivity extends Activity implements View.OnClickList
                 Selection.setSelection(spanText, text.length());
             }
         }
+        isOnlyAnchor = manager.isOnlyAnchor();
+        if (isOnlyAnchor){
+            iv_is_only_anchor_icon.setImageResource(R.mipmap.mz_is_only_anchor_open);
+        }else {
+            iv_is_only_anchor_icon.setImageResource(R.mipmap.mz_is_only_anchor_close);
+        }
     }
 
     @Override
@@ -240,6 +261,17 @@ public class LandscapeTransActivity extends Activity implements View.OnClickList
             //            case R.id.mz_activity_input_danmuku:
 //                danmukuControl(mInputDanmukuIv);
 //                break;
+        } else if (id == R.id.mz_activity_input_emoji) {
+            num = 1;
+            if (!isShowEmoji) {
+                showEmoji();
+                isShowEmoji = true;
+            } else {
+                showKeyboard();
+                isShowEmoji = false;
+            }
+        }else if (id == R.id.ll_is_only_anchor){
+            changeIsOnlyAnchor();
         }
     }
 
@@ -344,15 +376,15 @@ public class LandscapeTransActivity extends Activity implements View.OnClickList
     }
 
 
-//    public void initEmoji() {
-//        List emoji = EmojiUtils.getExpressionRes(90);
-//        List<View> views = new ArrayList<View>();
-//        for (int i = 1; i <= 4; i++) {// 20*5
-//            View view = EmojiUtils.getGridChildView(this, i, emoji, et_input);
-//            views.add(view);
-//        }
-//        mVpEmoji.setAdapter(new EmojiPagerAdapter(views));
-//    }
+    public void initEmoji() {
+        List emoji = EmojiUtils.getExpressionRes(90);
+        List<View> views = new ArrayList<View>();
+        for (int i = 1; i <= 4; i++) {// 20*5
+            View view = EmojiUtils.getGridChildView(this, i, emoji, et_input);
+            views.add(view);
+        }
+        mVpEmoji.setAdapter(new EmojiPagerAdapter(views));
+    }
 
     class AtPushListener implements IBasePresenterLinstener {
 
@@ -367,20 +399,20 @@ public class LandscapeTransActivity extends Activity implements View.OnClickList
         }
     }
 
-//    private void showEmoji() {
-//        KeyBoardUtils.closeKeybord(et_input, this);
-//        new Handler() {//延时0.2秒显示表情
-//            @Override
-//            public void handleMessage(Message msg) {
-//                super.handleMessage(msg);
-//                mActivityInputEmoji.setImageResource(R.drawable.icon_input_keyboard);
-//                mVpEmoji.setVisibility(View.VISIBLE);
-//            }
-//        }.sendEmptyMessageDelayed(1, 200);
-//    }
+    private void showEmoji() {
+        KeyBoardUtils.closeKeybord(et_input, this);
+        new Handler() {//延时0.2秒显示表情
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                mActivityInputEmoji.setImageResource(R.mipmap.icon_keybord);
+                mVpEmoji.setVisibility(View.VISIBLE);
+            }
+        }.sendEmptyMessageDelayed(1, 200);
+    }
 
     private void showKeyboard() {
-//        mActivityInputEmoji.setImageResource(R.drawable.icon_input_emoji);
+        mActivityInputEmoji.setImageResource(R.mipmap.icon_emoji);
         mVpEmoji.setVisibility(View.GONE);
         new Handler() {//延时0.2秒显示表情
             @Override
@@ -418,6 +450,22 @@ public class LandscapeTransActivity extends Activity implements View.OnClickList
     protected void onDestroy() {
         super.onDestroy();
         ChatPresenter.isRefreshList = true;
+    }
+
+    public void changeIsOnlyAnchor(){
+        if (isOnlyAnchor){
+            isOnlyAnchor = false;
+            manager.setOnlyAnchor(isOnlyAnchor);
+            iv_is_only_anchor_icon.setImageResource(R.mipmap.mz_is_only_anchor_close);
+        }else {
+            isOnlyAnchor = true;
+            manager.setOnlyAnchor(isOnlyAnchor);
+            iv_is_only_anchor_icon.setImageResource(R.mipmap.mz_is_only_anchor_open);
+        }
+        Intent intent = new Intent("isOnlyAnchor");
+        intent.putExtra("isOnlyAnchor", isOnlyAnchor);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+        finish();
     }
 
 //    class TransShowMsgMonitorCallback implements ShowMsgMonitor.ShowMsgMonitorCallback {

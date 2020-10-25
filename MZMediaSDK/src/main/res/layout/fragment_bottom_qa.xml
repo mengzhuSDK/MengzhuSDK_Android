@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_131313"
+    android:orientation="vertical">
+
+    <com.mengzhu.live.sdk.ui.widgets.MzStateView
+        android:id="@+id/fragment_qa_state"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/dimen_38" />
+
+    <LinearLayout
+        android:id="@+id/fragment_qa_list_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/dimen_38"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/tv_qa_list_news_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_ff1d5c"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/tv_qa_list_news"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dimen_32"
+                android:drawableStart="@mipmap/icon_qa_news"
+                android:gravity="center"
+                android:text="新的消息回复"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dimen_12sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_qa_list_all"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_32"
+            android:background="@color/color_ff1d5c"
+            android:gravity="center"
+            android:text="查看全部提问"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_12sp"
+            android:visibility="gone" />
+
+        <com.mzmedia.pullrefresh.PullToRefreshExpandableListView
+            android:id="@+id/ex_qa_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_32"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/dimen_16"
+        android:layout_marginRight="@dimen/dimen_16"
+        android:layout_marginBottom="@dimen/dimen_6"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/iv_anonymous_icon"
+            android:layout_width="@dimen/dimen_20"
+            android:layout_height="@dimen/dimen_20"
+            android:src="@mipmap/icon_anonymous" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimen_6"
+            android:layout_marginRight="@dimen/dimen_6"
+            android:text="匿名"
+            android:textColor="@color/color_ff1d5c"
+            android:textSize="@dimen/dimen_14sp" />
+
+        <EditText
+            android:id="@+id/etv_ask"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_qa_edit"
+            android:gravity="center_vertical"
+            android:hint="请输入您的问题"
+            android:paddingLeft="@dimen/dimen_12"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:textSize="@dimen/dimen_14sp" />
+
+        <TextView
+            android:id="@+id/tv_ask_submit"
+            android:layout_width="@dimen/dimen_60"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_qa_submit"
+            android:gravity="center"
+            android:text="提问"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_14sp" />
+    </LinearLayout>
+</RelativeLayout>

@@ -7,6 +7,7 @@ import android.text.TextPaint;
 import android.view.View;
 import android.widget.TextView;
 
+import com.mengzhu.live.sdk.ui.widgets.emoji.EmojiUtils;
 import com.mengzhu.sdk.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -43,7 +44,7 @@ public class DanmakuViewCacheStuffer extends ViewCacheStuffer<DanmakuViewCacheSt
             viewHolder.mText.getPaint().set(paint);
         }
 
-        viewHolder.mText.setText( danmaku.text.toString());
+        viewHolder.mText.setText(EmojiUtils.getEmojiText(mContext, danmaku.text.toString().split(",")[0]));
         viewHolder.mText.setTextColor(danmaku.textColor);
         viewHolder.mText.setTextSize(danmaku.textSize);
         Bitmap bitmap = null;

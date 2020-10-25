@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vpi="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/layout_gift_outside"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00000000"
+        android:orientation="horizontal"
+        android:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/layout_fragment_send_gift_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+        <!--title-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@mipmap/icon_bottom_gift_ver"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dimen_13"
+            android:background="@mipmap/bg_gift_title"
+            android:text="礼物"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_16sp" />
+
+        <!--<include layout="@layout/bottom_tools_view_line" />-->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:background="@color/color_4a4a4a">
+            <!--礼物-->
+            <LinearLayout
+                android:id="@+id/layout_fragment_send_gift_container"
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                android:orientation="vertical">
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/vp_fragment_send_gift"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <com.mengzhu.live.sdk.ui.widgets.CirclePageIndicator
+                    android:id="@+id/cpi_fragment_send_gift"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_18"
+                    android:paddingTop="4dp"
+                    vpi:fillColor="@color/color_FF1B56"
+                    vpi:pageColor="@color/color_EAEAEA" />
+            </LinearLayout>
+
+            <com.mengzhu.live.sdk.ui.widgets.MzStateView
+                android:id="@+id/errorview_fragment_send_gift"
+                android:layout_width="match_parent"
+                android:layout_height="254dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/fragment_send_gift_btn_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_44"
+            android:background="@color/color_4a4a4a">
+
+            <Button
+                android:id="@+id/fragment_buy_gift_send_btn"
+                android:layout_width="@dimen/dimen_64"
+                android:layout_height="@dimen/dimen_30"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dimen_16"
+                android:background="@color/color_FF1B56"
+                android:gravity="center"
+                android:text="赠送"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dimen_14sp" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>

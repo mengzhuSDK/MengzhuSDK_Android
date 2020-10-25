@@ -28,9 +28,12 @@ import com.mengzhu.live.sdk.business.presenter.chat.ChatMessageObserver;
 import com.mengzhu.live.sdk.core.utils.ToastUtils;
 import com.mengzhu.live.sdk.ui.api.MZApiDataListener;
 import com.mengzhu.live.sdk.ui.api.MZApiRequest;
+
+import com.mengzhu.live.sdk.ui.widgets.popupwindow.MZLottoWebFragment;
 import com.mengzhu.live.sdk.ui.widgets.popupwindow.SignInWebFragment;
 import com.mengzhu.sdk.R;
 import com.mzmedia.IPlayerClickListener;
+import com.mzmedia.fragment.gift.SendGiftDialogFragment;
 import com.mzmedia.utils.ActivityUtils;
 import com.mzmedia.widgets.ChatOnlineView;
 import com.mzmedia.widgets.LoveLayout;
@@ -41,8 +44,9 @@ import java.util.ArrayList;
 
 import tv.mengzhu.core.frame.coreutils.PreferencesUtils;
 import tv.mengzhu.core.module.model.dto.BaseDto;
-import tv.mengzhu.core.wrap.netwock.Page;
+import tv.mengzhu.core.wrap.library.utils.CommonUtil;
 import tv.mengzhu.core.wrap.user.presenter.MyUserInfoPresenter;
+import tv.mengzhu.core.wrap.netwock.Page;
 
 /**
  * 观看端 互动fragment
@@ -55,6 +59,7 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
     public static final String PLAY_INFO_KEY = "PLAY_INFO_KEY";
 
     private ImageView mIvConfig; //配置
+    private ImageView mIvGift; //礼物
     private ImageView mIvShare; //分享
     public ImageView mIvLike; //点赞
     private TextView mTvReport;
@@ -73,6 +78,7 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
     private LinearLayout mFuncLayout;
     private ImageView mIvVote;
     private ImageView mIvSignIn;
+    private ImageView mIvDraw; //抽奖入口
 
     private MZApiRequest mzApiRequestGoods;
     private MZApiRequest mPraiseRequest;
@@ -92,8 +98,12 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
     private IPlayerClickListener mListener;
 
     private ContentBean signInfoBean;
+    private ContentBean lottoBean;
     private CountDownTimer signCountDown;
     private boolean signDialogShowing = false;
+    private String anchorUid;
+
+    SendGiftDialogFragment giftDialogFragment;
 
     public void setIPlayerClickListener(IPlayerClickListener listener) {
         mListener = listener;
@@ -146,6 +156,7 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
         }
 
         mIvConfig = (ImageView) findViewById(R.id.iv_playerfragment_config);
+        mIvGift = (ImageView) findViewById(R.id.iv_playerfragment_gift);
         mIvShare = (ImageView) findViewById(R.id.iv_playerfragment_share);
         mIvLike = (ImageView) findViewById(R.id.iv_playerfragment_zan);
         mConfigLayout = (LinearLayout) findViewById(R.id.iv_playerfragment_config_layout);
@@ -163,11 +174,15 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
         mFuncLayout = (LinearLayout) findViewById(R.id.ll_func_layout);
         mIvVote = (ImageView) findViewById(R.id.iv_vote);
         mIvSignIn = (ImageView) findViewById(R.id.iv_sign_in);
+        mIvDraw = (ImageView) findViewById(R.id.iv_draw);
         if (mPlayInfoDto.isVoteShow()){
             mIvVote.setVisibility(View.VISIBLE);
         }
         if (mPlayInfoDto.isSignShow()){
             mIvSignIn.setVisibility(View.VISIBLE);
+        }
+        if(mPlayInfoDto.isLottoShow()){
+            mIvDraw.setVisibility(View.VISIBLE);
         }
         goodsCountDown = new GoodsCountDown(10000 * 5000, 5000);
     }
@@ -176,7 +191,7 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
     public void initData() {
         mChatFragment = new PlayerChatListFragment();
         //是否禁言
-        initBanChat(mPlayInfoDto.getUser_status() == 3);
+        initBanChat(mPlayInfoDto.getUser_status() == 3 || mPlayInfoDto.getUser_status() == 2);
 
         //添加聊天fragment
         Bundle bundle = new Bundle();
@@ -189,6 +204,9 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
         for (int i = 0; i < mPlayInfoDto.getRight().size(); i++) {
             if ("sign".equals(mPlayInfoDto.getRight().get(i).getType())){
                 signInfoBean = mPlayInfoDto.getRight().get(i).getContent();
+            }
+            if ("prize".equals(mPlayInfoDto.getRight().get(i).getType())){
+                lottoBean = mPlayInfoDto.getRight().get(i).getContent();
             }
         }
         initSign();
@@ -203,6 +221,12 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
         if (!playInfoDto.isSignShow()){
             mIvSignIn.setVisibility(View.GONE);
         }
+        mIvGift.setVisibility(mPlayInfoDto.isPay_gift_open() ? View.VISIBLE : View.GONE);
+
+        mLoveLayout.setVisibility(mPlayInfoDto.isLike_open() ? View.VISIBLE : View.GONE);
+        mIvLike.setVisibility(mPlayInfoDto.isLike_open() ? View.VISIBLE : View.GONE);
+
+        mIvDraw.setVisibility(playInfoDto.isLottoShow()?View.VISIBLE:View.GONE);
     }
 
     @Override
@@ -210,12 +234,14 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
         mIvConfig.setOnClickListener(this);
         mIvShare.setOnClickListener(this);
         mIvLike.setOnClickListener(this);
+        mIvGift.setOnClickListener(this);
         mTvReport.setOnClickListener(this);
         mTvDanmakuSwtich.setOnClickListener(this);
         mRlSendChat.setOnClickListener(this);
         mGoodsIv.setOnClickListener(this);
         mIvVote.setOnClickListener(this);
         mIvSignIn.setOnClickListener(this);
+        mIvDraw.setOnClickListener(this);
 
         mPlayerGoodsPushLayout.setOnGoodsPushItemClickListener(new PlayerGoodsView.OnGoodsItemClickListener() {
             @Override
@@ -558,6 +584,21 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
                 }
             }
         }
+        if(view.getId() == R.id.iv_draw){
+            if(!CommonUtil.isFastDoubleClick()){
+                showLottoDialog();
+            }
+        }
+        if (view.getId() == R.id.iv_playerfragment_gift){
+            showSendGiftDialog();
+        }
+    }
+
+    public void showSendGiftDialog(){
+        if (mPlayInfoDto != null){
+            giftDialogFragment = SendGiftDialogFragment.newInstance(mPlayInfoDto);
+            giftDialogFragment.show(getFragmentManager() , "gift_dialog");
+        }
     }
 
     public void showSignDialog(){
@@ -579,4 +620,20 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
         signInWebFragment.showAtLocation(mActivity.findViewById(android.R.id.content), Gravity.CENTER, 0, 0);
         signDialogShowing = true;
     }
+
+    /**
+     * 抽奖弹窗
+     */
+    public void showLottoDialog(){
+        MZLottoWebFragment lottoWebFragment = new MZLottoWebFragment(mActivity,lottoBean,"抽奖");
+        lottoWebFragment.setLottoOutSideDismiss(true);
+        lottoWebFragment.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+
+            }
+        });
+        lottoWebFragment.showAtLocation(mActivity.findViewById(android.R.id.content), Gravity.CENTER, 0, 0);
+    }
+
 }

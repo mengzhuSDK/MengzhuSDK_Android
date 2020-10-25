@@ -2,7 +2,6 @@
 <resources>
 
 
-
     <!-- 屏幕宽高比选项 -->
     <style name="AspectRatioButton">
         <item name="android:layout_width">wrap_content</item>
@@ -12,7 +11,11 @@
     </style>
 
 
-
+    <style name="TransparentPushDialog" parent="android:style/Theme.Light">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/transparent</item>
+    </style>
 
 
     <style name="mz_public_bg_line_style">
@@ -62,6 +65,7 @@
         <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
 
     </style>
+
     <style name="AnimationActivity" parent="@android:style/Animation.Activity">
         <item name="android:activityOpenEnterAnimation">@anim/dialog_in_no_anim</item>
         <item name="android:activityOpenExitAnimation">@anim/dialog_out_no_anim</item>

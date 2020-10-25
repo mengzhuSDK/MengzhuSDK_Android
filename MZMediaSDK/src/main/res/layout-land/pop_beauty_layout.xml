@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/ll_beauty_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/item_beauty_4x"
+            android:layout_width="@dimen/dimen_40"
+            android:layout_height="@dimen/dimen_40"
+            android:layout_marginBottom="@dimen/dimen_10"
+            android:background="@drawable/bg_item_beauty"
+            android:gravity="center"
+            android:text="4X"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_14sp" />
+
+        <TextView
+            android:id="@+id/item_beauty_3x"
+            android:layout_width="@dimen/dimen_40"
+            android:layout_height="@dimen/dimen_40"
+            android:layout_marginBottom="@dimen/dimen_10"
+            android:background="@drawable/bg_item_beauty"
+            android:gravity="center"
+            android:text="3X"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_14sp" />
+
+        <TextView
+            android:id="@+id/item_beauty_2x"
+            android:layout_width="@dimen/dimen_40"
+            android:layout_height="@dimen/dimen_40"
+            android:layout_marginBottom="@dimen/dimen_10"
+            android:background="@drawable/bg_item_beauty"
+            android:gravity="center"
+            android:text="2X"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_14sp" />
+
+        <TextView
+            android:id="@+id/item_beauty_1x"
+            android:layout_width="@dimen/dimen_40"
+            android:layout_height="@dimen/dimen_40"
+            android:layout_marginBottom="@dimen/dimen_10"
+            android:background="@drawable/bg_item_beauty"
+            android:gravity="center"
+            android:text="1X"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_14sp" />
+
+        <TextView
+            android:id="@+id/item_beauty_0x"
+            android:layout_width="@dimen/dimen_40"
+            android:layout_height="@dimen/dimen_40"
+            android:layout_marginBottom="@dimen/dimen_10"
+            android:background="@drawable/bg_item_beauty"
+            android:gravity="center"
+            android:text="无"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_14sp" />
+    </LinearLayout>
+
+</LinearLayout>
