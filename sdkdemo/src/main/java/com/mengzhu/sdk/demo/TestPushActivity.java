@@ -11,17 +11,25 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.mengzhu.live.sdk.business.dto.Config.MZCategoryDto;
+import com.mengzhu.live.sdk.business.dto.Config.MZFCodeDto;
+import com.mengzhu.live.sdk.business.dto.Config.MZWhiteListDto;
 import com.mengzhu.live.sdk.business.dto.push.StartBroadcastInfoDto;
 import com.mengzhu.live.sdk.business.dto.push.StartCreateDto;
 import com.mengzhu.live.sdk.core.utils.DateUtils;
 import com.mengzhu.live.sdk.ui.api.MZApiDataListener;
 import com.mengzhu.live.sdk.ui.api.MZApiRequest;
+import com.mzmedia.utils.MUIImmerseUtils;
+import com.mzmedia.widgets.MZCategoryListPopWindow;
+import com.mzmedia.widgets.MZFCodeListPopWindow;
+import com.mzmedia.widgets.MZWhiteListPopWindow;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -38,7 +46,8 @@ public class TestPushActivity extends Activity {
     private EditText livetk;
     private EditText tv_ticket_id;
     private EditText time;
-    private AppCompatCheckBox cbbeauty, cblater, cbAudio, cbAllBanChat;
+    private TextView category;
+    private AppCompatCheckBox cbbeauty, cblater, cbAudio, cbAllBanChat , auto_record_check;
 
     private RelativeLayout rb360_layout;
     private RelativeLayout rb480_layout;
@@ -52,6 +61,10 @@ public class TestPushActivity extends Activity {
     private TextView rb480_tv;
     private TextView rb720_tv;
 
+    private TextView tv_free;
+    private TextView tv_f_code;
+    private TextView tv_white_list;
+
     private int screen;
     private int bitrate = 500 * 1024;
     private MZApiRequest mzLiveCreateApiRequest;
@@ -63,15 +76,32 @@ public class TestPushActivity extends Activity {
 
     int live_type = 0;
 
+    private int view_mode = 1; //1，免费。5白名单，6，F码
+    private int f_code_id = 1;
+    private int white_list_id = 1; //默认值
+
+    private int category_id = 1; //默认值1
+    private int auto_record = 1; //默认生成回放
+    private String notice = "默认提示语提示语";
+
+    MZFCodeListPopWindow mzfCodeListPopWindow;
+    MZWhiteListPopWindow mzWhiteListPopWindow;
+    MZCategoryListPopWindow mzCategoryListPopWindow;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MUIImmerseUtils.setStatusTranslucent(getWindow(), this);
         setContentView(R.layout.activity_test_push);
         progressDialog = new ProgressDialog(this);
         mzLiveCreateApiRequest = new MZApiRequest();
         mzLiveStreamApiRequest = new MZApiRequest();
         mzLiveCreateApiRequest.createRequest(TestPushActivity.this, MZApiRequest.API_TYPE_LIVE_CREATE);
         mzLiveStreamApiRequest.createRequest(TestPushActivity.this, MZApiRequest.API_TYPE_LIVE_STREAM);
+
+        mzfCodeListPopWindow = new MZFCodeListPopWindow(TestPushActivity.this);
+        mzWhiteListPopWindow = new MZWhiteListPopWindow(TestPushActivity.this);
+        mzCategoryListPopWindow = new MZCategoryListPopWindow(TestPushActivity.this);
 
         unique_id = findViewById(R.id.account_no);
         findViewById(R.id.tv_push_p).setOnClickListener(new View.OnClickListener() {
@@ -109,6 +139,8 @@ public class TestPushActivity extends Activity {
         cblater = findViewById(R.id.cb_later);
         cbAudio = findViewById(R.id.cb_audio);
         livetk = findViewById(R.id.live_tk);
+        auto_record_check = findViewById(R.id.auto_record);
+        auto_record_check.setChecked(true);
         tv_ticket_id = findViewById(R.id.tv_ticket_id);
         time = findViewById(R.id.time);
         rb360_layout = findViewById(R.id.rb360);
@@ -122,6 +154,119 @@ public class TestPushActivity extends Activity {
         rb360_tv = findViewById(R.id.rb_text1);
         rb480_tv = findViewById(R.id.rb_text2);
         rb720_tv = findViewById(R.id.rb_text3);
+
+        tv_free = findViewById(R.id.tv_free);
+        tv_f_code = findViewById(R.id.tv_f_code);
+        tv_white_list = findViewById(R.id.tv_white_list);
+        tv_free.setBackgroundResource(R.drawable.mz_shape_rb_bg_select);
+        tv_free.setTextColor(getResources().getColor(R.color.color_ff1f60));
+
+        category = findViewById(R.id.category);
+        mzCategoryListPopWindow.setOnDisMissListener(new MZCategoryListPopWindow.OnPopDisMissListener() {
+            @Override
+            public void onDismiss(MZCategoryDto mzCategoryDto) {
+                if (mzCategoryDto != null){
+                    category.setText(mzCategoryDto.getName());
+                    category_id = mzCategoryDto.getId();
+                }else {
+                    category.setText("");
+                    category_id = 1;
+                }
+            }
+        });
+        category.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!mzCategoryListPopWindow.isShowing()){
+                    mzCategoryListPopWindow.initData();
+                    mzCategoryListPopWindow.showAtLocation(getWindow().getDecorView() , Gravity.BOTTOM , 0 , 0);
+                }
+            }
+        });
+
+        mzfCodeListPopWindow.setOnDisMissListener(new MZFCodeListPopWindow.OnPopDisMissListener() {
+            @Override
+            public void onDismiss(MZFCodeDto mzfCodeDto) {
+                if (mzfCodeDto != null){
+                    view_mode = 6;
+                    white_list_id = 1;
+                    f_code_id = mzfCodeDto.getId();
+                    setViewModeDefault();
+                    tv_f_code.setBackgroundResource(R.drawable.mz_shape_rb_bg_select);
+                    tv_f_code.setTextColor(getResources().getColor(R.color.color_ff1f60));
+                }else {
+                    if (view_mode == 6){
+                        view_mode = 1;
+                        white_list_id = 1;
+                        f_code_id = 1;
+                        setViewModeDefault();
+                        tv_free.setBackgroundResource(R.drawable.mz_shape_rb_bg_select);
+                        tv_free.setTextColor(getResources().getColor(R.color.color_ff1f60));
+                    }
+                }
+            }
+        });
+        tv_f_code.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!mzfCodeListPopWindow.isShowing()){
+                    mzfCodeListPopWindow.initData();
+                    mzfCodeListPopWindow.showAtLocation(getWindow().getDecorView() , Gravity.BOTTOM , 0 , 0);
+                }
+            }
+        });
+
+        mzWhiteListPopWindow.setOnDisMissListener(new MZWhiteListPopWindow.OnPopDisMissListener() {
+
+            @Override
+            public void onDismiss(MZWhiteListDto.WhiteListItem whiteListItem) {
+                if (whiteListItem != null){
+                    view_mode = 5;
+                    f_code_id = 1;
+                    white_list_id = whiteListItem.getId();
+                    setViewModeDefault();
+                    tv_white_list.setBackgroundResource(R.drawable.mz_shape_rb_bg_select);
+                    tv_white_list.setTextColor(getResources().getColor(R.color.color_ff1f60));
+                }else {
+                    if (view_mode == 5){
+                        if (view_mode == 6){
+                        view_mode = 1;
+                        white_list_id = 1;
+                        f_code_id = 1;
+                        setViewModeDefault();
+                        tv_free.setBackgroundResource(R.drawable.mz_shape_rb_bg_select);
+                        tv_free.setTextColor(getResources().getColor(R.color.color_ff1f60));
+                    }
+                    }
+                }
+            }
+        });
+        tv_white_list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!mzWhiteListPopWindow.isShowing()){
+                    mzWhiteListPopWindow.initData();
+                    mzWhiteListPopWindow.showAtLocation(getWindow().getDecorView() , Gravity.BOTTOM , 0 , 0);
+                }
+            }
+        });
+
+        tv_free.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                view_mode = 1;
+                white_list_id = 1;
+                f_code_id = 1;
+                setViewModeDefault();
+                tv_free.setBackgroundResource(R.drawable.mz_shape_rb_bg_select);
+                tv_free.setTextColor(getResources().getColor(R.color.color_ff1f60));
+            }
+        });
+
+        rb360_layout.setBackgroundResource(R.drawable.mz_shape_rb_bg_select);
+        rb360_iv.setImageResource(R.mipmap.rb2);
+        rb360_tv.setTextColor(getResources().getColor(R.color.color_ff1f60));
+
         rb360_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -178,6 +323,16 @@ public class TestPushActivity extends Activity {
         rb720_tv.setTextColor(getResources().getColor(R.color.white));
     }
 
+    public void setViewModeDefault() {
+        tv_free.setBackgroundResource(R.drawable.mz_shape_rb_bg_default);
+        tv_f_code.setBackgroundResource(R.drawable.mz_shape_rb_bg_default);
+        tv_white_list.setBackgroundResource(R.drawable.mz_shape_rb_bg_default);
+
+        tv_free.setTextColor(getResources().getColor(R.color.white));
+        tv_f_code.setTextColor(getResources().getColor(R.color.white));
+        tv_white_list.setTextColor(getResources().getColor(R.color.white));
+    }
+
     private void startPush() {
         UserDto dto = new UserDto();
         dto.setUniqueID(unique_id.getText().toString());
@@ -195,7 +350,7 @@ public class TestPushActivity extends Activity {
             mzLiveStreamApiRequest.setResultListener(new TestPushActivity.StartStream());
             progressDialog.show();
             mzLiveStreamApiRequest.startData(MZApiRequest.API_TYPE_LIVE_STREAM,
-                    URLEncoder.encode(livetk.getText().toString()),
+                    livetk.getText().toString(),
                     unique_id.getText().toString(),
                     URLEncoder.encode("T丶????"),
                     URLEncoder.encode("http://s1.t.zmengzhu.com/upload/img/50/6d/506da693ecb2cf6f2fd0e3e92656dde4.png"), tv_ticket_id.getText().toString());
@@ -228,7 +383,18 @@ public class TestPushActivity extends Activity {
                 public void onClick(DialogInterface dialog, int which) {
                     //debug模式下提供此api用于测试
                     mzLiveCreateApiRequest.startData(MZApiRequest.API_TYPE_LIVE_CREATE,
-                            "直播活动描述" + DateUtils.stringToDateNoymds(System.currentTimeMillis() + ""), TestActivity.channel_id, live_type, screen == 2 ? "0" : "1", "http://s1.t.zmengzhu.com/upload/img/50/6d/506da693ecb2cf6f2fd0e3e92656dde4.png", "test" + DateUtils.stringToDateNoymds(System.currentTimeMillis() + ""));
+                            "直播活动描述" + DateUtils.stringToDateNoymds(System.currentTimeMillis() + ""), //活动介绍
+                            TestActivity.channel_id, //渠道号
+                            live_type, //语音还是视频直播
+                            screen == 2 ? "0" : "1", //横屏还是竖屏
+                            "http://s1.t.zmengzhu.com/upload/img/50/6d/506da693ecb2cf6f2fd0e3e92656dde4.png", //活动介绍直播封面
+                            "test" + DateUtils.stringToDateNoymds(System.currentTimeMillis() + ""), //活动标题
+                            auto_record, //是否生成回放
+                            view_mode, //观看方式id
+                            white_list_id, //白名单id
+                            f_code_id, //F码id
+                            notice, //光看方式提示语提示语
+                            category_id); //分类id
                 }
             });
             builder.show();

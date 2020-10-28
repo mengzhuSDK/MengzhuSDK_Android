@@ -113,6 +113,19 @@
                 android:textSize="@dimen/dimen_14sp" />
 
             <TextView
+                android:id="@+id/category"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_44"
+                android:layout_marginTop="0.5dp"
+                android:background="#26ffffff"
+                android:gravity="center_vertical"
+                android:hint="选择直播分类，不选则为默认"
+                android:paddingLeft="@dimen/dimen_30"
+                android:textColor="@color/white"
+                android:textColorHint="@color/color_7a7a7a"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_44"
                 android:gravity="center_vertical"
@@ -126,10 +139,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_44"
                 android:background="#26ffffff"
+                android:button="@drawable/mz_item_check_selector"
                 android:gravity="center_vertical"
                 android:layoutDirection="rtl"
                 android:paddingLeft="@dimen/dimen_30"
+                android:paddingRight="@dimen/dimen_20"
                 android:text="关闭美颜（默认开启）"
+                android:textColor="@color/white"
                 android:textDirection="ltr" />
 
             <android.support.v7.widget.AppCompatCheckBox
@@ -137,10 +153,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_44"
                 android:background="#26ffffff"
+                android:button="@drawable/mz_item_check_selector"
                 android:gravity="center_vertical"
                 android:layoutDirection="rtl"
                 android:paddingLeft="@dimen/dimen_30"
+                android:paddingRight="@dimen/dimen_20"
                 android:text="后置摄像头（默认前置）"
+                android:textColor="@color/white"
                 android:textDirection="ltr" />
 
 
@@ -149,10 +168,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_44"
                 android:background="#26ffffff"
+                android:button="@drawable/mz_item_check_selector"
                 android:gravity="center_vertical"
                 android:layoutDirection="rtl"
                 android:paddingLeft="@dimen/dimen_30"
+                android:paddingRight="@dimen/dimen_20"
                 android:text="静音"
+                android:textColor="@color/white"
                 android:textDirection="ltr" />
 
             <android.support.v7.widget.AppCompatCheckBox
@@ -160,10 +182,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_44"
                 android:background="#26ffffff"
+                android:button="@drawable/mz_item_check_selector"
                 android:gravity="center_vertical"
                 android:layoutDirection="rtl"
                 android:paddingLeft="@dimen/dimen_30"
+                android:paddingRight="@dimen/dimen_20"
                 android:text="全体禁言"
+                android:textColor="@color/white"
+                android:textDirection="ltr" />
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/auto_record"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_44"
+                android:background="#26ffffff"
+                android:button="@drawable/mz_item_check_selector"
+                android:gravity="center_vertical"
+                android:layoutDirection="rtl"
+                android:paddingLeft="@dimen/dimen_30"
+                android:text="是否生成回放"
+                android:textColor="@color/white"
                 android:textDirection="ltr" />
 
             <TextView
@@ -286,6 +324,74 @@
                             android:textSize="@dimen/dimen_14sp" />
 
                     </RelativeLayout>
+                </RelativeLayout>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_44"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/dimen_16"
+                android:text="观看权限选择"
+                android:textColor="@color/color_7a7a7a"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="#26ffffff"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/tv_free"
+                        android:layout_width="@dimen/dimen_82"
+                        android:layout_height="@dimen/dimen_40"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/mz_shape_rb_bg_default"
+                        android:gravity="center"
+                        android:text="免费"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/dimen_14sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/tv_f_code"
+                        android:layout_width="@dimen/dimen_82"
+                        android:layout_height="@dimen/dimen_40"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/mz_shape_rb_bg_default"
+                        android:gravity="center"
+                        android:text="F码"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/dimen_14sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/tv_white_list"
+                        android:layout_width="@dimen/dimen_82"
+                        android:layout_height="@dimen/dimen_40"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/mz_shape_rb_bg_default"
+                        android:gravity="center"
+                        android:text="白名单"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/dimen_14sp" />
                 </RelativeLayout>
             </LinearLayout>
         </LinearLayout>

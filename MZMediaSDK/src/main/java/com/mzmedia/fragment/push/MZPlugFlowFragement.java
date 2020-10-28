@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,7 @@ import com.mzmedia.utils.ActivityUtils;
 import com.mzmedia.utils.String_Utils;
 import com.mzmedia.widgets.ChatOnlineView;
 import com.mzmedia.widgets.CircleImageView;
+import com.mzmedia.widgets.dialog.MessageDialog;
 import com.mzmedia.widgets.popupwindow.BeautyPopWindow;
 import com.mzmedia.widgets.popupwindow.BitratePopupWindow;
 import com.mzmedia.widgets.popupwindow.PersonListPopupWindow;
@@ -138,6 +140,7 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
     private float beautyValue = 0.3f;
     private BitratePopupWindow bitratePopupWindow;
     private BeautyPopWindow beautyPopWindow;
+    MessageDialog messageDialog;
 
     public static MZPlugFlowFragement newInstance(String pushUrl, String ticket_id, int screen, PlayInfoDto dto, LiveConfigDto liveConfigDto, boolean isAudioPush) {
 
@@ -272,6 +275,21 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
                 mzPushManager.startStreaming();
             }
         }
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if(keyEvent.getAction() == KeyEvent.ACTION_DOWN && i == KeyEvent.KEYCODE_BACK){
+                    if (!messageDialog.isShowing()){
+                        messageDialog.show();
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -287,6 +305,7 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mzPushManager.rePrepare();
+        mzPushManager.changeFilter(beautyValue);
     }
 
     private void initData() {
@@ -314,6 +333,24 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
     }
 
     private void initListener() {
+        messageDialog = new MessageDialog(getActivity());
+        messageDialog.setTitle("温馨提示");
+        messageDialog.setContentMessage("是否结束直播");
+        messageDialog.setMessageDialogCallBack(new MessageDialog.OnMessageDialogCallBack() {
+            @Override
+            public void onClick(boolean isConfirm) {
+                if (!isConfirm){
+                    if (mzPushManager.isStreaming()) {
+                        isBackStage = false;
+                        mzPushManager.stopStreaming();
+                    } else {
+                        if (mIPushClickListener != null) {
+                            mIPushClickListener.onStopLive();
+                        }
+                    }
+                }
+            }
+        });
         mPushIvClose.setOnClickListener(this);
         mIvStartClose.setOnClickListener(this);
         mPushRlSendChat.setOnClickListener(this);
@@ -506,19 +543,15 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.push_iv_playerfragment_close) {
-            if (mzPushManager.isStreaming()) {
-                isBackStage = false;
-                mzPushManager.stopStreaming();
-            } else {
-                if (mIPushClickListener != null) {
-                    mIPushClickListener.onStopLive();
-                }
-            }
+            if (!messageDialog.isShowing())
+                messageDialog.show();
         }
         if (v.getId() == R.id.iv_activity_live_broadcast_close_out) {
-            if (mIPushClickListener != null) {
-                mIPushClickListener.onStopLive();
-            }
+            if (!messageDialog.isShowing())
+            messageDialog.show();
+//            if (mIPushClickListener != null) {
+//                mIPushClickListener.onStopLive();
+//            }
         }
         if (v.getId() == R.id.push_rl_playerfragment_send_chat) {
             ActivityUtils.startLandscapeTransActivity(getActivity());

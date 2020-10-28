@@ -28,6 +28,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mengzhu.live.sdk.business.dto.AnchorInfoDto;
+import com.mengzhu.live.sdk.business.dto.MZAllSettingDto;
 import com.mengzhu.live.sdk.business.dto.MZOnlineUserListDto;
 import com.mengzhu.live.sdk.business.dto.ad.MZAdRollAdvertDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatMessageDto;
@@ -128,6 +129,7 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
     private MZApiRequest mzApiRequest;
     private MZApiRequest mzApiRequestOnline;
     private MZApiRequest mzApiRequestAnchorInfo;
+    private MZApiRequest mzGetSettingRequest;
     private String ticketId; //活动id
     private String mTotalPerson;
     private List<MZOnlineUserListDto> personAvatars = new ArrayList<>();
@@ -547,6 +549,7 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
         mzApiRequest = new MZApiRequest();
         mzApiRequestOnline = new MZApiRequest();
         mzApiRequestAnchorInfo = new MZApiRequest();
+        mzGetSettingRequest = new MZApiRequest();
 
         //设置获取观看信息回调监听
         mzApiRequest.setResultListener(this);
@@ -602,6 +605,32 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
             }
         });
 
+        //配置相关回调
+        mzGetSettingRequest.setResultListener(new MZApiDataListener() {
+            @Override
+            public void dataResult(String apiType, Object dto, Page page, int status) {
+                if (dto instanceof MZAllSettingDto){
+                    MZAllSettingDto mzAllSettingDto = (MZAllSettingDto) dto;
+                    if (mzAllSettingDto.getTools() != null && mzAllSettingDto.getTools().size() > 0){
+                        List<MZAllSettingDto.SettingDto> settingDtoList = mzAllSettingDto.getTools();
+                        List<RightBean> configList = new ArrayList<>();
+                        for (int i = 0; i < settingDtoList.size(); i++) {
+                            RightBean rightBean = new RightBean();
+                            rightBean.setType(settingDtoList.get(i).getTools());
+                            rightBean.setIs_open(settingDtoList.get(i).getIs_open());
+                            configList.add(rightBean);
+                        }
+                        updateConfigs(configList);
+                    }
+                }
+            }
+
+            @Override
+            public void errorResult(String apiType, int code, String msg) {
+
+            }
+        });
+
     }
 
     //消息弹幕监听
@@ -628,6 +657,7 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
         mzApiRequest.createRequest(mActivity, MZApiRequest.API_TYPE_PLAY_INFO);
         mzApiRequestOnline.createRequest(mActivity, MZApiRequest.API_TYPE_ONLINE_USER_LIST);
         mzApiRequestAnchorInfo.createRequest(mActivity, MZApiRequest.API_TYPE_ANCHOR_INFO);
+        mzGetSettingRequest.createRequest(mActivity , MZApiRequest.API_GET_ALL_SETTING);
 
         //请求主播信息api
         mzApiRequestAnchorInfo.startData(MZApiRequest.API_TYPE_ANCHOR_INFO, ticketId);
@@ -727,11 +757,12 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
     @Override
     public void dataResult(String s, Object o, Page page, int status) {
         mPlayInfoDto = (PlayInfoDto) o;
+        updateConfigs(mPlayInfoDto.getRight());
         UserDto userDto = MyUserInfoPresenter.getInstance().getUserInfo();
         userDto.setUid(mPlayInfoDto.getChat_uid());
         MyUserInfoPresenter.getInstance().saveUserinfo(userDto);
-
-        updateConfigs(mPlayInfoDto.getRight());
+        //请求配置相关数据
+        mzGetSettingRequest.startData(MZApiRequest.API_GET_ALL_SETTING, ticketId);
         liveStatus = mPlayInfoDto.getStatus();
         //获取播放地址
         mVideoUrl = mPlayInfoDto.getVideo().getUrl();
@@ -755,41 +786,41 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
             mManager.setTicket_id(ticketId);
             //广告需要
             //广告设置
-            mManager.setTVSkipText("点击跳过广告");
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT , RelativeLayout.LayoutParams.WRAP_CONTENT);
-            layoutParams.topMargin = 100;
-            mManager.setTVSkipLayoutParams(layoutParams);
-            mManager.setIsCanPlayVideo(true); //默认为true
-            mManager.setOnADClickListener(new OnADClickListener() {
-                @Override
-                public void onSkipClick(MZPlayAdVideoDto videoAdvertDto) {
-                    ToastUtils.popUpToast("点击跳过");
-                }
-
-                @Override
-                public void onADVideoClick(MZPlayAdVideoDto videoAdvertDto) {
-                    ToastUtils.popUpToast("点击视频");
-                    mManager.pauseADCountDown();
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mManager.resumeADCountDown();
-                        }
-                    } , 10000);
-                }
-            });
-            mManager.setOnADCountDownListener(new OnADCountDownListener() {
-                @Override
-                public void onCountDown(long countDownTime) {
-                    Log.e("Tag", "onCountDown: " + countDownTime);
-                }
-
-                @Override
-                public void onCountDownEnd(MZPlayAdVideoDto videoAdvertDto) {
-                    ToastUtils.popUpToast("视频广告倒计时结束");
-//                    mManager.start();
-                }
-            });
+//            mManager.setTVSkipText("点击跳过广告");
+//            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT , RelativeLayout.LayoutParams.WRAP_CONTENT);
+//            layoutParams.topMargin = 100;
+//            mManager.setTVSkipLayoutParams(layoutParams);
+//            mManager.setIsCanPlayVideo(true); //默认为true
+//            mManager.setOnADClickListener(new OnADClickListener() {
+//                @Override
+//                public void onSkipClick(MZPlayAdVideoDto videoAdvertDto) {
+//                    ToastUtils.popUpToast("点击跳过");
+//                }
+//
+//                @Override
+//                public void onADVideoClick(MZPlayAdVideoDto videoAdvertDto) {
+//                    ToastUtils.popUpToast("点击视频");
+//                    mManager.pauseADCountDown();
+//                    new Handler().postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            mManager.resumeADCountDown();
+//                        }
+//                    } , 10000);
+//                }
+//            });
+//            mManager.setOnADCountDownListener(new OnADCountDownListener() {
+//                @Override
+//                public void onCountDown(long countDownTime) {
+//                    Log.e("Tag", "onCountDown: " + countDownTime);
+//                }
+//
+//                @Override
+//                public void onCountDownEnd(MZPlayAdVideoDto videoAdvertDto) {
+//                    ToastUtils.popUpToast("视频广告倒计时结束");
+////                    mManager.start();
+//                }
+//            });
             //广告设置
             mManager.setVideoPath(mVideoUrl);
             mManager.showPreviewImage(mPlayInfoDto.getCover());
@@ -1041,7 +1072,6 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
             switch (rightBeans.get(i).getType()) {
                 case PlayInfoDto.DISABLE_CHAT: //禁言
                     mPlayInfoDto.setDisable_chat(isOpen);
-//                    StaticStateDto.getInstance().setForbidPublicMsg(isOpen);
                     break;
                 case PlayInfoDto.BARRAGE:
                     mPlayInfoDto.setInputDanmuku(isOpen);
@@ -1066,6 +1096,19 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
                     break;
                 case PlayInfoDto.CHAT_HISTORY:
                     mPlayInfoDto.setHide_chat_history(isOpen);
+                    break;
+                case PlayInfoDto.TIMES_SPEED:
+                    mPlayInfoDto.setTimes_speed_open(isOpen);
+                    if (mPlayInfoDto.isTimes_speed_open()){
+                        mzPlayerView.showSpeedIV();
+                    }else {
+                        mzPlayerView.hideSpeedIV();
+                    }
+                case PlayInfoDto.PAY_GIFT:
+                    mPlayInfoDto.setPay_gift_open(isOpen);
+                    break;
+                case PlayInfoDto.OPEN_LIKE:
+                    mPlayInfoDto.setLike_open(isOpen);
                     break;
             }
             if (mWatchBottomFragment != null && mWatchBottomFragment.isAdded()) {

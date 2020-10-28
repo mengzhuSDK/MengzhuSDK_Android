@@ -66,7 +66,7 @@
                 android:id="@+id/layout_activity_set_channel_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="34dp"
                 android:background="@color/transparent"
                 android:fitsSystemWindows="true"
                 android:gravity="center_vertical"

@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.mengzhu.live.sdk.ui.api.MZApiDataListener;
 import com.mengzhu.live.sdk.ui.api.MZApiRequest;
 import com.mzmedia.fragment.HalfPlayerFragment;
+import com.mzmedia.utils.MUIImmerseUtils;
 
 import tv.mengzhu.core.frame.coreutils.URLParamsUtils;
 import tv.mengzhu.core.wrap.user.modle.UserDto;
@@ -35,6 +36,7 @@ public class TestPlayActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MUIImmerseUtils.setStatusTranslucent(getWindow(), this);
         setContentView(R.layout.activity_test_play);
 
         ticketId = findViewById(R.id.ticket_id);

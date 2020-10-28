@@ -221,6 +221,11 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
         if (!playInfoDto.isSignShow()){
             mIvSignIn.setVisibility(View.GONE);
         }
+        mIvGift.setVisibility(mPlayInfoDto.isPay_gift_open() ? View.VISIBLE : View.GONE);
+
+        mLoveLayout.setVisibility(mPlayInfoDto.isLike_open() ? View.VISIBLE : View.GONE);
+        mIvLike.setVisibility(mPlayInfoDto.isLike_open() ? View.VISIBLE : View.GONE);
+
         mIvDraw.setVisibility(playInfoDto.isLottoShow()?View.VISIBLE:View.GONE);
     }
 

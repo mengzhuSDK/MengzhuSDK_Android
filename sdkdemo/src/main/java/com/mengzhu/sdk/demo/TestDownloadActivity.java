@@ -22,6 +22,7 @@ import com.mengzhu.sdk.download.library.publics.util.ALog;
 import com.mengzhu.sdk.download.permission.OnPermissionCallback;
 import com.mengzhu.sdk.download.permission.PermissionManager;
 import com.mengzhu.sdk.download.util.UrlPathUtil;
+import com.mzmedia.utils.MUIImmerseUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,7 @@ public class TestDownloadActivity extends Activity implements NormalTaskListener
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MUIImmerseUtils.setStatusTranslucent(getWindow(), this);
         setContentView(R.layout.download_test_layout);
         mListView=findViewById(R.id.download_list);
 

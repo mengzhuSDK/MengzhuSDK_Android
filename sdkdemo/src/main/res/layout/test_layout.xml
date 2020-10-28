@@ -21,7 +21,7 @@
             android:layout_width="280dp"
             android:layout_height="48dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="121dp"
+            android:layout_marginTop="101dp"
             android:background="@drawable/mz_shape_play_btn_bg"
             android:onClick="onPlayClick"
             android:text="直播/回放"
@@ -49,6 +49,18 @@
             android:background="@drawable/mz_shape_push_btn_bg"
             android:onClick="onDownLoadClick"
             android:text="下载"
+            android:textColor="#FF1F60"
+            android:textSize="@dimen/dimen_16sp" />
+
+        <Button
+            android:id="@+id/upload_click"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="33dp"
+            android:background="@drawable/mz_shape_push_btn_bg"
+            android:onClick="onUploadClick"
+            android:text="上传"
             android:textColor="#FF1F60"
             android:textSize="@dimen/dimen_16sp" />
     </LinearLayout>

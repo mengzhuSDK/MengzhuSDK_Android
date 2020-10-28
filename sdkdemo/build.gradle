@@ -3,14 +3,12 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
 
-
-
     defaultConfig {
         applicationId "com.mengzhu.sdk.demo"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 1
-        versionName "2.2.1"
+        versionCode 250
+        versionName "2.5.0"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
@@ -20,7 +18,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -29,7 +27,7 @@ android {
     }
     sourceSets {
         main {
-            jniLibs.srcDirs  'src/main/libs'
+            jniLibs.srcDirs 'src/main/libs'
             jni.srcDirs = []
         }
     }
@@ -46,9 +44,10 @@ dependencies {
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 
 
-    implementation project(':MZMediaSDK')
+    api project(':MZMediaSDK')
 
 }

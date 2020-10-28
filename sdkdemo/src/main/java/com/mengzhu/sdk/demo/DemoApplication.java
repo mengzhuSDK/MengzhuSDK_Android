@@ -13,6 +13,6 @@ public class DemoApplication extends Application {
     public void onCreate() {
         super.onCreate();
         MultiDex.install(this);
-        MZSDKInitManager.getInstance().initApplication(this, true);
+        MZSDKInitManager.getInstance().initApplication(this, TestActivity.app_id, true);
     }
 }
