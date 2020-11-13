@@ -30,7 +30,7 @@ public class TestUploadActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        MUIImmerseUtils.setStatusBar(this, false, true, R.color.color_000000);
+        MUIImmerseUtils.setStatusTextColor(false , this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.upload_test_layout);
         MZUploadManager.init(this);

@@ -138,7 +138,6 @@ public class PlayerActivity extends AppCompatActivity implements IPlayerClickLis
 //            isLink = false;
 //            handler.sendEmptyMessage(2);
 //        }
-        mPlayerFragment.setControllerNoAutoGone();
     }
 
 

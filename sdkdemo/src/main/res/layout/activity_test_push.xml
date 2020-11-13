@@ -5,6 +5,29 @@
     android:background="@color/color_000000"
     android:orientation="vertical">
 
+    <RelativeLayout
+        android:layout_marginTop="@dimen/dimen_40"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_40"
+            android:gravity="center"
+            android:text="推流"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_16sp" />
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dimen_44"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/dimen_16"
+            android:paddingRight="@dimen/dimen_16"
+            android:src="@mipmap/ic_icon_back" />
+    </RelativeLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -14,28 +37,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_44"
-                    android:gravity="center"
-                    android:text="推流"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/dimen_16sp" />
-
-                <ImageView
-                    android:id="@+id/iv_back"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/dimen_44"
-                    android:layout_centerVertical="true"
-                    android:paddingLeft="@dimen/dimen_16"
-                    android:paddingRight="@dimen/dimen_16"
-                    android:src="@mipmap/ic_icon_back" />
-            </RelativeLayout>
 
             <TextView
                 android:layout_width="match_parent"
@@ -79,7 +80,7 @@
                 android:layout_marginTop="0.5dp"
                 android:background="#26ffffff"
                 android:gravity="center_vertical"
-                android:hint="填写live_tk,debug模式会自动获取，无需填写"
+                android:hint="填写live_tk,直播推流信息的token"
                 android:paddingLeft="@dimen/dimen_30"
                 android:textColor="@color/white"
                 android:textColorHint="@color/color_7a7a7a"
@@ -92,7 +93,7 @@
                 android:layout_marginTop="0.5dp"
                 android:background="#26ffffff"
                 android:gravity="center_vertical"
-                android:hint="填写ticket_id,debug模式会自动获取，无需填写"
+                android:hint="填写ticket_id,直播活动ID"
                 android:paddingLeft="@dimen/dimen_30"
                 android:textColor="@color/white"
                 android:textColorHint="@color/color_7a7a7a"

@@ -80,7 +80,7 @@ public class PusherActivity  extends AppCompatActivity implements IPushClickList
         }
         liveConfigDto.setFps(Integer.parseInt(fps));
         if(TextUtils.isEmpty(time)){
-            time = "3";
+            time = "0";
         }
         liveConfigDto.setTime(Integer.parseInt(time));
         MUIImmerseUtils.setStatusTextColor(false, this);

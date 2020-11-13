@@ -27,21 +27,11 @@ import static com.mengzhu.sdk.demo.TestPlayActivity.nickName;
  */
 public class TestActivity extends Activity {
 
-    public static String live_tk = "";
-    public static String ticket_Id = "";
-    public static String app_id = "";
-    public static String unique_id_test = "";
-    public static String channel_id = "";
-    public static String secretKey = "";
-
-    private ProgressDialog progressDialog;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        MUIImmerseUtils.setStatusTextColor(false , this);
         super.onCreate(savedInstanceState);
-        MUIImmerseUtils.setStatusTranslucent(getWindow(), this);
         setContentView(R.layout.test_layout);
-        progressDialog = new ProgressDialog(this);
     }
 
     public void onPlayClick(View view) {
@@ -60,10 +50,10 @@ public class TestActivity extends Activity {
     }
 
     public void onUploadClick(View view) {
-        URLParamsUtils.setSecretKey(TestActivity.secretKey);
+        URLParamsUtils.setSecretKey(DemoApplication.secretKey);
         UserDto userDto =new UserDto();
         userDto.setUniqueID("B123456789");
-        userDto.setAppid(TestActivity.app_id);
+        userDto.setAppid(DemoApplication.app_id);
         userDto.setAvatar(avatar);
         userDto.setNickname(nickName);
         MyUserInfoPresenter.getInstance().saveUserinfo(userDto);

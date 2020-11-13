@@ -154,15 +154,17 @@ public class PlayerChatListFragment extends BaseFragement implements MZChatMessa
                 dataList.addAll(0, list);
                 mAdapter.setList(dataList);
                 mListView.inform();
-                new Handler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mPayerScroll.fullScroll(ScrollView.FOCUS_DOWN);
-                    }
-                });
+                if (dataList.size() <= 21) {
+                    new Handler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mPayerScroll.fullScroll(ScrollView.FOCUS_DOWN);
+                        }
+                    });
+                }
                 break;
             } else {
-                if(mAdapter.getList() == null || mAdapter.getList().isEmpty()){
+                if (mAdapter.getList() == null || mAdapter.getList().isEmpty()) {
                     mAdapter.setList(dataList);
                 }
                 dataList.add(list.get(j));
@@ -246,7 +248,7 @@ public class PlayerChatListFragment extends BaseFragement implements MZChatMessa
     @Override
     public void setListener() {
         // 注册只看主播切换监听事件
-        MZChatManager.getInstance(mActivity).registerChangeIsOnlyAnchorListener(PlayerChatListFragment.class.getSimpleName() , changeISOnlyAnchorListener);
+        MZChatManager.getInstance(mActivity).registerChangeIsOnlyAnchorListener(PlayerChatListFragment.class.getSimpleName(), changeISOnlyAnchorListener);
 
         ChatMessageObserver.getInstance().register(new PlaymMonitorCallback(), PlayerChatListFragment.class.getSimpleName());
         MZChatManager.getInstance(mActivity).registerListener(PlayerChatListFragment.class.getSimpleName(), this);

@@ -27,7 +27,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.google.android.exoplayer.util.PlayerControl;
 import com.mengzhu.live.sdk.business.dto.AnchorInfoDto;
 import com.mengzhu.live.sdk.business.dto.MZAllSettingDto;
 import com.mengzhu.live.sdk.business.dto.MZGoodsListDto;
@@ -52,10 +51,7 @@ import com.mengzhu.live.sdk.ui.chat.MZChatMessagerListener;
 import com.mengzhu.live.sdk.ui.widgets.ChannelDlnaDialogFragment;
 import com.mengzhu.live.sdk.ui.widgets.popupwindow.SpeedBottomDialogFragment;
 import com.mengzhu.sdk.R;
-import com.mengzhu.sdk.download.util.SharePreUtil;
-import com.mengzhu.sdk.download.util.TextUtil;
 import com.mzmedia.IPlayerClickListener;
-import com.mzmedia.activity.LandscapeTransActivity;
 import com.mzmedia.fragment.gift.SendGiftDialogFragment;
 import com.mzmedia.utils.ActivityUtils;
 import com.mzmedia.utils.String_Utils;
@@ -289,6 +285,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         goodsCountDown = new GoodsCountDown(10000 * 5000, 5000);
         mManager = new MZPlayerManager();
         mManager.init(mzPlayerView);
+        setControllerNoAutoGone();
     }
 
     /**
@@ -883,7 +880,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
     @Override
     public void dataResult(String s, Object o, Page page, int status) {
         mPlayInfoDto = (PlayInfoDto) o;
-        MyUserInfoPresenter.getInstance().getUserInfo().setUid(mPlayInfoDto.getChat_uid());
         updateConfigs(mPlayInfoDto.getRight());
         MyUserInfoPresenter.getInstance().getUserInfo().setUid(mPlayInfoDto.getChat_uid());
         //请求配置相关数据

@@ -2,17 +2,26 @@ package com.mzmedia.fragment.push;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -56,10 +65,12 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import tv.mengzhu.core.module.model.dto.BaseDto;
+import tv.mengzhu.core.wrap.library.utils.NetWorkUtils;
 import tv.mengzhu.core.wrap.user.modle.UserDto;
 import tv.mengzhu.core.wrap.user.presenter.MyUserInfoPresenter;
 import tv.mengzhu.core.wrap.netwock.Page;
@@ -142,6 +153,8 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
     private BeautyPopWindow beautyPopWindow;
     MessageDialog messageDialog;
 
+    private NetBroadcastReceiver netBroadcastReceiver;
+
     public static MZPlugFlowFragement newInstance(String pushUrl, String ticket_id, int screen, PlayInfoDto dto, LiveConfigDto liveConfigDto, boolean isAudioPush) {
 
         Bundle args = new Bundle();
@@ -166,6 +179,12 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
         mPlayInfoDto = (PlayInfoDto) getArguments().getSerializable("playinfoDto");
         mLiveConfigDto = (LiveConfigDto) getArguments().getSerializable("liveConfig");
 
+        netBroadcastReceiver = new NetBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);// 只有持有相同的action的接受者才能接收此广播
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Objects.requireNonNull(getActivity()).registerReceiver(netBroadcastReceiver, intentFilter);
+        }
     }
 
     @Override
@@ -271,9 +290,11 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
     public void onResume() {
         super.onResume();
         if (isBackStage) {
+            streamLiveCameraView.resetCamera();
             if (!mzPushManager.isStreaming()) {
                 mzPushManager.startStreaming();
             }
+
         }
 
         getView().setFocusableInTouchMode(true);
@@ -281,8 +302,8 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
         getView().setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if(keyEvent.getAction() == KeyEvent.ACTION_DOWN && i == KeyEvent.KEYCODE_BACK){
-                    if (!messageDialog.isShowing()){
+                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN && i == KeyEvent.KEYCODE_BACK) {
+                    if (!messageDialog.isShowing()) {
                         messageDialog.show();
                     }
                     return true;
@@ -304,8 +325,8 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        mzPushManager.rePrepare();
-        mzPushManager.changeFilter(beautyValue);
+//        mzPushManager.rePrepare();
+//        mzPushManager.changeFilter(beautyValue);
     }
 
     private void initData() {
@@ -339,7 +360,7 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
         messageDialog.setMessageDialogCallBack(new MessageDialog.OnMessageDialogCallBack() {
             @Override
             public void onClick(boolean isConfirm) {
-                if (!isConfirm){
+                if (!isConfirm) {
                     if (mzPushManager.isStreaming()) {
                         isBackStage = false;
                         mzPushManager.stopStreaming();
@@ -494,7 +515,7 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
         //推流错误
         @Override
         public void onWriteError(int result) {
-            Toast.makeText(mActivity, "error=" + result, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(mActivity, "error=" + result, Toast.LENGTH_SHORT).show();
         }
 
         //推流停止
@@ -548,7 +569,7 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
         }
         if (v.getId() == R.id.iv_activity_live_broadcast_close_out) {
             if (!messageDialog.isShowing())
-            messageDialog.show();
+                messageDialog.show();
 //            if (mIPushClickListener != null) {
 //                mIPushClickListener.onStopLive();
 //            }
@@ -727,6 +748,9 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
      * 直播计时
      */
     private void startTime() {
+        if (timer != null){
+            return;
+        }
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -946,10 +970,59 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
             timer.cancel();
             timer = null;
         }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Objects.requireNonNull(getActivity()).unregisterReceiver(netBroadcastReceiver);
+        }
+
         //请求结束推流直播
         mzApiRequestStopLive.startData(MZApiRequest.API_TYPE_LIVE_STOP, ticketId);
         if (mzPushManager != null) {
             mzPushManager.destroy();
+        }
+    }
+
+    Handler netWorkHandler = new Handler() {
+        @SuppressLint("HandlerLeak")
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 1:
+                    if (mzPushManager != null) {
+                        mzPushManager.startStreaming();
+                    }
+                    break;
+                case 2:
+                    if (mzPushManager != null) {
+                        mzPushManager.stopStreaming();
+                    }
+                    break;
+            }
+        }
+    };
+
+
+    boolean isFirst = true;
+
+    public class NetBroadcastReceiver extends BroadcastReceiver {
+
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // TODO Auto-generated method stub
+            // 如果相等的话就说明网络状态发生了变化
+            if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+                if (!isFirst) {
+                    if (NetWorkUtils.isNetworkAvailable(context)) {
+                        netWorkHandler.sendEmptyMessage(1);
+                    } else {
+                        netWorkHandler.sendEmptyMessage(2);
+                    }
+                }else {
+                    isFirst = false;
+                }
+            }
         }
     }
 }
