@@ -60,7 +60,7 @@ dependencies {
     api 'tv.mengzhu.restreaming:MZPushFlowSDK:2.6.0'
     api 'com.mengzhu.sdk.download:MZDownload:2.3.0'
     api 'com.mengzhu.live.sdk:MZLiveSDK:2.6.0'
-    api 'tv.mengzhu.sdk:MZPlayer:2.6.0'
+    api 'tv.mengzhu.sdk:MZPlayer:2.6.1'
     api 'com.mengzhu.upload:MZVideoUpload:1.0.0'
 
 }
