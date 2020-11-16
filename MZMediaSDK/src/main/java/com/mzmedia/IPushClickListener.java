@@ -4,8 +4,6 @@ import com.mengzhu.live.sdk.business.dto.MZOnlineUserListDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatTextDto;
 import com.mengzhu.live.sdk.business.dto.play.PlayInfoDto;
 
-import java.util.List;
-
 public interface IPushClickListener {
     /**
      * 结束直播
@@ -34,5 +32,5 @@ public interface IPushClickListener {
     /**
      * 点击在线人数
      */
-    void onOnlineNum(List<MZOnlineUserListDto> mzOnlineUserListDto);
+    void onOnlineNum(MZOnlineUserListDto mzOnlineUserListDto);
 }

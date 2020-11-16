@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ptr="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="464dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bg_speed_pop"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_44">
+
+            <TextView
+                style="@style/bottom_watch_dialog_title_style"
+                android:text="@string/vote" />
+
+            <ImageView
+                android:id="@+id/iv_dialog_vote_close"
+                style="@style/bottom_watch_dialog_close_style" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+
+            <LinearLayout
+                android:id="@+id/layout_vote_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <com.mzmedia.pullrefresh.PullToRefreshRecyclerView
+                    android:id="@+id/rv_dialog_vote_option"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dimen_16"
+                    android:layout_marginRight="@dimen/dimen_16"
+                    android:layout_weight="1"
+                    android:divider="#00000000"
+                    android:fadingEdge="none"
+                    android:focusable="false"
+                    android:overScrollMode="never"
+                    android:scrollbars="none"
+                    ptr:ptrMode="disabled"
+                    ptr:ptrOverScroll="true" />
+
+                <Button
+                    android:id="@+id/btn_dialog_vote"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_40"
+                    android:layout_marginLeft="@dimen/dimen_16"
+                    android:layout_marginTop="@dimen/dimen_20"
+                    android:layout_marginRight="@dimen/dimen_16"
+                    android:layout_marginBottom="@dimen/dimen_10"
+                    android:background="@drawable/bg_vote_commit_normal"
+                    android:text="@string/vote"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+        </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>
+
+
+
+
+
+
+
+
+
+

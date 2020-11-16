@@ -1,33 +1,37 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.mengzhu.live.sdk.ui.push.StreamLiveCameraView
+
+    <tv.mengzhu.restreaming.push.StreamLiveCameraView
         android:id="@+id/push_stream_previewView"
         android:layout_width="match_parent"
-        android:background="@color/color_000000"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:background="@color/color_000000" />
+
     <RelativeLayout
         android:id="@+id/push_rl_activity_broadcast_live_over"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone">
+
         <ImageView
             android:id="@+id/push_iv_activity_broadcast_live_over"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#80000000"/>
+            android:background="#80000000" />
+
         <TextView
             android:id="@+id/push_tv_activity_broadcast_live_over"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:textColor="@color/white"
-            android:textSize="20sp"
+            android:gravity="center_horizontal"
             android:text="主播暂时离开，\n稍等一下马上回来"
-            android:gravity="center_horizontal"/>
+            android:textColor="@color/white"
+            android:textSize="20sp" />
     </RelativeLayout>
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/push_sv_activity_content_appbar"
         android:layout_width="match_parent"
@@ -40,6 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:statusBarScrim="#00000000">
+
             <android.support.v7.widget.Toolbar
                 android:id="@+id/push_layout_activity_set_channel_toolbar"
                 android:layout_width="match_parent"
@@ -54,13 +59,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
                     <View
                         android:id="@+id/push_v_live_toolbar"
                         android:layout_width="match_parent"
                         android:layout_height="24dp" />
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
+
                         <android.support.constraint.ConstraintLayout
                             android:id="@+id/push_layout_plugfragment"
                             android:layout_width="172dp"
@@ -178,36 +186,39 @@
                                 android:layout_alignParentRight="true"
                                 android:src="@mipmap/icon_gm__closed_black" />
                         </LinearLayout>
+
                         <LinearLayout
                             android:id="@+id/push_layout_live_kb_time_group"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:background="@drawable/bg_live_ground_icon"
                             android:layout_below="@+id/push_layout_plugfragment"
+                            android:layout_marginLeft="@dimen/dimen_12"
                             android:layout_marginTop="@dimen/dimen_10"
-                            android:layout_marginLeft="@dimen/dimen_12">
+                            android:background="@drawable/bg_live_ground_icon"
+                            android:orientation="horizontal">
+
                             <TextView
                                 android:id="@+id/tv_plug_fragment_kb"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="1000kb"
-                                android:textSize="10sp"
-                                android:textColor="@color/color_50E3C2"
+                                android:layout_marginRight="@dimen/dimen_10"
+                                android:paddingLeft="10dp"
                                 android:paddingTop="7dp"
                                 android:paddingBottom="7dp"
-                                android:paddingLeft="10dp"
-                                android:layout_marginRight="@dimen/dimen_10"/>
+                                android:text="1000kb"
+                                android:textColor="@color/color_50E3C2"
+                                android:textSize="10sp" />
+
                             <TextView
                                 android:id="@+id/tv_plug_fragment_time"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="00:00:00"
-                                android:textSize="10sp"
-                                android:textColor="@color/white"
-                                android:paddingRight="10dp"
                                 android:paddingTop="7dp"
-                                android:paddingBottom="7dp"/>
+                                android:paddingRight="10dp"
+                                android:paddingBottom="7dp"
+                                android:text="00:00:00"
+                                android:textColor="@color/white"
+                                android:textSize="10sp" />
                         </LinearLayout>
                     </RelativeLayout>
                 </LinearLayout>
@@ -219,71 +230,94 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/audio_anim_view"
+        android:layout_width="match_parent"
+        android:layout_height="210dp"
+        android:layout_marginTop="106dp"
+        android:visibility="gone"
+        app:lottie_rawRes="@raw/wave" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_anchor="@+id/push_stream_previewView"
         app:layout_anchorGravity="center_vertical">
 
-            <!--上下线消息-->
-            <com.mzmedia.widgets.ChatOnlineView
-                android:id="@+id/push_player_chat_list_online_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dimen_10"
-                android:layout_above="@+id/push_layout_activity_live_broadcast_chat"/>
-            <!--聊天信息-->
-            <FrameLayout
-                android:id="@+id/push_layout_activity_live_broadcast_chat"
-                android:layout_width="match_parent"
-                android:layout_height="158dp"
-                android:layout_marginBottom="7dp"
-                android:layout_above="@+id/push_rl_activity_live_broadcast_bottom_group"/>
+        <!--上下线消息-->
+        <com.mzmedia.widgets.ChatOnlineView
+            android:id="@+id/push_player_chat_list_online_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/push_layout_activity_live_broadcast_chat"
+            android:layout_marginBottom="@dimen/dimen_10" />
+        <!--聊天信息-->
+        <FrameLayout
+            android:id="@+id/push_layout_activity_live_broadcast_chat"
+            android:layout_width="match_parent"
+            android:layout_height="158dp"
+            android:layout_above="@+id/push_rl_activity_live_broadcast_bottom_group"
+            android:layout_marginBottom="7dp" />
+
         <LinearLayout
             android:id="@+id/push_layout_live_config_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginRight="@dimen/dimen_12"
-            android:layout_alignParentRight="true"
             android:layout_above="@+id/push_rl_activity_live_broadcast_bottom_group"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dimen_12"
+            android:orientation="vertical"
             android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/push_iv_playerfragment_bitrate"
+                android:layout_width="@dimen/dimen_44"
+                android:layout_height="@dimen/dimen_44"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="@dimen/dimen_8"
+                android:src="@mipmap/mz_icon_biaoqing_select" />
+
             <ImageView
                 android:id="@+id/push_iv_playerfragment_allchat"
                 android:layout_width="@dimen/dimen_44"
                 android:layout_height="@dimen/dimen_44"
-                android:layout_marginBottom="@dimen/dimen_8"
                 android:layout_alignParentRight="true"
+                android:layout_marginBottom="@dimen/dimen_8"
                 android:src="@mipmap/mz_icon_allchat_default" />
+
             <ImageView
                 android:id="@+id/push_iv_playerfragment_voice"
                 android:layout_width="@dimen/dimen_44"
                 android:layout_height="@dimen/dimen_44"
-                android:layout_marginBottom="@dimen/dimen_8"
                 android:layout_alignParentRight="true"
+                android:layout_marginBottom="@dimen/dimen_8"
                 android:src="@mipmap/mz_icon_voice_default" />
+
             <ImageView
                 android:id="@+id/push_iv_playerfragment_flash"
                 android:layout_width="@dimen/dimen_44"
                 android:layout_height="@dimen/dimen_44"
-                android:layout_marginBottom="@dimen/dimen_8"
                 android:layout_alignParentRight="true"
+                android:layout_marginBottom="@dimen/dimen_8"
                 android:src="@mipmap/mz_icon_flash_default" />
+
             <ImageView
                 android:id="@+id/push_iv_playerfragment_mirror"
                 android:layout_width="@dimen/dimen_44"
                 android:layout_height="@dimen/dimen_44"
-                android:layout_marginBottom="@dimen/dimen_8"
                 android:layout_alignParentRight="true"
+                android:layout_marginBottom="@dimen/dimen_8"
                 android:src="@mipmap/mz_icon_mirror_default" />
+
             <ImageView
                 android:id="@+id/push_iv_playerfragment_beauty"
                 android:layout_width="@dimen/dimen_44"
                 android:layout_height="@dimen/dimen_44"
-                android:layout_marginBottom="@dimen/dimen_8"
                 android:layout_alignParentRight="true"
+                android:layout_marginBottom="@dimen/dimen_8"
                 android:src="@mipmap/mz_icon_beauty_on" />
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/push_rl_activity_live_broadcast_bottom_group"
             android:layout_width="match_parent"
@@ -300,8 +334,8 @@
                 android:layout_height="@dimen/dimen_44"
                 android:layout_marginLeft="14dp"
                 android:layout_marginRight="8dp"
-                android:layout_weight="1"
                 android:layout_toLeftOf="@+id/push_iv_playerfragment_share"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
@@ -320,49 +354,64 @@
                     android:layout_alignParentBottom="true"
                     android:background="#80ffffff" />
             </RelativeLayout>
+
             <LinearLayout
                 android:id="@+id/push_layout_live_config_group_h"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_alignParentRight="true"
+                android:orientation="horizontal"
                 android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/push_iv_playerfragment_bitrate_h"
+                    android:layout_width="@dimen/dimen_44"
+                    android:layout_height="@dimen/dimen_44"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/dimen_12"
+                    android:src="@mipmap/mz_icon_biaoqing_select" />
+
                 <ImageView
                     android:id="@+id/push_iv_playerfragment_allchat_h"
                     android:layout_width="@dimen/dimen_44"
                     android:layout_height="@dimen/dimen_44"
-                    android:layout_marginRight="@dimen/dimen_12"
                     android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/dimen_12"
                     android:src="@mipmap/mz_icon_allchat_default" />
+
                 <ImageView
                     android:id="@+id/push_iv_playerfragment_voice_h"
                     android:layout_width="@dimen/dimen_44"
                     android:layout_height="@dimen/dimen_44"
-                    android:layout_marginRight="@dimen/dimen_12"
                     android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/dimen_12"
                     android:src="@mipmap/mz_icon_voice_default" />
+
                 <ImageView
                     android:id="@+id/push_iv_playerfragment_flash_h"
                     android:layout_width="@dimen/dimen_44"
                     android:layout_height="@dimen/dimen_44"
-                    android:layout_marginRight="@dimen/dimen_12"
                     android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/dimen_12"
                     android:src="@mipmap/mz_icon_flash_default" />
+
                 <ImageView
                     android:id="@+id/push_iv_playerfragment_mirror_h"
                     android:layout_width="@dimen/dimen_44"
                     android:layout_height="@dimen/dimen_44"
-                    android:layout_marginRight="@dimen/dimen_12"
                     android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/dimen_12"
                     android:src="@mipmap/mz_icon_mirror_default" />
+
                 <ImageView
                     android:id="@+id/push_iv_playerfragment_beauty_h"
                     android:layout_width="@dimen/dimen_44"
                     android:layout_height="@dimen/dimen_44"
-                    android:layout_marginRight="@dimen/dimen_12"
                     android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/dimen_12"
                     android:src="@mipmap/mz_icon_beauty_on" />
             </LinearLayout>
+
             <ImageView
                 android:id="@+id/push_iv_playerfragment_share"
                 android:layout_width="44dp"
@@ -377,16 +426,18 @@
                 android:layout_height="44dp"
                 android:layout_toLeftOf="@+id/push_iv_playerfragment_config"
                 android:src="@mipmap/mz_icon_camera" />
+
             <ImageView
                 android:id="@+id/push_iv_playerfragment_config"
                 android:layout_width="@dimen/dimen_44"
                 android:layout_height="@dimen/dimen_44"
                 android:layout_alignParentRight="true"
                 android:layout_marginLeft="@dimen/dimen_12"
-                android:src="@mipmap/mz_icon_config"/>
+                android:src="@mipmap/mz_icon_config" />
         </LinearLayout>
 
     </RelativeLayout>
+
     <android.support.constraint.ConstraintLayout
         android:id="@+id/layout_activity_broadcast_count"
         android:layout_width="match_parent"
@@ -399,13 +450,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:text=""
             android:textColor="@color/white"
             android:textSize="100dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:text=""/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/iv_activity_live_broadcast_close_out"

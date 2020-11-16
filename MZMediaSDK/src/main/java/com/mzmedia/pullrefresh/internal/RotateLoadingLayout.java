@@ -25,7 +25,7 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView.ScaleType;
 
-import com.mengzhu.live.sdk.R;
+import com.mengzhu.sdk.R;
 import com.mzmedia.pullrefresh.PullToRefreshBase;
 
 @SuppressLint("ViewConstructor")

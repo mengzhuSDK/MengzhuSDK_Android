@@ -33,7 +33,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.mengzhu.live.sdk.R;
+import com.mengzhu.sdk.R;
 
 @SuppressWarnings("UnusedDeclaration")
 public class RoundedImageView extends ImageView {

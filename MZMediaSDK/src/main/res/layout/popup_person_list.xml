@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/ll_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_common_rounded_white"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_popup_window_person_list_num"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_weight="1.0"
+                android:drawableLeft="@drawable/yellow_point"
+                android:drawablePadding="6dp"
+                android:text="在线人数"
+                android:textSize="@dimen/dimen_18sp" />
+
+            <ImageView
+                android:id="@+id/iv_popup_window_person_list_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:clickable="true"
+                android:src="@mipmap/icon_channel_detail_close" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/common_horizontal_divider" />
+
+
+            <com.mzmedia.pullrefresh.PullToRefreshListView
+                android:id="@+id/listveiw_popup_person_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@null"
+                android:footerDividersEnabled="false"
+                android:headerDividersEnabled="false"
+                android:listSelector="@null"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:ptrHeaderTextColor="@color/color_000000"
+                app:ptrShowIndicator="false">
+
+            </com.mzmedia.pullrefresh.PullToRefreshListView>
+
+    </LinearLayout>
+</LinearLayout>

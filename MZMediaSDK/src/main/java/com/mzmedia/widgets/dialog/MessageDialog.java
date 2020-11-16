@@ -12,8 +12,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.mengzhu.live.sdk.R;
-import com.mengzhu.live.sdk.core.utils.DeviceUtil;
+import com.mengzhu.sdk.R;
+
+import tv.mengzhu.core.frame.coreutils.DeviceUtil;
 
 /**
  * @author max

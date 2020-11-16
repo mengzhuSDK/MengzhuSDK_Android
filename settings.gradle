@@ -1,1 +1,2 @@
-include ':sdkdemo', ':MZMediaSDK'
+include ':MZMediaSDK'
+include ':sdkdemo'

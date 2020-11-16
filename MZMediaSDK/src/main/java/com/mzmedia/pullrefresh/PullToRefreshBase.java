@@ -35,7 +35,7 @@ import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import com.mengzhu.live.sdk.R;
+import com.mengzhu.sdk.R;
 import com.mzmedia.pullrefresh.internal.FlipLoadingLayout;
 import com.mzmedia.pullrefresh.internal.LoadingLayout;
 import com.mzmedia.pullrefresh.internal.RotateLoadingLayout;

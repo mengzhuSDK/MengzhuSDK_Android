@@ -6,10 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.mengzhu.live.sdk.business.dto.BaseItemDto;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import tv.mengzhu.core.module.model.dto.BaseItemDto;
+
 
 public class CommonAdapterType<T extends BaseItemDto> extends BaseAdapter {
 
@@ -133,6 +134,9 @@ public class CommonAdapterType<T extends BaseItemDto> extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		mPosition=position;
 		BaseViewObtion<T> obtain = mViewObtains.get(getItemViewType(position));
+		if (obtain == null){
+			return new View(mActivity);
+		}
 		if (convertView == null) {
 			convertView = mViewObtains.get(getItemViewType(position))
 					.createView(getItem(position), position, convertView, parent);

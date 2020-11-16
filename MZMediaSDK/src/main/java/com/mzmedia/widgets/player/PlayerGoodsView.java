@@ -15,8 +15,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.mengzhu.live.sdk.R;
 import com.mengzhu.live.sdk.business.dto.MZGoodsListDto;
+import com.mengzhu.sdk.R;
 import com.mzmedia.utils.String_Utils;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;

@@ -3,9 +3,7 @@
     <string name="app_error">应用程序错误</string>
     <string name="submit_report">确定</string>
     <string name="mz_not_network">当前网络不可用，请检查你的网络设置</string>
-    <string name="china_mobile">中国移动</string>
-    <string name="china_unicom">中国联通</string>
-    <string name="china_telecom">中国电信</string>
+
     <string name="save_ing">正在保存...</string>
     <string name="save_success">保存成功</string>
     <string name="save_error">保存失败，请重试...</string>
@@ -15,23 +13,17 @@
     <string name="mz_banned_to_post">亲，你已被管理员禁言了...</string>
     <string name="mz_recover_chat">亲，你已被管理员恢复聊天功能...</string>
     <string name="forbid_public_hint">本次直播管理员已开启禁言功能</string>
-    <string name="video_record">记忆上次播放到</string>
     <string name="video_skip">继续播放</string>
-    <string name="buffer_loading_hint">正在缓冲中，请稍后…</string>
-    <string-array name="media_quality">
-        <item>流畅</item>
-        <item>清晰</item>
-        <item>高清</item>
-        <item>超清</item>
-        <item>1080P</item>
-    </string-array>
-    <string name="gm_chat_notice">依法对直播内容进行24小时巡查，禁止传播暴力血腥、低俗色情、招嫖诈骗、非法政治活动等违法信息，坚决维护社会文明健康环境</string>
+
+    <string name="gm_chat_notice">国民直播依法对直播内容进行24小时巡查，禁止传播暴力血腥、低俗色情、招嫖诈骗、非法政治活动等违法信息，坚决维护社会文明健康环境</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
-    <string name="talk_to_up">跟主播聊点什么？</string>
+    <string name="talk_to_up">跟主播聊天</string>
     <string name="talk_to">聊点什么？</string>
     <string name="ban_talk_to_up">你已被禁言</string>
+
+    <string name="vote">投票</string>
 
 </resources>

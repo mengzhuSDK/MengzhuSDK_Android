@@ -9,6 +9,7 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/ll_goods_layout"
         android:layout_width="wrap_content"
         android:layout_height="413dp"
         android:layout_alignParentBottom="true"

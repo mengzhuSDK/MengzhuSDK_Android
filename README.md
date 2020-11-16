@@ -3,188 +3,70 @@
 # 2. 盟主直播Android SDK架构设计
 盟主直播Android SDK架构以CBU设计模式进行搭建，Core为核心层面技术，内部实现了推流编码及网络请求等功能，Business业务层处理了播放器控制器及MVP业务架构等所有业务控制工作，UserInterface为用户对接层，此层面封装了所有面向接入端所需要的业务接口及管理器。具体结构请看下图。
 ![](https://wmz.zmengzhu.com/uploads/201811/5bdac3a253f9d_5bdac3a2.png)
+
 # 3. SDK功能及支持
 ### 3.1.  设备和系统要求
-> 支持Android 4.3及以上系统
+支持Android 4.3及以上系统
 支持所有装有Android系统的硬件设备
-###  3.2 功能特性
-> 支持推流到主流 RTMP 服务器  
-支持 H.264 和 AAC 编码  
-支持MP4录制  
-支持音视频采集，编码，打包，传输  
-支持 armv7、arm64 架构  
-资源占用率低，库文件小  
-画质清晰，延时低  
-支持闪光灯开启操作  
-支持摄像头缩放操作  
-支持前后置摄像头动态切换  
-支持分辨率动态切换  
-支持自动对焦  
-支持摄像头焦距调节  
-支持视频镜像操作  
-支持视频截图  
-支持多款滤镜  
-支持磨皮  
-支持直播过程中帧率调节  
-支持直播过程中码率调节  
-提供固定ui模板  
-支持直播间聊天  
-支持历史消息获取  
-支持商品列表  
-支持直播间信息获取  
-支持在线观众展示  
-支持主播信息获取  
 
-# 4. 固定UI模板配置及实现方式(快速集成)
-#### 固定UI模板使用Module android-library方式提供，内部实现业务上提供的所有功能逻辑及UI的模板。使用时将其library导入项目进行简单配置即可使用。具体配置代码请查看下发示例.如需自主研发UI及逻辑请参考开发指南及API文档。
-###  4.1 manifest配置
+### 3.2 功能支持
+直播
 
-    <uses-feature android:name="android.hardware.camera"/>
-    <uses-feature android:name="android.hardware.camera.autofocus"/>
-    <uses-feature android:name="android.hardware.camera.flash"/>
-    <uses-feature android:glEsVersion="0x00020000" android:required="true"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    
-###  4.2 build.gradle配置
-    dependencies {
-      ...
-      implementation project(':MZMediaSDK')
-    }
-###  4.3 代码实现
+默认推流UI、普通视频直播、纯语音直播、横屏直播、竖屏直播、直播时静音、美颜动态调节、分辨率动态调节、镜像、闪光灯、前后置摄像头动态切换、直播开始倒计时、实时展示帧率、直播时长、设置直播所属分类、设置直播间禁言、设置直播的观看方式
 
-#### Application类内onCreate调用以下代码：
-      MZSDKInitManager.getInstance().initApplication(this);
+播放
 
-#### 初始化关键数据
-        //用户信息
-    UserDto dto=new UserDto();
-    dto.setAccountNo(用户Id);
-    dto.setAppid(appId);
-    dto.setAvatar(头像地址);
-    dto.setNickname(昵称);
-    URLParamsUtils.setDebug(true); //开启debug模式
-    URLParamsUtils.setSecretKey(自己的Secret_Key);
-    MyUserInfoPresenter.getInstance().saveUserinfo(dto); //保存用户信息
-        
-#### 播放直播间activity实现
-    MUIImmerseUtils.setStatusTranslucent(getWindow(),this);//super.onCreate之前调用 设置顶部状态
-    super.onCreate(savedInstanceState);
-    setTheme(R.style.AppCompatTheme);//设置主题
-    setContentView(...);
-    MUIImmerseUtils.setStatusTextColor(false,this);//设置顶部状态栏字体颜色
-    
-#### 播放直播间SDK fragment实现
-    mPlayerFragment = PlayerFragment.newInstance(String Uid,String Appid,String avatar,String nickName, String ticketId)
-    mPlayerFragment.setIPlayerClickListener(IPlayerClickListener);//IPlayerClickListener 是fragmentUI点击回调 具体逻辑需要接入方自行实现。
-    
-#### IPlayerClickListener介绍
-    void onAvatarClick()//点击主播头像
-    void onAttentionClick()//关注
-    void onOnlineClick()//在线人数
-    void onCloseClick()//退出
-    void onReportClick()//举报
-    void onShareClick()//分享
-    void onLikeClick()//点赞
-    void onRecommendGoods()//推荐商品
-### 4.3.1推流SDK
-#### 推流Activity实现
-        @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        MUIImmerseUtils.setStatusTranslucent(getWindow(), this);
-        //根据需要选择是竖屏推还是横屏推
-        screen = getIntent().getIntExtra("screen",0);
-        switch (screen){
-            case 1:
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);竖屏
-                break;
-            case 2:
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);横屏
-                break;
-        }
-        super.onCreate(savedInstanceState);
-        setTheme(R.style.AppCompatTheme);
-        setContentView(...);
-        MUIImmerseUtils.setStatusTextColor(false, this);
-    }
-#### 推流Fragment实现
+默认播放UI、竖屏播放、二分屏播放、横屏播放、投屏、倍速、防录屏、小窗口播放、弹幕组件、 视屏封面、开屏广告、片头视频广告、滚动广告、F码观看、白名单观看、自定义播放控制栏、活动配置实时更改
 
-    //推流前默认配置
-    LiveConfigDto liveConfigDto = new LiveConfigDto();
-    //码率 标清500 高清800 超清1000
-    liveConfigDto.setBitrate(getIntent().getIntExtra("bitrate",0));
-    //美颜
-    liveConfigDto.setCbbeauty(getIntent().getBooleanExtra("cbbeauty",false));
-    //前后置摄像头
-    liveConfigDto.setCblater(getIntent().getBooleanExtra("cblater",false));
-    //静音
-    liveConfigDto.setCbAudio(getIntent().getBooleanExtra("cbAudio",false));
-    //调用盟主提供的创建直播Api获取的live_tk
-    liveConfigDto.setLive_tk(getIntent().getStringExtra("live_tk"));
-    //活动id
-    liveConfigDto.setTicketId(getIntent().getStringExtra("ticketId"));
-    //全体禁言
-    liveConfigDto.setAllBanChat(getIntent().getBooleanExtra("cbAllBanChat",false)?0:1);
-    //FPS 15-30
-    liveConfigDto.setFps(Integer.parseInt(getIntent().getStringExtra("fps")));
-    //开始倒计时
-    liveConfigDto.setTime(Integer.parseInt(getIntent().getStringExtra("time")));
-    //活动信息
-    mPlayInfoDto = new PlayInfoDto();
-    //消息信息 具体请查看API文档
-    mPlayInfoDto.setMsg_config(startBroadcastInfoDto.getMsg_conf());
-    //长连接 具体请查看API文档
-    mPlayInfoDto.setChat_config(startBroadcastInfoDto.getChat_conf());
-    //活动id
-    mPlayInfoDto.setTicket_id(startBroadcastInfoDto.getTicket_id());
-    //频道id
-    mPlayInfoDto.setChannel_id(startBroadcastInfoDto.getChannel_id());
-    //参数1 推流地址 2活动id 3横竖屏 4活动必要信息 5推流前默认配置集合()
-    mzPlugFlowFragement=MZPlugFlowFragement.newInstance(startBroadcastInfoDto.getPush_url(),startBroadcastInfoDto.getTicket_id()
-                ,screen,mPlayInfoDto,liveConfigDto);
-#### IPushClickListener推流UI点击回调
-    /**
-     * 点击结束直播
-     */
-    void onStopLive();
-    /**
-     * 点击聊天用户头像回调
-     */
-    void onChatAvatar(ChatTextDto chatTextDto);
-    /**
-     * 点击全体禁言
-     */
-    void onALLBanChat();
-    /**
-     * 点击单体禁言
-     */
-    void onBanChat();
-    /**
-     * 点击分享
-     */
-    void onShare(PlayInfoDto dto);
-    /**
-     * 点击主播头像
-     */
-    void onLiveAvatar();
-    /**
-     * 点击在线人数
-     */
-    void onOnlineNum(List<MZOnlineUserListDto> mzOnlineUserListDto);
-#### 推流SDK build.gradle配置
-    
-    api 'com.github.mengzhuSDK:MZKitLiveSDK:1.0.2'
+聊天
 
-#### 下载SDK build.gradle配置
-  
-    api 'com.github.mengzhuSDK:MZKitDownloadSDK:1.0.5'
-    
-#### 项目build.gradle配置
-    
-![](https://s1.zmengzhu.com/upload/img/b5/e0/b5e074ae8ca9e0935a780c9f7246fe02.jpeg)    
+文字聊天、表情聊天(可自定义表情)、用户信息获取、聊天历史记录是否显示、在线观众列表、禁言用户、踢出用户、聊天公告设置、只显示主播聊天信息
 
-    repositories {
-      maven { url "https://jitpack.io"}
-    }
+互动
+
+文档功能、问答功能、礼物功能、签到功能、投票功能、抽奖功能
+
+商品
+
+商品列表、循环播放推荐商品、
+
+下载
+
+视频多线程下载、实时展示进度、支持后台下载、直播下载完成后播放
+
+上传
+
+视频多线程上传、多任务上传，支持后台上传
+
+# 4. 介绍
+#### 运行MengzhuSDK_Android工程demo需要申请secretKey，Appid两个参数用以验证。
+##### 定义
+Appid：为接入方申请的唯一标识。
+secretKey：用以加密验证。
+
+# 4. 项目目录
+#### 4.1 sdkdemo
+sdkdemo 为接入盟主Android SDK实现方式的demo示例代码，调用了快速集成方式的模板。
+#### 4.2 MZMediaSDK
+MZMediaSDK 为快速集成方式提供的固定UI模板 module工程。以android-library方式提供，内部实现业务上提供的所有功能逻辑及UI的模板。使用时将其library导入项目进行简单配置即可使用。具体配置代码查看快速集成文档。
+### 注意
+MZMediaSDK 是一个 UI 库，封装了盟主SDK功能常用的控件、fragment 等等，旨在帮助开发者快速集成盟主SDK。
+Fragment的使用更适用于ui改动较少或者着急出功能的开发者，建议开发者基于MZMediaSDK的控件做开发，这样更灵活。
+MZMediaSDK包含一个最简单的使用demo，开发者可导出查看。
+注意：因为这是一个 UI 库，后续很可能还会继续改动，新旧版本在 API 的兼容上不会像其他组件SDK那样绝对的兼容。
+注意：单独使用MZMediaSDK时请参考demo中的实现，确保申请了相关的权限。
+
+# 5. 混淆剔除配置
+
+    -dontwarn com.mengzhu.**
+    -keep class  com.mengzhu.** { *; }
+    -dontwarn tv.mengzhu.**
+    -keep class  tv.mengzhu.** { *; }
+    -dontwarn org.fourthline.cling.**
+    -keep class org.fourthline.cling.**{*;}
+    //接入上传需要
+    -dontwarn okio.**
+    -dontwarn org.apache.commons.codec.binary.**
+
+# 6.wiki文档
+https://github.com/mengzhuSDK/MengzhuSDK_Android/wiki

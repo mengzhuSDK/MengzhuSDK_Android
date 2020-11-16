@@ -29,7 +29,7 @@ import android.widget.FrameLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import com.mengzhu.live.sdk.R;
+import com.mengzhu.sdk.R;
 import com.mzmedia.pullrefresh.internal.EmptyViewMethodAccessor;
 import com.mzmedia.pullrefresh.internal.LoadingLayout;
 

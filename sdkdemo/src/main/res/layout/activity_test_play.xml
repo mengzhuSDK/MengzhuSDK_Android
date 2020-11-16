@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_000000">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_marginTop="@dimen/dimen_40"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_44"
+                android:gravity="center"
+                android:text="播放"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dimen_16sp" />
+
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dimen_44"
+                android:layout_centerVertical="true"
+                android:paddingLeft="@dimen/dimen_16"
+                android:paddingRight="@dimen/dimen_16"
+                android:src="@mipmap/ic_icon_back" />
+        </RelativeLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_44"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dimen_16"
+            android:text="信息填写"
+            android:textColor="@color/color_7a7a7a"
+            android:textSize="@dimen/dimen_14sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/ticket_id"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_44"
+                android:layout_marginTop="@dimen/dimen_1"
+                android:background="#26ffffff"
+                android:gravity="center_vertical"
+                android:hint="填写TicketId,必填项，例如：10014584"
+                android:paddingLeft="@dimen/dimen_30"
+                android:textColor="@color/white"
+                android:textColorHint="@color/color_7a7a7a"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:paddingLeft="@dimen/dimen_20"
+                android:text="*"
+                android:textColor="@color/color_ff1f60" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/account_no"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_44"
+                android:background="#26ffffff"
+                android:gravity="center_vertical"
+                android:hint="填写用户唯一ID，必填项，例user8888"
+                android:paddingLeft="@dimen/dimen_30"
+                android:textColor="@color/white"
+                android:textColorHint="@color/color_7a7a7a"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:paddingLeft="@dimen/dimen_20"
+                android:text="*"
+                android:textColor="@color/color_ff1f60" />
+        </RelativeLayout>
+
+
+        <EditText
+            android:id="@+id/user_name"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_44"
+            android:layout_marginTop="@dimen/dimen_1"
+            android:background="#26ffffff"
+            android:gravity="center_vertical"
+            android:hint="填写用户昵称，空则使用默认名字"
+            android:paddingLeft="@dimen/dimen_30"
+            android:textColor="@color/white"
+            android:textColorHint="@color/color_7a7a7a"
+            android:textSize="@dimen/dimen_14sp" />
+
+        <EditText
+            android:id="@+id/user_avatar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_44"
+            android:layout_marginTop="@dimen/dimen_1"
+            android:background="#26ffffff"
+            android:gravity="center_vertical"
+            android:hint="填写用户头像地址，空则使用默认头像"
+            android:paddingLeft="@dimen/dimen_30"
+            android:textColor="@color/white"
+            android:textColorHint="@color/color_7a7a7a"
+            android:textSize="@dimen/dimen_14sp" />
+
+        <EditText
+            android:id="@+id/user_phone"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_44"
+            android:layout_marginTop="@dimen/dimen_1"
+            android:background="#26ffffff"
+            android:gravity="center_vertical"
+            android:hint="填写用户手机号，空则使用默认默认手机号"
+            android:paddingLeft="@dimen/dimen_30"
+            android:textColor="@color/white"
+            android:textColorHint="@color/color_7a7a7a"
+            android:textSize="@dimen/dimen_14sp" />
+
+        <Button
+            android:id="@+id/player_click"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_44"
+            android:layout_marginLeft="47dp"
+            android:layout_marginTop="194dp"
+            android:layout_marginRight="47dp"
+            android:background="@drawable/mz_shape_play_btn_bg"
+            android:onClick="onPlayClick"
+            android:text="播放"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_16sp" />
+
+        <Button
+            android:id="@+id/half_player_click"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="47dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="47dp"
+            android:background="@drawable/mz_shape_play_btn_bg"
+            android:onClick="onHalfPlayClick"
+            android:text="二分屏播放"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_16sp" />
+    </LinearLayout>
+</RelativeLayout>

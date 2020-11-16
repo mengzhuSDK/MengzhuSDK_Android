@@ -5,21 +5,17 @@
 
 
     <dimen name="control_bar_height">42dp</dimen>
-    <dimen name="danmaku_input_options_height">48dp</dimen>
-    <dimen name="danmaku_input_options_color_radio_btn_width">32.0dip</dimen>
-    <dimen name="danmaku_input_options_color_radio_btn_height">25.0dip</dimen>
-    <dimen name="danmaku_input_options_color_radio_btn_margin">5.0dip</dimen>
-    <dimen name="danmaku_input_options_color_radio_btn_size">42.0dip</dimen>
 
     <dimen name="settings_btn_width">44dp</dimen>
     <dimen name="aspect_btn_height">20dp</dimen>
-    <dimen name="aspect_btn_size">30dp</dimen>
     <dimen name="dimen_12">12dp</dimen>
     <dimen name="dimen_44">44dp</dimen>
+    <dimen name="dimen_42">42dp</dimen>
     <dimen name="dimen_28">28dp</dimen>
     <dimen name="dimen_40">40dp</dimen>
     <dimen name="dimen_9">9dp</dimen>
     <dimen name="dimen_3">3dp</dimen>
+    <dimen name="dimen_2">2dp</dimen>
     <dimen name="dimen_5">5dp</dimen>
     <dimen name="dimen_30">30dp</dimen>
     <dimen name="dimen_16">16dp</dimen>
@@ -38,15 +34,19 @@
     <dimen name="dimen_14sp">14sp</dimen>
     <dimen name="dimen_16sp">16sp</dimen>
     <dimen name="dimen_90">90dp</dimen>
+    <dimen name="dimen_94">94dp</dimen>
     <dimen name="dimen_4">4dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="dimen_18">18dp</dimen>
+    <dimen name="dimen_18sp">18sp</dimen>
     <dimen name="dimen_17">17dp</dimen>
     <dimen name="dimen_12sp">12sp</dimen>
+    <dimen name="dimen_4sp">4sp</dimen>
     <dimen name="dimen_60">60dp</dimen>
     <dimen name="dimen_32">32dp</dimen>
     <dimen name="dimen_15">15dp</dimen>
     <dimen name="dimen_26">26dp</dimen>
+    <dimen name="dimen_56">56dp</dimen>
 
     <dimen name="indicator_right_padding">10dp</dimen>
     <dimen name="indicator_corner_radius">12dp</dimen>

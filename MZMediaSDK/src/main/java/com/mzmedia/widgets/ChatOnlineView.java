@@ -14,8 +14,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.mengzhu.live.sdk.R;
 import com.mengzhu.live.sdk.business.dto.chat.ChatMessageDto;
+import com.mengzhu.sdk.R;
 
 import java.util.Timer;
 import java.util.TimerTask;

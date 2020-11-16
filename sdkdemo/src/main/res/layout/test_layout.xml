@@ -1,140 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/color_000000"
         android:orientation="vertical">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dimen_110"
+            android:src="@mipmap/logo" />
 
         <Button
             android:id="@+id/player_click"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="280dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="101dp"
+            android:background="@drawable/mz_shape_play_btn_bg"
             android:onClick="onPlayClick"
-            android:text="播放" />
+            android:text="直播/回放"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_16sp" />
 
-        <EditText
-            android:id="@+id/ticket_id"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/push_click"
+            android:layout_width="280dp"
             android:layout_height="wrap_content"
-            android:hint="填写TicketId" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="33dp"
+            android:background="@drawable/mz_shape_push_btn_bg"
+            android:onClick="onPushClick"
+            android:text="推流测试"
+            android:textColor="#FF1F60"
+            android:textSize="@dimen/dimen_16sp" />
 
-        <EditText
-            android:id="@+id/account_no"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/download_click"
+            android:layout_width="280dp"
             android:layout_height="wrap_content"
-            android:hint="填写用户ID" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="33dp"
+            android:background="@drawable/mz_shape_push_btn_bg"
+            android:onClick="onDownLoadClick"
+            android:text="下载"
+            android:textColor="#FF1F60"
+            android:textSize="@dimen/dimen_16sp" />
 
-        <EditText
-            android:id="@+id/app_id"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/upload_click"
+            android:layout_width="280dp"
             android:layout_height="wrap_content"
-            android:hint="填写appId" />
-
-        <EditText
-            android:id="@+id/live_tk"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="填写live_tk" />
-
-        <EditText
-            android:id="@+id/fps"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="填写fps（15-30）"
-            android:inputType="number" />
-
-        <EditText
-            android:id="@+id/time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="填写开始倒计时长"
-            android:inputType="number" />
-
-        <android.support.v7.widget.AppCompatCheckBox
-            android:id="@+id/cb_beauty"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:text="关闭美颜（默认开启）" />
-
-        <android.support.v7.widget.AppCompatCheckBox
-            android:id="@+id/cb_later"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:text="后置摄像头（默认前置）" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <android.support.v7.widget.AppCompatCheckBox
-                android:id="@+id/cb_audio"
-                android:layout_width="wrap_content"
-                android:layout_height="60dp"
-                android:text="静音" />
-            <android.support.v7.widget.AppCompatCheckBox
-                android:id="@+id/cb_all_banchat"
-                android:layout_width="wrap_content"
-                android:layout_height="60dp"
-                android:text="全体禁言" />
-        </LinearLayout>
-
-
-        <RadioGroup
-            android:id="@+id/test_group"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/rb360"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="标清" />
-
-            <RadioButton
-                android:id="@+id/rb480"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="高清" />
-
-            <RadioButton
-                android:id="@+id/rb720"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="超清" />
-        </RadioGroup>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/download_test_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="下载" />
-
-            <Button
-                android:id="@+id/tv_push_p"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="竖推"
-                android:textSize="18sp" />
-
-            <Button
-                android:id="@+id/tv_push_l"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="横推"
-                android:textSize="18sp" />
-        </LinearLayout>
-
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="33dp"
+            android:background="@drawable/mz_shape_push_btn_bg"
+            android:onClick="onUploadClick"
+            android:text="上传"
+            android:textColor="#FF1F60"
+            android:textSize="@dimen/dimen_16sp" />
     </LinearLayout>
-</ScrollView>
+</RelativeLayout>

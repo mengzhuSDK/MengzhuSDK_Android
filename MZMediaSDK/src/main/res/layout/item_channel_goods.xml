@@ -60,9 +60,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen_22"
+            android:layout_marginTop="@dimen/dimen_12"
             android:layout_marginBottom="@dimen/dimen_10"
-            android:gravity="center_vertical"
+            android:gravity="bottom"
             android:orientation="horizontal">
 
             <TextView
@@ -78,7 +78,7 @@
             <TextView
                 android:id="@+id/btn_item_goods_buy"
                 android:layout_width="64dp"
-                android:layout_height="wrap_content"
+                android:layout_height="22dp"
                 android:layout_gravity="end|bottom"
                 android:background="@drawable/bg_item_goods_buy_rounded"
                 android:gravity="center"

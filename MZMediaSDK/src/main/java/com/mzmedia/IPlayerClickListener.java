@@ -5,6 +5,7 @@ import android.widget.TextView;
 
 import com.mengzhu.live.sdk.business.dto.AnchorInfoDto;
 import com.mengzhu.live.sdk.business.dto.MZGoodsListDto;
+import com.mengzhu.live.sdk.business.dto.MZOnlineUserListDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatTextDto;
 import com.mengzhu.live.sdk.business.dto.play.PlayInfoDto;
 
@@ -27,7 +28,7 @@ public interface IPlayerClickListener {
     /**
      * 在线人数回调
      */
-    void onOnlineClick();
+    void onOnlineClick(MZOnlineUserListDto onlineUserDto);
 
     /**
      * 退出回调
@@ -80,4 +81,9 @@ public interface IPlayerClickListener {
     void onChatAvatar(ChatTextDto dto);
 
     void onNotLogin(PlayInfoDto dto);
+
+    /**
+     *  主播信息回调
+     */
+    void resultAnchorInfo(AnchorInfoDto anchorInfoDto);
 }

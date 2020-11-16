@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_44">
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/item_check"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dimen_10"
+            android:layout_marginRight="@dimen/dimen_10"
+            android:button="@drawable/mz_item_check_selector"
+            android:clickable="false"
+            android:focusableInTouchMode="false"
+            android:layoutDirection="rtl"
+            android:textColor="@color/color_222222"
+            android:textDirection="ltr"
+            android:textSize="@dimen/dimen_14sp" />
+    </RelativeLayout>
+</LinearLayout>

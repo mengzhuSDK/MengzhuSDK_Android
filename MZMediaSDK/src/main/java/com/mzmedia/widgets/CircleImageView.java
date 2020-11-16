@@ -18,7 +18,7 @@ import android.net.Uri;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-import com.mengzhu.live.sdk.R;
+import com.mengzhu.sdk.R;
 
 
 /**

@@ -37,7 +37,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.mengzhu.live.sdk.R;
+import com.mengzhu.sdk.R;
 import com.mzmedia.pullrefresh.ILoadingLayout;
 import com.mzmedia.pullrefresh.PullToRefreshBase;
 
