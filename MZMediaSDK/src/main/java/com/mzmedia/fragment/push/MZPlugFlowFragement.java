@@ -2,26 +2,12 @@ package com.mzmedia.fragment.push;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.net.ConnectivityManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.telephony.PhoneStateListener;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -33,6 +19,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.mengzhu.live.sdk.business.dto.MZOnlineUserListDto;
@@ -65,15 +57,13 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import tv.mengzhu.core.module.model.dto.BaseDto;
-import tv.mengzhu.core.wrap.library.utils.NetWorkUtils;
+import tv.mengzhu.core.wrap.netwock.Page;
 import tv.mengzhu.core.wrap.user.modle.UserDto;
 import tv.mengzhu.core.wrap.user.presenter.MyUserInfoPresenter;
-import tv.mengzhu.core.wrap.netwock.Page;
 import tv.mengzhu.restreaming.push.MZPushManager;
 import tv.mengzhu.restreaming.push.PushStreamingListener;
 import tv.mengzhu.restreaming.push.StreamLiveCameraView;
@@ -153,8 +143,6 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
     private BeautyPopWindow beautyPopWindow;
     MessageDialog messageDialog;
 
-    private NetBroadcastReceiver netBroadcastReceiver;
-
     public static MZPlugFlowFragement newInstance(String pushUrl, String ticket_id, int screen, PlayInfoDto dto, LiveConfigDto liveConfigDto, boolean isAudioPush) {
 
         Bundle args = new Bundle();
@@ -179,12 +167,6 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
         mPlayInfoDto = (PlayInfoDto) getArguments().getSerializable("playinfoDto");
         mLiveConfigDto = (LiveConfigDto) getArguments().getSerializable("liveConfig");
 
-        netBroadcastReceiver = new NetBroadcastReceiver();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);// 只有持有相同的action的接受者才能接收此广播
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Objects.requireNonNull(getActivity()).registerReceiver(netBroadcastReceiver, intentFilter);
-        }
     }
 
     @Override
@@ -402,9 +384,6 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
                 if (mIPushClickListener != null) {
                     mIPushClickListener.onStopLive();
                 }
-                if (mzPushManager != null) {
-                    mzPushManager.destroy();
-                }
             }
 
             @Override
@@ -515,7 +494,8 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
         //推流错误
         @Override
         public void onWriteError(int result) {
-//            Toast.makeText(mActivity, "error=" + result, Toast.LENGTH_SHORT).show();
+            Log.e("Lujie", "onWriteError:    " + result);
+            Toast.makeText(mActivity, "error=" + result, Toast.LENGTH_SHORT).show();
         }
 
         //推流停止
@@ -524,10 +504,40 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
             if (!isBackStage) {
                 audio_anim_view.cancelAnimation();
                 //请求结束推流直播
-                mzApiRequestStopLive.startData(MZApiRequest.API_TYPE_LIVE_STOP, ticketId);
+//                mzApiRequestStopLive.startData(MZApiRequest.API_TYPE_LIVE_STOP, ticketId);
             }
             Toast.makeText(mActivity, "close=" + result, Toast.LENGTH_SHORT).show();
         }
+
+//        @Override
+//        public void onReConnecting() {
+//            Log.e("Lujie", "onReConnecting: " + "正在重连");
+//        }
+//
+//        @Override
+//        public void onReConnectFail() {
+//            Log.e("Lujie", "onReConnectFail: " + "重连失败");
+//            MessageDialog messageDialog = new MessageDialog(getActivity());
+//            messageDialog.setTitle("温馨提示");
+//            messageDialog.setContentMessage("重连");
+//            messageDialog.setMessageDialogCallBack(new MessageDialog.OnMessageDialogCallBack() {
+//                @Override
+//                public void onClick(boolean isConfirm) {
+//                    if (!isConfirm) {
+//                        mzPushManager.stopStreaming();
+//                        mzPushManager.startStreaming();
+//                    }
+//                }
+//            });
+//            messageDialog.show();
+//            Toast.makeText(mActivity, "重连失败", Toast.LENGTH_SHORT).show();
+//        }
+//
+//        @Override
+//        public void onReConnectSuccess() {
+//            Log.e("Lujie", "onReConnectSuccess: " + "重连成功");
+//            Toast.makeText(mActivity, "重连成功", Toast.LENGTH_SHORT).show();
+//        }
     }
 
     public void setPushClickListener(IPushClickListener listener) {
@@ -971,10 +981,6 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
             timer = null;
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Objects.requireNonNull(getActivity()).unregisterReceiver(netBroadcastReceiver);
-        }
-
         //请求结束推流直播
         mzApiRequestStopLive.startData(MZApiRequest.API_TYPE_LIVE_STOP, ticketId);
         if (mzPushManager != null) {
@@ -982,47 +988,4 @@ public class MZPlugFlowFragement extends Fragment implements View.OnClickListene
         }
     }
 
-    Handler netWorkHandler = new Handler() {
-        @SuppressLint("HandlerLeak")
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case 1:
-                    if (mzPushManager != null) {
-                        mzPushManager.startStreaming();
-                    }
-                    break;
-                case 2:
-                    if (mzPushManager != null) {
-                        mzPushManager.stopStreaming();
-                    }
-                    break;
-            }
-        }
-    };
-
-
-    boolean isFirst = true;
-
-    public class NetBroadcastReceiver extends BroadcastReceiver {
-
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // TODO Auto-generated method stub
-            // 如果相等的话就说明网络状态发生了变化
-            if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-                if (!isFirst) {
-                    if (NetWorkUtils.isNetworkAvailable(context)) {
-                        netWorkHandler.sendEmptyMessage(1);
-                    } else {
-                        netWorkHandler.sendEmptyMessage(2);
-                    }
-                }else {
-                    isFirst = false;
-                }
-            }
-        }
-    }
 }

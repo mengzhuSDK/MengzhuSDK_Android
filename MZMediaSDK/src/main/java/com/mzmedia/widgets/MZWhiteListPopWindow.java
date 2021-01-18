@@ -10,14 +10,12 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.mengzhu.live.sdk.business.dto.Config.MZFCodeDto;
 import com.mengzhu.live.sdk.business.dto.Config.MZWhiteListDto;
 import com.mengzhu.live.sdk.core.utils.DensityUtil;
 import com.mengzhu.live.sdk.ui.api.MZApiDataListener;
 import com.mengzhu.live.sdk.ui.api.MZApiRequest;
 import com.mengzhu.live.sdk.ui.widgets.MzStateView;
 import com.mengzhu.sdk.R;
-import com.mzmedia.adapter.push.MZFCodeListAdapter;
 import com.mzmedia.adapter.push.MZWhiteListAdapter;
 import com.mzmedia.widgets.dialog.AbstractPopupWindow;
 

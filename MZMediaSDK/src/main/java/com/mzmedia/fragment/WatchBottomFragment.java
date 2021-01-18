@@ -28,7 +28,6 @@ import com.mengzhu.live.sdk.business.presenter.chat.ChatMessageObserver;
 import com.mengzhu.live.sdk.core.utils.ToastUtils;
 import com.mengzhu.live.sdk.ui.api.MZApiDataListener;
 import com.mengzhu.live.sdk.ui.api.MZApiRequest;
-
 import com.mengzhu.live.sdk.ui.widgets.popupwindow.MZLottoWebFragment;
 import com.mengzhu.live.sdk.ui.widgets.popupwindow.SignInWebFragment;
 import com.mengzhu.sdk.R;
@@ -45,8 +44,8 @@ import java.util.ArrayList;
 import tv.mengzhu.core.frame.coreutils.PreferencesUtils;
 import tv.mengzhu.core.module.model.dto.BaseDto;
 import tv.mengzhu.core.wrap.library.utils.CommonUtil;
-import tv.mengzhu.core.wrap.user.presenter.MyUserInfoPresenter;
 import tv.mengzhu.core.wrap.netwock.Page;
+import tv.mengzhu.core.wrap.user.presenter.MyUserInfoPresenter;
 
 /**
  * 观看端 互动fragment

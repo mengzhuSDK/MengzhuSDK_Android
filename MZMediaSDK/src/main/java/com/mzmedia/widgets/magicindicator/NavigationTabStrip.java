@@ -32,8 +32,6 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewPager;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -43,6 +41,9 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.Scroller;
+
+import androidx.core.view.ViewCompat;
+import androidx.viewpager.widget.ViewPager;
 
 import com.mengzhu.sdk.R;
 
@@ -164,6 +165,7 @@ public class NavigationTabStrip extends View implements ViewPager.OnPageChangeLi
         this(context, attrs, 0);
     }
 
+    @SuppressLint("WrongConstant")
     public NavigationTabStrip(final Context context, final AttributeSet attrs, final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         //Init NTS

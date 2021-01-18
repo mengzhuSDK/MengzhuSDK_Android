@@ -10,9 +10,7 @@ import android.widget.TextView;
 
 import com.mengzhu.live.sdk.business.dto.chat.ChatMessageDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatTextDto;
-import com.mengzhu.live.sdk.business.dto.chat.impl.ChatCompleteDto;
 import com.mengzhu.live.sdk.business.dto.chat.impl.ChatMegTxtDto;
-import com.mengzhu.live.sdk.business.presenter.chat.ChatMessageObserver;
 import com.mengzhu.sdk.R;
 import com.mzmedia.adapter.base.BaseViewObtion;
 import com.mzmedia.utils.String_Utils;

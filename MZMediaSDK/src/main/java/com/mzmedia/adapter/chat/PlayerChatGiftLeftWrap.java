@@ -1,7 +1,6 @@
 package com.mzmedia.adapter.chat;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -12,11 +11,8 @@ import android.widget.TextView;
 import com.mengzhu.live.sdk.business.dto.chat.ChatMessageDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatTextDto;
 import com.mengzhu.live.sdk.business.dto.chat.impl.ChatCompleteDto;
-import com.mengzhu.live.sdk.business.dto.chat.impl.ChatMegTxtDto;
-import com.mengzhu.live.sdk.business.presenter.chat.ChatMessageObserver;
 import com.mengzhu.sdk.R;
 import com.mzmedia.adapter.base.BaseViewObtion;
-import com.mzmedia.utils.String_Utils;
 import com.mzmedia.widgets.CircularImage;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;

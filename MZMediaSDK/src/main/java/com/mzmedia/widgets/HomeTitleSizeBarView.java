@@ -11,7 +11,7 @@ import com.mzmedia.widgets.magicindicator.buildins.UIUtil;
 import com.mzmedia.widgets.magicindicator.buildins.commonnavigator.abs.IMeasurablePagerTitleView;
 
 
-public class HomeTitleSizeBarView extends TextView implements IMeasurablePagerTitleView {
+public class HomeTitleSizeBarView extends androidx.appcompat.widget.AppCompatTextView implements IMeasurablePagerTitleView {
     protected int mSelectedColor;
     protected int mNormalColor;
     protected int mSelectedSize;

@@ -3,13 +3,10 @@ package com.mzmedia.activity;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.ViewPager;
 import android.text.Selection;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -22,6 +19,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.viewpager.widget.ViewPager;
 
 import com.mengzhu.live.sdk.business.dto.StaticStateDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatMessageDto;
@@ -36,15 +36,14 @@ import com.mengzhu.live.sdk.ui.chat.MZChatManager;
 import com.mengzhu.live.sdk.ui.widgets.emoji.EmojiPagerAdapter;
 import com.mengzhu.live.sdk.ui.widgets.emoji.EmojiUtils;
 import com.mengzhu.sdk.R;
-import com.mengzhu.sdk.download.util.SharePreUtil;
 import com.mzmedia.utils.String_Utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import tv.mengzhu.core.frame.coreutils.Device;
-import tv.mengzhu.core.wrap.user.presenter.MyUserInfoPresenter;
 import tv.mengzhu.core.wrap.netwock.Page;
+import tv.mengzhu.core.wrap.user.presenter.MyUserInfoPresenter;
 
 /**
  * Created by DELL on 2016/7/13.

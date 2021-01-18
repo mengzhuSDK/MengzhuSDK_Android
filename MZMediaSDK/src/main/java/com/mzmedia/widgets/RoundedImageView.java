@@ -27,16 +27,17 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
-import android.support.annotation.DimenRes;
-import android.support.annotation.DrawableRes;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageView;
 
+import androidx.annotation.DimenRes;
+import androidx.annotation.DrawableRes;
+
 import com.mengzhu.sdk.R;
 
 @SuppressWarnings("UnusedDeclaration")
-public class RoundedImageView extends ImageView {
+public class RoundedImageView extends androidx.appcompat.widget.AppCompatImageView {
 
     // FriConstants for tile mode attributes
     private static final int TILE_MODE_UNDEFINED = -2;
@@ -90,14 +91,6 @@ public class RoundedImageView extends ImageView {
         super(context, attrs, defStyle);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RoundedImageView, defStyle, 0);
-
-        int index = a.getInt(R.styleable.RoundedImageView_android_scaleType, -1);
-        if (index >= 0) {
-            setScaleType(SCALE_TYPES[index]);
-        } else {
-            // default scaletype to FIT_CENTER
-            setScaleType(ScaleType.FIT_CENTER);
-        }
 
         float cornerRadiusOverride =
                 a.getDimensionPixelSize(R.styleable.RoundedImageView_riv_corner_radius, -1);

@@ -1,5 +1,6 @@
 package com.mzmedia.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -16,7 +17,7 @@ import android.widget.ImageView;
  * @author wang
  *
  */
-public abstract class MaskedImage extends ImageView {
+public abstract class MaskedImage extends androidx.appcompat.widget.AppCompatImageView {
     private static final Xfermode MASK_XFERMODE;
     private Bitmap mask;
     private Paint paint;
@@ -56,7 +57,7 @@ public abstract class MaskedImage extends ImageView {
             }  
             float f1 = getWidth();  
             float f2 = getHeight();  
-            int i = paramCanvas.saveLayer(0.0F, 0.0F, f1, f2, null, 31);
+            @SuppressLint("WrongConstant") int i = paramCanvas.saveLayer(0.0F, 0.0F, f1, f2, null, 31);
             int j = getWidth();  
             int k = getHeight();  
             localDrawable.setBounds(0, 0, j, k);

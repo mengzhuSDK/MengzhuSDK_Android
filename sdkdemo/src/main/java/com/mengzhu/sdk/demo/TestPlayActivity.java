@@ -1,24 +1,20 @@
 package com.mengzhu.sdk.demo;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.mengzhu.live.sdk.ui.api.MZApiDataListener;
-import com.mengzhu.live.sdk.ui.api.MZApiRequest;
 import com.mzmedia.fragment.HalfPlayerFragment;
 import com.mzmedia.utils.MUIImmerseUtils;
 
 import tv.mengzhu.core.frame.coreutils.URLParamsUtils;
 import tv.mengzhu.core.wrap.user.modle.UserDto;
 import tv.mengzhu.core.wrap.user.presenter.MyUserInfoPresenter;
-import tv.mengzhu.core.wrap.netwock.Page;
 
 public class TestPlayActivity extends Activity {
 

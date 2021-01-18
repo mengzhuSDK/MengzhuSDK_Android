@@ -2,11 +2,12 @@ package com.mzmedia.widgets.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+
+import androidx.annotation.NonNull;
 
 import com.mengzhu.live.sdk.core.utils.DensityUtil;
 import com.mengzhu.sdk.R;

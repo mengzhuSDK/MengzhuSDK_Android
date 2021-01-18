@@ -3,9 +3,10 @@ package com.mzmedia.widgets.magicindicator.buildins.commonnavigator.titles;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.view.Gravity;
+
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.mzmedia.widgets.magicindicator.buildins.UIUtil;
 import com.mzmedia.widgets.magicindicator.buildins.commonnavigator.abs.IMeasurablePagerTitleView;

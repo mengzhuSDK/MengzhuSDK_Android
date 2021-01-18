@@ -135,7 +135,7 @@
                 android:textColor="@color/color_7a7a7a"
                 android:textSize="@dimen/dimen_14sp" />
 
-            <android.support.v7.widget.AppCompatCheckBox
+            <androidx.appcompat.widget.AppCompatCheckBox
                 android:id="@+id/cb_beauty"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_44"
@@ -149,7 +149,7 @@
                 android:textColor="@color/white"
                 android:textDirection="ltr" />
 
-            <android.support.v7.widget.AppCompatCheckBox
+            <androidx.appcompat.widget.AppCompatCheckBox
                 android:id="@+id/cb_later"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_44"
@@ -164,7 +164,7 @@
                 android:textDirection="ltr" />
 
 
-            <android.support.v7.widget.AppCompatCheckBox
+            <androidx.appcompat.widget.AppCompatCheckBox
                 android:id="@+id/cb_audio"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_44"
@@ -178,7 +178,7 @@
                 android:textColor="@color/white"
                 android:textDirection="ltr" />
 
-            <android.support.v7.widget.AppCompatCheckBox
+            <androidx.appcompat.widget.AppCompatCheckBox
                 android:id="@+id/cb_all_banchat"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_44"
@@ -192,7 +192,7 @@
                 android:textColor="@color/white"
                 android:textDirection="ltr" />
 
-            <android.support.v7.widget.AppCompatCheckBox
+            <androidx.appcompat.widget.AppCompatCheckBox
                 android:id="@+id/auto_record"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_44"

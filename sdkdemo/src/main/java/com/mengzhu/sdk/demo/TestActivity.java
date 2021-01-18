@@ -1,20 +1,15 @@
 package com.mengzhu.sdk.demo;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.View;
 
-import com.mengzhu.live.sdk.business.model.Paths;
-import com.mengzhu.live.sdk.ui.api.MZApiDataListener;
-import com.mengzhu.live.sdk.ui.api.MZApiRequest;
 import com.mzmedia.utils.MUIImmerseUtils;
 
 import tv.mengzhu.core.frame.coreutils.JurisdictionUtils;
 import tv.mengzhu.core.frame.coreutils.URLParamsUtils;
-import tv.mengzhu.core.wrap.netwock.Page;
 import tv.mengzhu.core.wrap.user.modle.UserDto;
 import tv.mengzhu.core.wrap.user.presenter.MyUserInfoPresenter;
 
@@ -41,6 +36,11 @@ public class TestActivity extends Activity {
 
     public void onPushClick(View view) {
         Intent intent = new Intent(this , TestPushActivity.class);
+        startActivity(intent);
+    }
+
+    public void onMeetingClick(View view) {
+        Intent intent = new Intent(this , JoinMeetingActivity.class);
         startActivity(intent);
     }
 

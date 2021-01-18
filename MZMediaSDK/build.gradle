@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 29
+    buildToolsVersion '29.0.3'
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
         minSdkVersion 18
-        targetSdkVersion 27
+        targetSdkVersion 29
         versionCode 1000100
         versionName "1.0"
     }
@@ -45,15 +45,15 @@ configurations.all {
 
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support:support-v4:28.0.0'
-    implementation 'com.android.support:design:28.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
+    implementation 'com.google.android.material:material:1.2.1'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation 'com.android.support:cardview-v7:28.0.0'
+    //noinspection GradleCompatible
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
 
     api 'tv.mengzhu.core:MZCoreLibrary:2.6.0'
     api 'tv.mengzhu.dlna:MZDLNAlibrary:2.2.0'
@@ -62,5 +62,6 @@ dependencies {
     api 'com.mengzhu.live.sdk:MZLiveSDK:2.6.0'
     api 'tv.mengzhu.sdk:MZPlayer:2.6.1'
     api 'com.mengzhu.upload:MZVideoUpload:1.0.0'
+    api 'tv.mengzhu.netmeeting:MZNetMeeting:1.0.0'
 
 }

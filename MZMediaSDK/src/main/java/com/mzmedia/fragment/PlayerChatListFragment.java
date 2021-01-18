@@ -1,19 +1,11 @@
 package com.mzmedia.fragment;
 
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
-import android.support.v4.content.LocalBroadcastManager;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,9 +21,6 @@ import com.mengzhu.live.sdk.business.presenter.chat.ChatPresenter;
 import com.mengzhu.live.sdk.ui.chat.MZChatManager;
 import com.mengzhu.live.sdk.ui.chat.MZChatMessagerListener;
 import com.mengzhu.sdk.R;
-import com.mengzhu.sdk.download.util.SharePreUtil;
-import com.mengzhu.sdk.download.util.TextUtil;
-import com.mzmedia.activity.LandscapeTransActivity;
 import com.mzmedia.adapter.base.CommonAdapterType;
 import com.mzmedia.adapter.chat.PlayerChatGiftLeftWrap;
 import com.mzmedia.adapter.chat.PlayerChatGiftRightWrap;

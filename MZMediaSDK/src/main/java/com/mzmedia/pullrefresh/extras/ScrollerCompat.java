@@ -18,9 +18,10 @@ package com.mzmedia.pullrefresh.extras;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.v4.widget.EdgeEffectCompat;
 import android.view.animation.Interpolator;
 import android.widget.Scroller;
+
+import androidx.core.widget.EdgeEffectCompat;
 
 /**
  * Provides access to new {@link Scroller Scroller} APIs when

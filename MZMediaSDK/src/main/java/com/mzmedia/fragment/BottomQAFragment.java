@@ -1,10 +1,7 @@
 package com.mzmedia.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
@@ -12,21 +9,20 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import com.mengzhu.live.sdk.business.dto.play.PlayInfoDto;
 import com.mengzhu.live.sdk.business.dto.qa.QAListDto;
 import com.mengzhu.live.sdk.business.dto.qa.QAModelDto;
 import com.mengzhu.live.sdk.business.dto.qa.SubmitQADto;
-import com.mengzhu.live.sdk.core.utils.DensityUtil;
 import com.mengzhu.live.sdk.core.utils.ToastUtils;
 import com.mengzhu.live.sdk.ui.api.MZApiDataListener;
 import com.mengzhu.live.sdk.ui.api.MZApiRequest;
-import com.mengzhu.live.sdk.ui.fragment.ViewDocumentFragment;
 import com.mengzhu.live.sdk.ui.widgets.MzStateView;
 import com.mengzhu.sdk.R;
 import com.mzmedia.adapter.QAExpandableAdapter;
 import com.mzmedia.pullrefresh.PullToRefreshBase;
 import com.mzmedia.pullrefresh.PullToRefreshExpandableListView;
-import com.mzmedia.pullrefresh.PullToRefreshRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,16 +1,14 @@
 package com.mzmedia.adapter.push;
 
 import android.content.Context;
-import android.support.v7.widget.AppCompatCheckBox;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatCheckBox;
 
 import com.mengzhu.live.sdk.business.dto.Config.MZCategoryDto;
-import com.mengzhu.live.sdk.business.dto.Config.MZFCodeDto;
 import com.mengzhu.sdk.R;
 
 import java.util.List;
