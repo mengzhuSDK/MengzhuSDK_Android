@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +36,7 @@ import com.mengzhu.live.sdk.business.dto.MZGoodsListExternalDto;
 import com.mengzhu.live.sdk.business.dto.MZOnlineUserListDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatMessageDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatTextDto;
+import com.mengzhu.live.sdk.business.dto.chat.ContentBean;
 import com.mengzhu.live.sdk.business.dto.chat.RightBean;
 import com.mengzhu.live.sdk.business.dto.chat.impl.ChatCmdDto;
 import com.mengzhu.live.sdk.business.dto.chat.impl.ChatCompleteDto;
@@ -45,11 +47,14 @@ import com.mengzhu.live.sdk.business.presenter.chat.ChatMessageObserver;
 import com.mengzhu.live.sdk.business.presenter.chat.ChatPresenter;
 import com.mengzhu.live.sdk.core.MZSDKInitManager;
 import com.mengzhu.live.sdk.core.SDKInitListener;
+import com.mengzhu.live.sdk.core.utils.ToastUtils;
 import com.mengzhu.live.sdk.ui.api.MZApiDataListener;
 import com.mengzhu.live.sdk.ui.api.MZApiRequest;
 import com.mengzhu.live.sdk.ui.chat.MZChatManager;
 import com.mengzhu.live.sdk.ui.chat.MZChatMessagerListener;
 import com.mengzhu.live.sdk.ui.widgets.ChannelDlnaDialogFragment;
+import com.mengzhu.live.sdk.ui.widgets.popupwindow.MZLottoWebFragment;
+import com.mengzhu.live.sdk.ui.widgets.popupwindow.SignInWebFragment;
 import com.mengzhu.live.sdk.ui.widgets.popupwindow.SpeedBottomDialogFragment;
 import com.mengzhu.sdk.R;
 import com.mzmedia.IPlayerClickListener;
@@ -74,6 +79,7 @@ import java.util.List;
 import tv.mengzhu.core.frame.coreutils.DensityUtil;
 import tv.mengzhu.core.frame.coreutils.PreferencesUtils;
 import tv.mengzhu.core.module.model.dto.BaseDto;
+import tv.mengzhu.core.wrap.library.utils.CommonUtil;
 import tv.mengzhu.core.wrap.netwock.Page;
 import tv.mengzhu.core.wrap.user.modle.UserDto;
 import tv.mengzhu.core.wrap.user.presenter.MyUserInfoPresenter;
@@ -165,6 +171,15 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
 
     private DLNAController controller; //投屏控制
 
+    private ImageView mIvVote;
+    private ImageView mIvSignIn;
+    private ImageView mIvDraw; //抽奖入口
+    //签到抽奖等
+    private ContentBean signInfoBean;
+    private ContentBean lottoBean;
+    private CountDownTimer signCountDown;
+    private boolean signDialogShowing = false;
+
     public static PlayerFragment newInstance(String Appid, String avatar, String nickName, String unique_id, String ticketId) {
         PlayerFragment fragment = new PlayerFragment();
         Bundle args = new Bundle();
@@ -234,6 +249,11 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         mGoodsIv = rootView.findViewById(R.id.iv_player_fragment_goods);
         mChatOnlineView = rootView.findViewById(R.id.player_chat_list_online_view);
         mLiveContent = rootView.findViewById(R.id.tv_activity_broadcast_live_over);
+
+        mIvVote = (ImageView) rootView.findViewById(R.id.iv_vote);
+        mIvSignIn = (ImageView) rootView.findViewById(R.id.iv_sign_in);
+        mIvDraw = (ImageView) rootView.findViewById(R.id.iv_draw);
+
         DanmakuView danmakuView = mzPlayerView.findViewById(R.id.sv_danmaku);
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) danmakuView.getLayoutParams();
         params.topMargin = DensityUtil.dip2px(mActivity, 68);
@@ -313,6 +333,9 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         mOnlinePersonIv1.setOnClickListener(this);
         mOnlinePersonIv2.setOnClickListener(this);
         mOnlinePersonIv3.setOnClickListener(this);
+        mIvVote.setOnClickListener(this);
+        mIvSignIn.setOnClickListener(this);
+        mIvDraw.setOnClickListener(this);
 
         mPlayerGoodsPushLayout.setOnGoodsPushItemClickListener(new PlayerGoodsView.OnGoodsItemClickListener() {
             @Override
@@ -663,7 +686,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         } else {
             mzPlayerView.setDanmakuCustomTextColor(getResources().getColor(R.color.white));
             if (!MZChatManager.getInstance(mActivity).isOnlyAnchor())
-            mzPlayerView.sendDanmaku(mChatText.getUser_name() + ":  " + megTxtDto.getText(), liveStatus == 1, mChatText.getAvatar(), new DanmakuViewCacheStuffer(mActivity, mzPlayerView.getDanmakuView()));
+                mzPlayerView.sendDanmaku(mChatText.getUser_name() + ":  " + megTxtDto.getText(), liveStatus == 1, mChatText.getAvatar(), new DanmakuViewCacheStuffer(mActivity, mzPlayerView.getDanmakuView()));
         }
     }
 
@@ -872,6 +895,41 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
         if (view.getId() == R.id.iv_playerfragment_gift){
             showSendGiftDialog();
         }
+        if (view.getId() == R.id.iv_vote){ //投票
+            assert getFragmentManager() != null;
+            VoteDialogFragment voteDialogFragment = (VoteDialogFragment) getFragmentManager().findFragmentByTag("VOTEDIALOGFRAGMENT");
+            if (null == voteDialogFragment) {
+                voteDialogFragment = VoteDialogFragment.newInstance(mPlayInfoDto);
+            }
+            if (!voteDialogFragment.isAdded() && !voteDialogFragment.isVisible() && !voteDialogFragment.isRemoving()) {
+                voteDialogFragment.show(getFragmentManager(), "VOTEDIALOGFRAGMENT");
+            }
+        }
+        if (view.getId() == R.id.iv_sign_in){
+            if (signInfoBean == null)return;
+            if (signInfoBean.getIs_expired() == 1) {
+                ToastUtils.popUpToast("签到过期无法签到");
+            } else {
+                if (!signInfoBean.isIs_sign()) {
+                    if (signInfoBean.getStatus() == 1) {
+                        if (signCountDown != null)
+                            signCountDown.cancel();
+                        showSignDialog();
+                    } else if (signInfoBean.getStatus() == 0) {
+                        ToastUtils.popUpToast("签到活动未开始");
+                    } else {
+                        ToastUtils.popUpToast("签到活动已结束");
+                    }
+                } else {
+                    showSignDialog();
+                }
+            }
+        }
+        if(view.getId() == R.id.iv_draw){
+            if(!CommonUtil.isFastDoubleClick()){
+                showLottoDialog();
+            }
+        }
     }
 
     /**
@@ -882,6 +940,24 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
     public void dataResult(String s, Object o, Page page, int status) {
         mPlayInfoDto = (PlayInfoDto) o;
         updateConfigs(mPlayInfoDto.getRight());
+        for (int i = 0; i < mPlayInfoDto.getRight().size(); i++) {
+            if ("sign".equals(mPlayInfoDto.getRight().get(i).getType())){
+                signInfoBean = mPlayInfoDto.getRight().get(i).getContent();
+            }
+            if ("prize".equals(mPlayInfoDto.getRight().get(i).getType())){
+                lottoBean = mPlayInfoDto.getRight().get(i).getContent();
+            }
+        }
+        if (mPlayInfoDto.isVoteShow()){
+            mIvVote.setVisibility(View.VISIBLE);
+        }
+        if (mPlayInfoDto.isSignShow()){
+            mIvSignIn.setVisibility(View.VISIBLE);
+        }
+        if(mPlayInfoDto.isLottoShow()){
+            mIvDraw.setVisibility(View.VISIBLE);
+        }
+        initSign();
         MyUserInfoPresenter.getInstance().getUserInfo().setUid(mPlayInfoDto.getChat_uid());
         //请求配置相关数据
         mzGetSettingRequest.startData(MZApiRequest.API_GET_ALL_SETTING, ticketId);
@@ -1033,6 +1109,9 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
                 case PlayInfoDto.SIGN:
                     mPlayInfoDto.setSignShow(isOpen);
                     break;
+                case PlayInfoDto.PRIZE:
+                    mPlayInfoDto.setLottoShow(isOpen);
+                    break;
                 case PlayInfoDto.DOCUMENTS:
                     mPlayInfoDto.setDocumentShow(isOpen);
                     break;
@@ -1058,6 +1137,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
                     break;
             }
         }
+        updateButtons(mPlayInfoDto);
     }
 
     /**
@@ -1204,6 +1284,96 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, MZ
                 }
             }
         });
+    }
+
+    public void updateButtons(PlayInfoDto playInfoDto){
+        if (playInfoDto.isVoteShow()){
+            mIvVote.setVisibility(View.VISIBLE);
+        }else {
+            mIvVote.setVisibility(View.GONE);
+        }
+        if (!playInfoDto.isSignShow()){
+            mIvSignIn.setVisibility(View.GONE);
+        }
+        mLoveLayout.setVisibility(mPlayInfoDto.isLike_open() ? View.VISIBLE : View.GONE);
+        mIvDraw.setVisibility(playInfoDto.isLottoShow()?View.VISIBLE:View.GONE);
+    }
+
+    //初始化签到数据
+    private void initSign(){
+        if (signInfoBean == null) return;
+        if (signInfoBean.isIs_sign()){
+            mIvSignIn.setImageResource(R.mipmap.icon_mz_signed);
+        }else {
+            mIvSignIn.setImageResource(R.mipmap.icon_mz_sign_in);
+        }
+        if (signInfoBean.isIs_force() &&
+                signInfoBean.getIs_expired() == 0
+                && signInfoBean.getRedirect_sign() == 1
+                && signInfoBean.getDelay_time()==0
+                && !signInfoBean.isIs_sign()
+                && signInfoBean.getStatus() == 1) {
+            showSignDialog();
+        }else if(signInfoBean.isIs_force()
+                && signInfoBean.getRedirect_sign() == 1
+                && signInfoBean.getDelay_time()>0
+                && !signInfoBean.isIs_sign()){
+            if(PreferencesUtils.loadPrefBoolean(mActivity,mPlayInfoDto.getTicket_id() +signInfoBean.getSign_id() + mPlayInfoDto.getUnique_id(),false)){
+                showSignDialog();
+            }else {
+                countdownSign(signInfoBean.getDelay_time()*6000);
+            }
+        }
+    }
+
+    private void countdownSign(long l) {
+        signCountDown = new CountDownTimer(l, 1000) {
+            @Override
+            public void onTick(long l) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                showSignDialog();
+            }
+        }.start();
+    }
+
+    //签到弹窗
+    public void showSignDialog(){
+        if (signInfoBean == null || mActivity == null || signDialogShowing)
+            return;
+        final SignInWebFragment signInWebFragment = new SignInWebFragment(mActivity , mPlayInfoDto , signInfoBean);
+        signInWebFragment.setSignInOutSideDismiss(false);
+        signInWebFragment.setOnDismissListener(new SignInWebFragment.OnDismissListener() {
+            @Override
+            public void onDismiss(boolean isSign) {
+                signDialogShowing = false;
+                signInWebFragment.onDestroy();
+                if (isSign){
+                    mIvSignIn.setImageResource(R.mipmap.icon_mz_signed);
+                }
+            }
+        });
+        PreferencesUtils.savePrefBoolean(mActivity,mPlayInfoDto.getTicket_id() +signInfoBean.getSign_id() + mPlayInfoDto.getUnique_id(),true);
+        signInWebFragment.showAtLocation(mActivity.findViewById(android.R.id.content), Gravity.CENTER, 0, 0);
+        signDialogShowing = true;
+    }
+
+    /**
+     * 抽奖弹窗
+     */
+    public void showLottoDialog(){
+        MZLottoWebFragment lottoWebFragment = new MZLottoWebFragment(mActivity,lottoBean,"抽奖");
+        lottoWebFragment.setLottoOutSideDismiss(true);
+        lottoWebFragment.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+
+            }
+        });
+        lottoWebFragment.showAtLocation(mActivity.findViewById(android.R.id.content), Gravity.CENTER, 0, 0);
     }
 
     //开始投屏

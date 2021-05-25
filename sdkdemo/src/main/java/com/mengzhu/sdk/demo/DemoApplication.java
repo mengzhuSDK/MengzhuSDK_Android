@@ -6,9 +6,7 @@ import androidx.multidex.MultiDex;
 import com.mengzhu.live.sdk.core.MZSDKInitManager;
 import com.mzmedia.utils.MZLogUtils;
 
-/**
- * Created by DELL on 2018/10/29.
- */
+
 public class DemoApplication extends Application {
 
     public static String live_tk = "";
@@ -18,13 +16,13 @@ public class DemoApplication extends Application {
     public static String channel_id = "";
     public static String secretKey = "";
 
-    private boolean isDebug = false;
+    private boolean isDebug = true;
 
     @Override
     public void onCreate() {
         super.onCreate();
         MultiDex.install(this);
-//        MZLogUtils.setMZLogDebug(isDebug);
+        MZLogUtils.setMZLogDebug(true);
         MZSDKInitManager.getInstance().initApplication(this, DemoApplication.app_id, isDebug);
     }
 }
