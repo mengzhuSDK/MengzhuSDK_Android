@@ -214,6 +214,13 @@ public class MessageDialog extends BaseDialog implements android.view.View.OnCli
         }
     }
 
+    public void setSingleType(String... content) {
+        message_dialog_btn_cancle.setVisibility(View.GONE);
+        if (content != null && content.length > 0) {
+            message_dialog_btn_ok.setText(content[0]);
+        }
+    }
+
     /**
      * @author sunjiale
      * @description 设置一个按钮背景

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.mengzhu.sdk.ui.push.StreamLiveCameraView
+    <tv.mengzhu.restreaming.push.StreamLiveCameraView
         android:id="@+id/stream_previewView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

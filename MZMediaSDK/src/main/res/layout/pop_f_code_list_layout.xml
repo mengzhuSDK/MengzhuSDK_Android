@@ -37,6 +37,7 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:textColor="#FFFF1F60"
                 android:gravity="center"
                 android:paddingLeft="@dimen/dimen_10"
                 android:paddingRight="@dimen/dimen_10"
@@ -51,8 +52,24 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+
+            <TextView
+                android:id="@+id/mz_create_btn"
+                android:layout_alignParentBottom="true"
+                android:layout_width="284dp"
+                android:layout_centerHorizontal="true"
+                android:layout_height="@dimen/dimen_40"
+                android:layout_marginTop="@dimen/dimen_20"
+                android:layout_marginBottom="@dimen/dimen_20"
+                android:background="@drawable/mz_shape_ff1f60_20"
+                android:text="创建"
+                android:gravity="center"
+                android:textColor="#ffffffff"
+                android:textSize="14sp" />
+
             <ListView
                 android:id="@+id/list_listview"
+                android:layout_above="@id/mz_create_btn"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 

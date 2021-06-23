@@ -2,6 +2,7 @@ package com.mzmedia.adapter.chat;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -59,7 +60,7 @@ public class PlayerChatGiftLeftWrap extends BaseViewObtion {
         ChatTextDto textDto = dto.getText();
         holder.mPlayerChatUsername.setText(textDto.getUser_name() + ": ");
         holder.mPlayerChatIcon.setTag(textDto);
-        holder.mPlayerChatLayout.setOnClickListener(new ChatLeltItemtListener(textDto));
+        holder.mPlayerChatIcon.setOnClickListener(new ChatIconListener(textDto));
 
         mHolder.mPlayerGiftLayout.setVisibility(View.VISIBLE);
         ImageLoader.getInstance().displayImage(textDto.getAvatar(), holder.mPlayerChatIcon, new DisplayImageOptions.Builder()
@@ -79,31 +80,26 @@ public class PlayerChatGiftLeftWrap extends BaseViewObtion {
                 .showImageOnFail(R.mipmap.icon_default_avatar).build());
     }
 
-    private OnChatIconClickListener mOnChatIconClickListener;
+    private PlayerChatLeltWrap.OnChatIconClickListener mOnChatIconClickListener;
 
-    public interface OnChatIconClickListener {
-        void onChatIconClick(ChatTextDto dto);
-    }
-
-    public void setOnChatIconClickListener(OnChatIconClickListener listener) {
+    public void setOnChatIconClickListener(PlayerChatLeltWrap.OnChatIconClickListener listener) {
         mOnChatIconClickListener = listener;
     }
 
-    class ChatLeltItemtListener implements View.OnClickListener {
+    class ChatIconListener implements View.OnClickListener {
         private ChatTextDto mDto;
 
-        public ChatLeltItemtListener(ChatTextDto dto) {
+        public ChatIconListener(ChatTextDto dto) {
             this.mDto = dto;
         }
 
         @Override
         public void onClick(View view) {
 
-            if (view.getId() == R.id.player_chat_avatar_layout) {
+            if (view.getId() == R.id.player_chat_icon) {
                 if (mOnChatIconClickListener != null) {
                     mOnChatIconClickListener.onChatIconClick(mDto);
                 }
-
             }
         }
     }

@@ -59,7 +59,7 @@ public class PlayerChatLeltWrap extends BaseViewObtion {
         ChatTextDto textDto = dto.getText();
         holder.mPlayerChatUsername.setText(textDto.getUser_name() + ": ");
         holder.mPlayerChatIcon.setTag(textDto);
-        holder.mPlayerChatLayout.setOnClickListener(new ChatLeltItemtListener(textDto));
+        holder.mPlayerChatIcon.setOnClickListener(new ChatIconListener(textDto));
 
         ImageLoader.getInstance().displayImage(textDto.getAvatar(), holder.mPlayerChatIcon, new DisplayImageOptions.Builder()
                 .showStubImage(R.mipmap.icon_default_avatar)
@@ -80,31 +80,31 @@ public class PlayerChatLeltWrap extends BaseViewObtion {
         }
     }
 
-    private OnChatIconClickListener mOnChatIconClickListener;
-
     public interface OnChatIconClickListener {
+
         void onChatIconClick(ChatTextDto dto);
+
     }
+    private OnChatIconClickListener mOnChatIconClickListener;
 
     public void setOnChatIconClickListener(OnChatIconClickListener listener) {
         mOnChatIconClickListener = listener;
     }
 
-    class ChatLeltItemtListener implements View.OnClickListener {
+    class ChatIconListener implements View.OnClickListener {
         private ChatTextDto mDto;
 
-        public ChatLeltItemtListener(ChatTextDto dto) {
+        public ChatIconListener(ChatTextDto dto) {
             this.mDto = dto;
         }
 
         @Override
         public void onClick(View view) {
 
-            if (view.getId() == R.id.player_chat_avatar_layout) {
+            if (view.getId() == R.id.player_chat_icon) {
                 if (mOnChatIconClickListener != null) {
                     mOnChatIconClickListener.onChatIconClick(mDto);
                 }
-
             }
         }
     }

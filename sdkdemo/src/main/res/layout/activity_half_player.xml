@@ -4,9 +4,4 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.mengzhu.live.sdk.business.view.widgets.MZPlayerView
-        android:id="@+id/vv_activity_watch_broadcast"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        tools:ignore="MissingConstraints"></com.mengzhu.live.sdk.business.view.widgets.MZPlayerView>
 </android.support.constraint.ConstraintLayout>

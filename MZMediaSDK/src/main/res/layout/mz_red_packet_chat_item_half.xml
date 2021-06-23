@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:paddingTop="10dp">
+
+
+    <LinearLayout
+        android:id="@+id/player_chat_avatar_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dimen_16">
+
+        <com.mzmedia.widgets.CircularImage
+            android:id="@+id/player_chat_icon"
+            android:layout_width="@dimen/dimen_32"
+            android:layout_height="@dimen/dimen_32"
+            android:scaleType="fitXY" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/player_chat_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/player_chat_avatar_layout"
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@id/player_chat_avatar_layout"
+        android:ellipsize="end"
+        android:lineSpacingExtra="2dp"
+        android:singleLine="true"
+        android:text="name"
+        android:textColor="#94a5dd"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:id="@+id/mz_chat_red_packet_layout"
+        android:layout_width="@dimen/dimen_230"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/player_chat_username"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginRight="@dimen/dimen_17"
+        android:layout_toRightOf="@id/player_chat_avatar_layout"
+        android:background="@drawable/new_chat_red_packet_bg"
+        android:gravity="left|center"
+        android:minWidth="@dimen/dimen_230"
+        android:orientation="horizontal"
+
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_10"
+            android:layout_marginRight="@dimen/dimen_6"
+            android:layout_marginBottom="@dimen/dimen_10"
+            android:clickable="false"
+            android:src="@drawable/chat_card_red_packet_specie"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/red_packet_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_8"
+            android:layout_marginBottom="@dimen/dimen_8"
+            android:clickable="false"
+            android:gravity="left|center"
+            android:lineSpacingExtra="2dp"
+            android:maxWidth="225.0dip"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_14sp"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
+</RelativeLayout>

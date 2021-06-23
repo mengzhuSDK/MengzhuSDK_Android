@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="305dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/mz_handle_user_bg"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_44">
+
+            <com.mzmedia.widgets.magicindicator.MagicIndicator
+                android:id="@+id/tab_dialog_user_list"
+                android:layout_width="288dp"
+                android:layout_height="@dimen/dimen_44" />
+
+            <ImageView
+                android:id="@+id/iv_close"
+                android:layout_width="@dimen/dimen_24"
+                android:layout_height="@dimen/dimen_24"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dimen_12"
+                android:src="@mipmap/icon_channel_detail_close_40" />
+        </RelativeLayout>
+
+        <com.mzmedia.widgets.HackyViewPager
+            android:id="@+id/vp_dialog_user_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/white" />
+    </LinearLayout>
+
+
+</LinearLayout>

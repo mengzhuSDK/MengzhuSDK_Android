@@ -1,19 +1,11 @@
 package com.mzmedia.fragment;
 
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
-import android.support.v4.content.LocalBroadcastManager;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,10 +21,8 @@ import com.mengzhu.live.sdk.business.presenter.chat.ChatPresenter;
 import com.mengzhu.live.sdk.ui.chat.MZChatManager;
 import com.mengzhu.live.sdk.ui.chat.MZChatMessagerListener;
 import com.mengzhu.sdk.R;
-import com.mengzhu.sdk.download.util.SharePreUtil;
-import com.mengzhu.sdk.download.util.TextUtil;
-import com.mzmedia.activity.LandscapeTransActivity;
 import com.mzmedia.adapter.base.CommonAdapterType;
+import com.mzmedia.adapter.chat.PlayChatRedPacketWrap;
 import com.mzmedia.adapter.chat.PlayerChatGiftLeftWrap;
 import com.mzmedia.adapter.chat.PlayerChatGiftRightWrap;
 import com.mzmedia.adapter.chat.PlayerChatLeltWrap;
@@ -59,6 +49,7 @@ public class PlayerChatListFragment extends BaseFragement implements MZChatMessa
     private PlayerChatNoticeWrap mNoticeWrap;
     private PlayerChatGiftLeftWrap mGiftLeftWrap;
     private PlayerChatGiftRightWrap mGiftRightWrap;
+    private PlayChatRedPacketWrap mRedPacketWarp;
     //    private ChatPresenter mChatPresenter;
     private WithScrollChangeScrollView mPayerScroll;
     public static final String PLAY_TYPE_KEY = "play_type_key";
@@ -113,6 +104,7 @@ public class PlayerChatListFragment extends BaseFragement implements MZChatMessa
         mNoticeWrap = new PlayerChatNoticeWrap(getActivity());
         mGiftLeftWrap = new PlayerChatGiftLeftWrap(getActivity());
         mGiftRightWrap = new PlayerChatGiftRightWrap(getActivity());
+        mRedPacketWarp = new PlayChatRedPacketWrap(getActivity());
         mRightWrap.setIsLandscape(isPush);
         mRightWrap.setHalfPlayer(isHalfPlayer);
         mLeltWrap.setIsLandscape(isPush);
@@ -121,11 +113,13 @@ public class PlayerChatListFragment extends BaseFragement implements MZChatMessa
         mGiftLeftWrap.setHalfPlayer(isHalfPlayer);
         mGiftRightWrap.setIsLandscape(isPush);
         mGiftRightWrap.setHalfPlayer(isHalfPlayer);
+        mRedPacketWarp.setHalfPlayer(isHalfPlayer);
         mAdapter.addViewObtains(ChatMessageDto.CHAT_LELT_WRAP, mLeltWrap);
         mAdapter.addViewObtains(ChatMessageDto.CHAT_RRIGHT_WRAP, mRightWrap);
         mAdapter.addViewObtains(ChatMessageDto.CHAT_NOTICE_WRAP, mNoticeWrap);
         mAdapter.addViewObtains(ChatMessageDto.CHAT_GIFT_LEFT, mGiftLeftWrap);
         mAdapter.addViewObtains(ChatMessageDto.CHAT_GIFT_RIGHT, mGiftRightWrap);
+        mAdapter.addViewObtains(ChatMessageDto.CHAT_CARD_RED_PACHET, mRedPacketWarp);
         mListView.setAdapter(mAdapter);
         mListView.setAddViewListener(new MyAddViewListener());
         if (isVoiceChat) {
@@ -260,6 +254,40 @@ public class PlayerChatListFragment extends BaseFragement implements MZChatMessa
                 }
             }
         });
+        mRightWrap.setOnChatIconClickListener(new PlayerChatLeltWrap.OnChatIconClickListener() {
+            @Override
+            public void onChatIconClick(ChatTextDto dto) {
+                if (mOnChatAvatarClickListener != null) {
+                    mOnChatAvatarClickListener.onChatAvatarClick(dto);
+                }
+            }
+        });
+        mGiftLeftWrap.setOnChatIconClickListener(new PlayerChatLeltWrap.OnChatIconClickListener() {
+            @Override
+            public void onChatIconClick(ChatTextDto dto) {
+                if (mOnChatAvatarClickListener != null) {
+                    mOnChatAvatarClickListener.onChatAvatarClick(dto);
+                }
+            }
+        });
+        mGiftRightWrap.setOnChatIconClickListener(new PlayerChatLeltWrap.OnChatIconClickListener() {
+            @Override
+            public void onChatIconClick(ChatTextDto dto) {
+                if (mOnChatAvatarClickListener != null) {
+                    mOnChatAvatarClickListener.onChatAvatarClick(dto);
+                }
+            }
+        });
+        mRedPacketWarp.setOnChatIconClickListener(new PlayerChatLeltWrap.OnChatIconClickListener() {
+            @Override
+            public void onChatIconClick(ChatTextDto dto) {
+                if (mOnChatAvatarClickListener != null) {
+                    mOnChatAvatarClickListener.onChatAvatarClick(dto);
+                }
+            }
+        });
+
+        mRedPacketWarp.setOnRedPacketClickListener(onRedPacketClickListener);
 
     }
 
@@ -267,8 +295,9 @@ public class PlayerChatListFragment extends BaseFragement implements MZChatMessa
         @Override
         public void changeIsOnlyAnchor(boolean isOnlyAnchor, List<ChatMessageDto> messageList) {
 //            isOnlyAnchor 是否是只看主播 messageList切换后的列表数据
-            mAdapter.setList(messageList);
-            mAdapter.notifyDataSetChanged();
+            dataList.clear();
+            dataList.addAll(messageList);
+            mAdapter.setList(dataList);
             mListView.inform();
         }
     };
@@ -281,6 +310,16 @@ public class PlayerChatListFragment extends BaseFragement implements MZChatMessa
 
     public void setOnChatAvatarClickListener(OnChatAvatarClickListener listener) {
         mOnChatAvatarClickListener = listener;
+    }
+
+    public interface OnRedPacketClickListener{
+        void onRedPacketClick(ChatTextDto dto);
+    }
+
+    private OnRedPacketClickListener onRedPacketClickListener;
+
+    public void setOnRedPacketClickListener(OnRedPacketClickListener onRedPacketClickListener) {
+        this.onRedPacketClickListener = onRedPacketClickListener;
     }
 
     @Override

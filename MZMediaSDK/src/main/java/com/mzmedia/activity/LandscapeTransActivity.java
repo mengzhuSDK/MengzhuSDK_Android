@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONObject;
 import com.mengzhu.live.sdk.business.dto.StaticStateDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatMessageDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatTextDto;
@@ -76,7 +77,6 @@ public class LandscapeTransActivity extends Activity implements View.OnClickList
     //    private PlayInfoDto mPlayinfo;
 //    private ImageView mInputDanmukuIv;
     private int isDanmuku;
-    private MZChatManager manager;
 
     private boolean isOnlyAnchor = false;
 
@@ -96,7 +96,6 @@ public class LandscapeTransActivity extends Activity implements View.OnClickList
         setContentView(R.layout.mz_activity_trans);
         super.onCreate(savedInstanceState);
         ChatPresenter.isRefreshList = false;
-        manager = MZChatManager.getInstance(this);
         initView();
         initListener();
         initLogic();
@@ -211,7 +210,7 @@ public class LandscapeTransActivity extends Activity implements View.OnClickList
                 Selection.setSelection(spanText, text.length());
             }
         }
-        isOnlyAnchor = manager.isOnlyAnchor();
+        isOnlyAnchor = MZChatManager.getInstance(this).isOnlyAnchor();
         if (isOnlyAnchor){
             iv_is_only_anchor_icon.setImageResource(R.mipmap.mz_is_only_anchor_open);
         }else {
@@ -287,7 +286,6 @@ public class LandscapeTransActivity extends Activity implements View.OnClickList
             overridePendingTransition(R.anim.dialog_in_no_anim, R.anim.dialog_out_no_anim);
         } else {
 
-            if (manager != null) {
                 ChatMegTxtDto dto = new ChatMegTxtDto();
                 ChatTextDto textDto = new ChatTextDto();
                 ChatMessageDto chatMessageDto = new ChatMessageDto();
@@ -302,7 +300,7 @@ public class LandscapeTransActivity extends Activity implements View.OnClickList
                 textDto.setEvent(ChatMessageObserver.MESSAGE_TYPE);
                 chatMessageDto.setText(textDto);
                 ChatMessageObserver.getInstance().sendMsgMonitor(ChatMessageObserver.MESSAGE_TYPE, chatMessageDto);
-                manager.registerAtPushListener(new IBasePresenterLinstener() {
+            MZChatManager.getInstance(this).registerAtPushListener(new IBasePresenterLinstener() {
                     @Override
                     public void dataResult(Object obj, Page page, int status) {
                     }
@@ -312,8 +310,7 @@ public class LandscapeTransActivity extends Activity implements View.OnClickList
 
                     }
                 });
-                manager.sendMessageExecute(ChatMessageObserver.MESSAGE_TYPE, dto);
-            }
+            MZChatManager.getInstance(this).sendMessageExecute(ChatMessageObserver.MESSAGE_TYPE, dto);
 
 //            ChatPresenter.isRefreshList = true;
 //            ChatMegTxtDto dto = new ChatMegTxtDto();
@@ -455,11 +452,11 @@ public class LandscapeTransActivity extends Activity implements View.OnClickList
     public void changeIsOnlyAnchor(){
         if (isOnlyAnchor){
             isOnlyAnchor = false;
-            manager.setOnlyAnchor(isOnlyAnchor);
+            MZChatManager.getInstance(this).setOnlyAnchor(isOnlyAnchor);
             iv_is_only_anchor_icon.setImageResource(R.mipmap.mz_is_only_anchor_close);
         }else {
             isOnlyAnchor = true;
-            manager.setOnlyAnchor(isOnlyAnchor);
+            MZChatManager.getInstance(this).setOnlyAnchor(isOnlyAnchor);
             iv_is_only_anchor_icon.setImageResource(R.mipmap.mz_is_only_anchor_open);
         }
         Intent intent = new Intent("isOnlyAnchor");

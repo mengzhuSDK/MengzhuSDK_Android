@@ -1,6 +1,7 @@
 package com.mzmedia.adapter.chat;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -57,7 +58,7 @@ public class PlayerChatGiftRightWrap extends BaseViewObtion {
         ViewHolder holder = (ViewHolder) convertView.getTag();
         ChatTextDto textDto = dto.getText();
         holder.mPlayerChatRightUsername.setText(textDto.getUser_name() + ": ");
-        holder.mPlayerChatRightLayout.setOnClickListener(new OnItemtClick(textDto));
+        holder.mPlayerChatRightIcon.setOnClickListener(new ChatIconListener(textDto));
         ImageLoader.getInstance().displayImage(textDto.getAvatar() + String_Utils.getPictureSizeAvatar(), holder.mPlayerChatRightIcon, new DisplayImageOptions.Builder()
                 .showStubImage(R.mipmap.icon_default_avatar)
                 .showImageForEmptyUri(R.mipmap.icon_default_avatar)
@@ -75,6 +76,30 @@ public class PlayerChatGiftRightWrap extends BaseViewObtion {
                 .showStubImage(R.mipmap.icon_default_avatar)
                 .showImageForEmptyUri(R.mipmap.icon_default_avatar)
                 .showImageOnFail(R.mipmap.icon_default_avatar).build());
+    }
+
+    private PlayerChatLeltWrap.OnChatIconClickListener mOnChatIconClickListener;
+
+    public void setOnChatIconClickListener(PlayerChatLeltWrap.OnChatIconClickListener listener) {
+        mOnChatIconClickListener = listener;
+    }
+
+    class ChatIconListener implements View.OnClickListener {
+        private ChatTextDto mDto;
+
+        public ChatIconListener(ChatTextDto dto) {
+            this.mDto = dto;
+        }
+
+        @Override
+        public void onClick(View view) {
+
+            if (view.getId() == R.id.player_chat_right_icon) {
+                if (mOnChatIconClickListener != null) {
+                    mOnChatIconClickListener.onChatIconClick(mDto);
+                }
+            }
+        }
     }
 
     class ViewHolder {
@@ -98,17 +123,5 @@ public class PlayerChatGiftRightWrap extends BaseViewObtion {
         isHalfPlayer = halfPlayer;
     }
 
-    class OnItemtClick implements View.OnClickListener {
-        private ChatTextDto mDto;
 
-        public OnItemtClick(ChatTextDto dto) {
-            mDto = dto;
-        }
-
-
-        @Override
-        public void onClick(View view) {
-
-        }
-    }
 }

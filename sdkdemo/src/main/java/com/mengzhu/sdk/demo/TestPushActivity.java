@@ -1,16 +1,16 @@
 package com.mengzhu.sdk.demo;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
@@ -29,13 +29,14 @@ import com.mengzhu.live.sdk.core.utils.DateUtils;
 import com.mengzhu.live.sdk.core.utils.ToastUtils;
 import com.mengzhu.live.sdk.ui.api.MZApiDataListener;
 import com.mengzhu.live.sdk.ui.api.MZApiRequest;
+import com.mengzhu.sdk.demo.widget.EditUserPop;
+import com.mzmedia.adapter.push.MZWhiteListAdapter;
 import com.mzmedia.utils.MUIImmerseUtils;
 import com.mzmedia.widgets.MZCategoryListPopWindow;
 import com.mzmedia.widgets.MZFCodeListPopWindow;
 import com.mzmedia.widgets.MZWhiteListPopWindow;
 import com.mzmedia.widgets.dialog.MessageDialog;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import tv.mengzhu.core.frame.coreutils.JurisdictionUtils;
@@ -97,7 +98,7 @@ public class TestPushActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MUIImmerseUtils.setStatusTextColor(false , this);
+        MUIImmerseUtils.setStatusTextColor(false, this);
         setContentView(R.layout.activity_test_push);
         progressDialog = new ProgressDialog(this);
 
@@ -221,6 +222,21 @@ public class TestPushActivity extends Activity {
                 }
             }
         });
+        mzfCodeListPopWindow.setOnCreateBtnClickListener(new MZFCodeListPopWindow.OnCreateBtnClickListener() {
+            @Override
+            public void onCreateBtnClick() {
+                Intent intent = new Intent(TestPushActivity.this, CreateFCodeActivity.class);
+                startActivityForResult(intent , 8888);
+            }
+        });
+        mzfCodeListPopWindow.setOnItemClickListener(new MZFCodeListPopWindow.OnItemClickListener() {
+            @Override
+            public void itemClick(MZFCodeDto mzfCodeDto) {
+                Intent intent = new Intent(TestPushActivity.this, CheckFCodeActivity.class);
+                intent.putExtra("fcode_id" , mzfCodeDto.getId() + "");
+                startActivity(intent);
+            }
+        });
         tv_f_code.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -254,6 +270,51 @@ public class TestPushActivity extends Activity {
                         }
                     }
                 }
+            }
+        });
+        mzWhiteListPopWindow.setOnCreateBtnClickListener(new MZFCodeListPopWindow.OnCreateBtnClickListener() {
+            @Override
+            public void onCreateBtnClick() {
+                Intent intent = new Intent(TestPushActivity.this, CreateWhiteListActivity.class);
+                //接收返回，创建返回，刷新列表数据
+                startActivityForResult(intent , 9999);
+            }
+        });
+        mzWhiteListPopWindow.setEditClickListener(new MZWhiteListAdapter.EditClickListener() {
+            @Override
+            public void editClick(View editView, int position, final MZWhiteListDto.WhiteListItem item) {
+                EditUserPop pop = new EditUserPop(TestPushActivity.this);
+                pop.setFocusable(true);
+                pop.setItemClickListener(new EditUserPop.ItemClickListener() {
+                    @Override
+                    public void editClick() {
+                        //传值白名单id，进入编辑页面
+                        Intent intent = new Intent(TestPushActivity.this, EditWhiteUserActivity.class);
+                        intent.putExtra("white_id" , item.getId()+"");
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void delClick() {
+                        //调用删除接口
+                        MZApiRequest delWhite = new MZApiRequest();
+                        delWhite.createRequest(TestPushActivity.this , MZApiRequest.API_GET_WHITE_LIST_DEL);
+                        delWhite.setResultListener(new MZApiDataListener() {
+                            @Override
+                            public void dataResult(String apiType, Object dto, Page page, int status) {
+                                if (status == 200)
+                                    mzWhiteListPopWindow.refreshData();
+                            }
+
+                            @Override
+                            public void errorResult(String apiType, int code, String msg) {
+
+                            }
+                        });
+                        delWhite.startData(MZApiRequest.API_GET_WHITE_LIST_DEL , item.getId());
+                    }
+                });
+                pop.showAsDropDown(editView);
             }
         });
         tv_white_list.setOnClickListener(new View.OnClickListener() {
@@ -438,6 +499,7 @@ public class TestPushActivity extends Activity {
             if (dto instanceof MZCheckPushDto) {
                 final MZCheckPushDto mzCheckPushDto = (MZCheckPushDto) dto;
                 //支持同时发起多路推流或者未开播直接发起创建活动并推流
+                mzCheckPushDto.setIs_multipath(0);
                 if (mzCheckPushDto.getIs_multipath() == 1 || mzCheckPushDto.getIs_live() == 0) {
                     startPush();
                 } else {
@@ -453,7 +515,7 @@ public class TestPushActivity extends Activity {
                             public void onClick(boolean isConfirm) {
                                 if (isConfirm) {
                                     requestStopLive(mzCheckPushDto.getLive_info().getTicket_id());
-                                }else {
+                                } else {
                                     livetk.setText(mzCheckPushDto.getLive_info().getLive_tk());
                                     tv_ticket_id.setText(mzCheckPushDto.getLive_info().getTicket_id());
                                     startPush();
@@ -481,7 +543,7 @@ public class TestPushActivity extends Activity {
         @Override
         public void dataResult(String apiType, Object dto, Page page, int status) {
             progressDialog.dismiss();
-            if (dto instanceof EndBroadcastInfoDto){
+            if (dto instanceof EndBroadcastInfoDto) {
                 startPush();
             }
         }
@@ -516,6 +578,17 @@ public class TestPushActivity extends Activity {
         @Override
         public void errorResult(String s, int i, String s1) {
             progressDialog.dismiss();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 9999 && mzWhiteListPopWindow != null){
+            mzWhiteListPopWindow.refreshData();
+        }
+        if (requestCode == 8888 && mzfCodeListPopWindow != null){
+            mzfCodeListPopWindow.refreshData();
         }
     }
 }

@@ -37,6 +37,7 @@ public class MZWhiteListPopWindow extends AbstractPopupWindow {
     private LinearLayout listLayout;
     private TextView tv_select;
     private ListView listView;
+    private TextView createBtn;
     private MzStateView mzStateView;
     private Animation enterAnim, exitAnim;
 
@@ -44,7 +45,7 @@ public class MZWhiteListPopWindow extends AbstractPopupWindow {
     private List<MZWhiteListDto.WhiteListItem> dataList = new ArrayList<>();
     MZApiRequest mzApiRequest;
 
-    public interface OnPopDisMissListener{
+    public interface OnPopDisMissListener {
         void onDismiss(MZWhiteListDto.WhiteListItem whiteListItem);
     }
 
@@ -52,6 +53,22 @@ public class MZWhiteListPopWindow extends AbstractPopupWindow {
 
     public void setOnDisMissListener(OnPopDisMissListener onDisMissListener) {
         this.onDisMissListener = onDisMissListener;
+    }
+
+    public interface OnCreateBtnClickListener {
+        void onCreateBtnClick();
+    }
+
+    private MZFCodeListPopWindow.OnCreateBtnClickListener onCreateBtnClickListener;
+
+    public void setOnCreateBtnClickListener(MZFCodeListPopWindow.OnCreateBtnClickListener onCreateBtnClickListener) {
+        this.onCreateBtnClickListener = onCreateBtnClickListener;
+    }
+
+    private MZWhiteListAdapter.EditClickListener editClickListener;
+
+    public void setEditClickListener(MZWhiteListAdapter.EditClickListener editClickListener) {
+        this.editClickListener = editClickListener;
     }
 
     public MZWhiteListPopWindow(Context context) {
@@ -71,7 +88,7 @@ public class MZWhiteListPopWindow extends AbstractPopupWindow {
         initView(root);
     }
 
-    public void initView(View root){
+    public void initView(View root) {
         root.findViewById(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,21 +104,40 @@ public class MZWhiteListPopWindow extends AbstractPopupWindow {
         });
         listView = root.findViewById(R.id.list_listview);
         mzStateView = root.findViewById(R.id.mz_state_view);
-        mzStateView.setContentView(listView);
+        createBtn = root.findViewById(R.id.mz_create_btn);
+        mzStateView.setContentView(listView, createBtn);
         mzStateView.show(MzStateView.NetState.LOADING);
+
+        createBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onCreateBtnClickListener != null) {
+                    onCreateBtnClickListener.onCreateBtnClick();
+                }
+            }
+        });
     }
 
-    public void initData(){
-        if (!dataList.isEmpty()){
+    public void initData() {
+        if (!dataList.isEmpty()) {
             return;
         }
+        loadData();
+    }
+
+    public void refreshData() {
+        loadData();
+    }
+
+    public void loadData() {
         mzApiRequest = new MZApiRequest();
         mzApiRequest.setResultListener(new MZApiDataListener() {
             @Override
             public void dataResult(String apiType, Object dto, Page page, int status) {
-                if (dto instanceof MZWhiteListDto){
+                if (dto instanceof MZWhiteListDto) {
                     dataList = ((MZWhiteListDto) dto).getList();
-                    listAdapter = new MZWhiteListAdapter(mContext , dataList);
+                    listAdapter = new MZWhiteListAdapter(mContext, dataList);
+                    listAdapter.setEditClickListener(editClickListener);
                     listView.setAdapter(listAdapter);
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
@@ -115,7 +151,7 @@ public class MZWhiteListPopWindow extends AbstractPopupWindow {
                         }
                     });
                     mzStateView.show(MzStateView.NetState.CONTENT);
-                }else {
+                } else {
                     mzStateView.show(MzStateView.NetState.LOADERROR);
                 }
             }
@@ -125,20 +161,20 @@ public class MZWhiteListPopWindow extends AbstractPopupWindow {
                 mzStateView.show(MzStateView.NetState.LOADERROR);
             }
         });
-        mzApiRequest.createRequest(mContext , MZApiRequest.API_GET_WHITE_LIST);
+        mzApiRequest.createRequest(mContext, MZApiRequest.API_GET_WHITE_LIST);
         mzApiRequest.startData(MZApiRequest.API_GET_WHITE_LIST);
     }
 
     @Override
     public void dismiss() {
         super.dismiss();
-        if (onDisMissListener != null){
-            if (dataList == null){
+        if (onDisMissListener != null) {
+            if (dataList == null) {
                 onDisMissListener.onDismiss(null);
-            }else {
+            } else {
                 MZWhiteListDto.WhiteListItem whiteListItem = null;
                 for (int i = 0; i < dataList.size(); i++) {
-                    if (dataList.get(i).isCheck()){
+                    if (dataList.get(i).isCheck()) {
                         whiteListItem = dataList.get(i);
                     }
                 }

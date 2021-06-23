@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_48"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.mzmedia.widgets.CircleImageView
+            android:id="@+id/item_user_avatar"
+            android:layout_width="@dimen/dimen_36"
+            android:layout_height="@dimen/dimen_36"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="12dp" />
+
+        <TextView
+            android:id="@+id/item_user_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/dimen_14sp" />
+
+        <TextView
+            android:id="@+id/item_relieve_silence"
+            android:layout_width="@dimen/dimen_48"
+            android:layout_height="@dimen/dimen_24"
+            android:layout_marginLeft="@dimen/dimen_19"
+            android:layout_marginRight="@dimen/dimen_16"
+            android:gravity="center"
+            android:text="解除禁言"
+            android:textColor="@color/color_ff1f60"
+            android:textSize="@dimen/dimen_12sp" />
+
+    </LinearLayout>
+</LinearLayout>

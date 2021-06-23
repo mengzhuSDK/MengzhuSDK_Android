@@ -61,8 +61,6 @@ public class MZWatchAuthPopWindow extends AbstractPopupWindow implements View.On
 
     public MZWatchAuthPopWindow(Context context, String ticket_id, String phone) {
         super(context);
-        ColorDrawable dw = new ColorDrawable(0x00000000);
-        setBackgroundDrawable(dw);
         this.mContext = context;
         this.ticket_id = ticket_id;
         this.phone = phone;
@@ -149,6 +147,11 @@ public class MZWatchAuthPopWindow extends AbstractPopupWindow implements View.On
                             fCodeLayout.setVisibility(View.VISIBLE);
                             mzStateView.show(MzStateView.NetState.CONTENT);
                         }
+                        break;
+                    default:
+                        //接口请求失败默认不验证，可自行修改
+                        isSuccess = true;
+                        dismiss();
                         break;
                 }
             } else {

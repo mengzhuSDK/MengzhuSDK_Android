@@ -1,5 +1,6 @@
 package com.mengzhu.sdk.demo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -184,6 +185,22 @@ public class PlayerActivity extends AppCompatActivity implements IPlayerClickLis
     @Override
     public void onShareClick(PlayInfoDto dto) {
         Toast.makeText(this, "点击分享", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onRedPacketClick(PlayInfoDto dto) {
+        Toast.makeText(this,"点击红包",Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(PlayerActivity.this , SendRedPacketActivity.class);
+        intent.putExtra("channel_id" , dto.getChannel_id());
+        intent.putExtra("ticket_id" , dto.getTicket_id());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onRedPacketHistoryClick(ChatTextDto dto) {
+        Intent intent = new Intent(PlayerActivity.this , RedPacketHistoryActivity.class);
+        intent.putExtra("ChatTextDto" , dto);
+        startActivity(intent);
     }
 
     @Override

@@ -52,6 +52,20 @@ public interface IPlayerClickListener {
     void onShareClick(PlayInfoDto dto);
 
     /**
+     * 创建红包按钮点击回调
+     *
+     * @param dto 直播间信息
+     */
+    void onRedPacketClick(PlayInfoDto dto);
+
+    /**
+     * 红包历史记录点击回调
+     *
+     * @param dto 红包消息数据
+     */
+    void onRedPacketHistoryClick(ChatTextDto dto);
+
+    /**
      * 点赞回调
      *
      * @param dto  直播间信息

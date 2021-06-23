@@ -86,6 +86,8 @@ public class MZCategoryListPopWindow extends AbstractPopupWindow {
         listView = root.findViewById(R.id.list_listview);
         mzStateView = root.findViewById(R.id.mz_state_view);
         mzStateView.setContentView(listView);
+
+        root.findViewById(R.id.mz_create_btn).setSystemUiVisibility(View.GONE);
     }
 
     public void initData(){

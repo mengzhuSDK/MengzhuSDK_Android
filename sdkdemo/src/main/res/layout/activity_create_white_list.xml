@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:orientation="vertical"
+    tools:context=".CreateWhiteListActivity"
+    tools:ignore="MissingDefaultResource">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_40">
+
+        <TextView
+            android:id="@+id/title_text"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_40"
+            android:gravity="center"
+            android:text="新建白名单"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_16sp" />
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dimen_44"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/dimen_16"
+            android:paddingRight="@dimen/dimen_16"
+            android:src="@mipmap/ic_icon_back" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_44"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/dimen_16"
+        android:text="白名单名称"
+        android:textColor="@color/color_7a7a7a"
+        android:textSize="@dimen/dimen_14sp" />
+
+    <EditText
+        android:id="@+id/edit_name"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_44"
+        android:background="#26FFFFFF"
+        android:hint="请输入名称"
+        android:paddingLeft="30dp"
+        android:textColor="@color/white"
+        android:textColorHint="@color/color_7a7a7a" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_44"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/dimen_16"
+        android:text="白名单描述"
+        android:textColor="@color/color_7a7a7a"
+        android:textSize="@dimen/dimen_14sp" />
+
+    <EditText
+        android:id="@+id/edit_desc"
+        android:layout_width="match_parent"
+        android:layout_height="124dp"
+        android:background="#26FFFFFF"
+        android:gravity="top"
+        android:hint="请输入F码描述"
+        android:paddingLeft="@dimen/dimen_30"
+        android:paddingTop="@dimen/dimen_12"
+        android:paddingRight="@dimen/dimen_30"
+        android:paddingBottom="@dimen/dimen_12"
+        android:textColor="@color/white"
+        android:textColorHint="@color/color_7a7a7a"
+        android:textSize="@dimen/dimen_14sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_60"
+        android:background="#26FFFFFF">
+
+        <TextView
+            android:id="@+id/btn_create"
+            android:layout_width="284dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/mz_shape_ff1f60_20"
+            android:gravity="center"
+            android:text="创建"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dimen_14sp" />
+    </RelativeLayout>
+</LinearLayout>

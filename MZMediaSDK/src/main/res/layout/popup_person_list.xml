@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
                 android:clickable="true"
-                android:src="@mipmap/icon_channel_detail_close" />
+                android:src="@mipmap/icon_channel_detail_close_40" />
         </LinearLayout>
 
         <TextView

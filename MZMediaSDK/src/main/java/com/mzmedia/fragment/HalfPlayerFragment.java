@@ -61,6 +61,7 @@ import com.mzmedia.utils.String_Utils;
 import com.mzmedia.widgets.CircleImageView;
 import com.mzmedia.widgets.DanmakuViewCacheStuffer;
 import com.mzmedia.widgets.HackyViewPager;
+import com.mzmedia.widgets.dialog.MessageDialog;
 import com.mzmedia.widgets.magicindicator.MagicIndicator;
 import com.mzmedia.widgets.magicindicator.ViewPagerHelper;
 import com.mzmedia.widgets.magicindicator.buildins.commonnavigator.CommonNavigator;
@@ -220,7 +221,6 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
         mBottomLayout = rootView.findViewById(R.id.video_halfplayerfragment_bottom_layout);
         mMagicIndicator = rootView.findViewById(R.id.video_halfplayerfragment_bottom_tab);
         mBottomLayout = rootView.findViewById(R.id.video_halfplayerfragment_bottom_layout);
-        mMagicIndicator = rootView.findViewById(R.id.video_halfplayerfragment_bottom_tab);
         mVpContainer = rootView.findViewById(R.id.vp_halffragment_watch_bottom);
         mzADBannerView = rootView.findViewById(R.id.banner_halfplayerfragment_ad);
         return rootView;
@@ -487,7 +487,7 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
                                     new Handler().postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
-                                            mManager.reload();
+                                            mManager.start();
                                         }
                                     }, 500);
                                 }
@@ -536,6 +536,12 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
             @Override
             public void monitorKickOutResult(ChatMessageDto chatMessageDto) {
                 Log.e("Kick_out", "monitorKickOutResult: " + ((ChatCmdDto)chatMessageDto.getText().getBaseDto()).getType());
+                //踢出自己自行处理
+                MessageDialog messageDialog = new MessageDialog(getContext());
+                messageDialog.setTitle("提示");
+                messageDialog.setContentMessage("您已被踢出直播间！");
+                messageDialog.setSingleType("确定");
+                messageDialog.show();
             }
         });
 
@@ -649,8 +655,13 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
         } else {
             mzPlayerView.setDanmakuCustomTextColor(getResources().getColor(R.color.white));
         }
-        if (!MZChatManager.getInstance(mActivity).isOnlyAnchor())
-        mzPlayerView.sendDanmaku(mChatText.getUser_name() + ":  " + megTxtDto.getText(), liveStatus == 1, mChatText.getAvatar(), new DanmakuViewCacheStuffer(mActivity, mzPlayerView.getDanmakuView()));
+        if (MZChatManager.getInstance(mActivity).isOnlyAnchor()){
+            if (isSelf || mChatText.getUser_id().equals(anchorInfoDto.getUid())){
+                mzPlayerView.sendDanmaku(mChatText.getUser_name() + ":  " + megTxtDto.getText(), liveStatus == 1, mChatText.getAvatar(), new DanmakuViewCacheStuffer(mActivity, mzPlayerView.getDanmakuView()));
+            }
+        }else {
+            mzPlayerView.sendDanmaku(mChatText.getUser_name() + ":  " + megTxtDto.getText(), liveStatus == 1, mChatText.getAvatar(), new DanmakuViewCacheStuffer(mActivity, mzPlayerView.getDanmakuView()));
+        }
     }
 
     private void loadData() {
@@ -733,14 +744,16 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
         if (view.getId() == R.id.tv_playerfragment_person || view.getId() == R.id.civ_activity_live_online_person1
                 || view.getId() == R.id.civ_activity_live_online_person2 || view.getId() == R.id.civ_activity_live_online_person3) { //点击在线人数
             if (mListener != null) {
-                PersonListPopupWindow personListPopupWindow = new PersonListPopupWindow(mActivity, mPlayInfoDto);
-                personListPopupWindow.showAtLocation(mzPlayerView, Gravity.CENTER, 0, 0);
-                personListPopupWindow.setOnPersonListClickCallBack(new PersonListPopupWindow.PersonListClickedCallBack() {
-                    @Override
-                    public void onPersonItemClicked(MZOnlineUserListDto onlineUserListDto) {
-                        mListener.onOnlineClick(onlineUserListDto);
-                    }
-                });
+//                PersonListPopupWindow personListPopupWindow = new PersonListPopupWindow(mActivity, mPlayInfoDto);
+//                personListPopupWindow.showAtLocation(mzPlayerView, Gravity.CENTER, 0, 0);
+//                personListPopupWindow.setOnPersonListClickCallBack(new PersonListPopupWindow.PersonListClickedCallBack() {
+//                    @Override
+//                    public void onPersonItemClicked(MZOnlineUserListDto onlineUserListDto) {
+//                        mListener.onOnlineClick(onlineUserListDto);
+//                    }
+//                });
+                MZUserDialogFragment userDialogFragment = MZUserDialogFragment.newInstance(mPlayInfoDto.getChannel_id() , mPlayInfoDto.getTicket_id());
+                userDialogFragment.show(getChildFragmentManager() , "MZUserDialogFragment");
             }
         }
         if (view.getId() == R.id.iv_playerfragment_close) { //点击退出
@@ -1066,7 +1079,7 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
     /**
      * 更新配置消息
      */
-    private void updateConfigs(List<RightBean> rightBeans) {
+    private synchronized void updateConfigs(List<RightBean> rightBeans) {
         for (int i = 0; i < rightBeans.size(); i++) {
             boolean isOpen = rightBeans.get(i).getIs_open() == 1;
             switch (rightBeans.get(i).getType()) {
@@ -1104,6 +1117,7 @@ public class HalfPlayerFragment extends Fragment implements View.OnClickListener
                     }else {
                         mzPlayerView.hideSpeedIV();
                     }
+                    break;
                 case PlayInfoDto.PAY_GIFT:
                     mPlayInfoDto.setPay_gift_open(isOpen);
                     break;

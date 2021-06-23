@@ -17,9 +17,7 @@ import com.mzmedia.widgets.magicindicator.buildins.commonnavigator.indicators.Li
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by max on 2019/3/11.
- */
+
 
 public class WatchTitleBarAdapter extends CommonNavigatorAdapter {
     private ViewPager mViewPager;

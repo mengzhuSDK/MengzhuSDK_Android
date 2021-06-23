@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#F12405">
+        <LinearLayout
+            android:id="@+id/ll_actvitity_rp_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal">
+            <com.mzmedia.widgets.CircleImageView
+                android:id="@+id/iv_activit_rp_avatar"
+                android:layout_width="@dimen/dimen_30"
+                android:layout_height="@dimen/dimen_30"
+                android:layout_marginLeft="@dimen/dimen_40"
+                android:src="@mipmap/icon_default_avatar" />
+
+
+            <TextView
+                android:id="@+id/tv_activity_rp_nikename"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="--"
+                android:textColor="@color/color_EFCE73"
+                android:textSize="@dimen/dimen_16sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:layout_marginLeft="@dimen/dimen_8"
+                android:layout_marginRight="@dimen/dimen_40"/>
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tv_activity_rp_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_10"
+            android:layout_marginBottom="@dimen/dimen_20"
+            android:text="恭喜发财"
+            android:textColor="@color/color_EFCE73"
+            android:textSize="@dimen/dimen_12sp"
+            android:layout_gravity="center_horizontal"/>
+
+        <LinearLayout
+            android:id="@+id/ll_activity_rp_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:text="¥"
+                android:textColor="@color/color_EFCE73"
+                android:textSize="@dimen/dimen_26"
+                android:translationY="-6dp"/>
+            <TextView
+                android:id="@+id/tv_activity_rp_money"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0.00"
+                android:textColor="@color/color_EFCE73"
+                android:textSize="@dimen/dimen_34sp"/>
+        </LinearLayout>
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/iv_rp_round"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_42"
+        android:background="@drawable/icon_get_red_packet_round"/>
+
+    <TextView
+        android:id="@+id/tv_activity_rp_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_16"
+        android:paddingTop="@dimen/dimen_12"
+        android:paddingBottom="@dimen/dimen_12"
+        android:text="领取1/6个"
+        android:textColor="@color/color_7a7a7a"
+        android:textSize="@dimen/dimen_12sp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#EFEFF4"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_activity_rp_status"/>
+
+
+    
+</LinearLayout>

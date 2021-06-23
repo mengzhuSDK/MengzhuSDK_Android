@@ -35,6 +35,7 @@ public class MZFCodeListPopWindow extends AbstractPopupWindow {
     private LinearLayout listLayout;
     private TextView tv_select;
     private ListView listView;
+    private TextView createBtn;
     private MzStateView mzStateView;
     private Animation enterAnim, exitAnim;
 
@@ -42,7 +43,7 @@ public class MZFCodeListPopWindow extends AbstractPopupWindow {
     private List<MZFCodeDto> dataList = new ArrayList<>();
     MZApiRequest mzApiRequest;
 
-    public interface OnPopDisMissListener{
+    public interface OnPopDisMissListener {
         void onDismiss(MZFCodeDto mzfCodeDto);
     }
 
@@ -50,6 +51,26 @@ public class MZFCodeListPopWindow extends AbstractPopupWindow {
 
     public void setOnDisMissListener(OnPopDisMissListener onDisMissListener) {
         this.onDisMissListener = onDisMissListener;
+    }
+
+    public interface OnCreateBtnClickListener {
+        void onCreateBtnClick();
+    }
+
+    private OnCreateBtnClickListener onCreateBtnClickListener;
+
+    public void setOnCreateBtnClickListener(OnCreateBtnClickListener onCreateBtnClickListener) {
+        this.onCreateBtnClickListener = onCreateBtnClickListener;
+    }
+
+    public interface OnItemClickListener {
+        void itemClick(MZFCodeDto mzfCodeDto);
+    }
+
+    private OnItemClickListener onItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     public MZFCodeListPopWindow(Context context) {
@@ -69,7 +90,7 @@ public class MZFCodeListPopWindow extends AbstractPopupWindow {
         initView(root);
     }
 
-    public void initView(View root){
+    public void initView(View root) {
         root.findViewById(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,21 +106,35 @@ public class MZFCodeListPopWindow extends AbstractPopupWindow {
         });
         listView = root.findViewById(R.id.list_listview);
         mzStateView = root.findViewById(R.id.mz_state_view);
-        mzStateView.setContentView(listView);
+        createBtn = root.findViewById(R.id.mz_create_btn);
+        mzStateView.setContentView(listView, createBtn);
         mzStateView.show(MzStateView.NetState.LOADING);
+
+        createBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onCreateBtnClickListener != null) {
+                    onCreateBtnClickListener.onCreateBtnClick();
+                }
+            }
+        });
     }
 
-    public void initData(){
-        if (!dataList.isEmpty()){
+    public void initData() {
+        if (!dataList.isEmpty()) {
             return;
         }
+        refreshData();
+    }
+
+    public void refreshData() {
         mzApiRequest = new MZApiRequest();
         mzApiRequest.setResultListener(new MZApiDataListener() {
             @Override
             public void dataResult(String apiType, Object dto, Page page, int status) {
-                if (dto != null){
+                if (dto != null) {
                     dataList = (List<MZFCodeDto>) dto;
-                    listAdapter = new MZFCodeListAdapter(mContext , dataList);
+                    listAdapter = new MZFCodeListAdapter(mContext, dataList);
                     listView.setAdapter(listAdapter);
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
@@ -110,10 +145,13 @@ public class MZFCodeListPopWindow extends AbstractPopupWindow {
                             }
                             dataList.get(position).setCheck(isCheck);
                             listAdapter.notifyDataSetChanged();
+                            if (onItemClickListener != null) {
+                                onItemClickListener.itemClick(dataList.get(position));
+                            }
                         }
                     });
                     mzStateView.show(MzStateView.NetState.CONTENT);
-                }else {
+                } else {
                     mzStateView.show(MzStateView.NetState.LOADERROR);
                 }
             }
@@ -123,20 +161,20 @@ public class MZFCodeListPopWindow extends AbstractPopupWindow {
                 mzStateView.show(MzStateView.NetState.LOADERROR);
             }
         });
-        mzApiRequest.createRequest(mContext , MZApiRequest.API_GET_F_CODE_LIST);
+        mzApiRequest.createRequest(mContext, MZApiRequest.API_GET_F_CODE_LIST);
         mzApiRequest.startData(MZApiRequest.API_GET_F_CODE_LIST);
     }
 
     @Override
     public void dismiss() {
         super.dismiss();
-        if (onDisMissListener != null){
-            if (dataList == null){
+        if (onDisMissListener != null) {
+            if (dataList == null) {
                 onDisMissListener.onDismiss(null);
-            }else {
+            } else {
                 MZFCodeDto mzfCodeDto = null;
                 for (int i = 0; i < dataList.size(); i++) {
-                    if (dataList.get(i).isCheck()){
+                    if (dataList.get(i).isCheck()) {
                         mzfCodeDto = dataList.get(i);
                     }
                 }

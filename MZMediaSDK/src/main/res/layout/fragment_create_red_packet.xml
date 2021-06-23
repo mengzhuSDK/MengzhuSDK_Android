@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f3f3f3"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_89"
+        android:layout_marginTop="@dimen/dimen_10"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_44"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="@dimen/dimen_66"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_16"
+                android:text="总金额"
+                android:textColor="@color/color_2b2b2b"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <EditText
+                android:id="@+id/etv_amount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_10"
+                android:layout_marginRight="@dimen/dimen_10"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:gravity="center_vertical|right"
+                android:hint="0.00"
+                android:inputType="numberDecimal"
+                android:textColor="@color/color_2b2b2b"
+                android:textColorHint="@color/color_9b9b9b"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dimen_16"
+                android:text="元"
+                android:textColor="@color/color_2b2b2b"
+                android:textSize="@dimen/dimen_14sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_1"
+            android:layout_marginLeft="@dimen/dimen_16"
+            android:background="#DEDEE6" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_44"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="@dimen/dimen_66"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_16"
+                android:text="红包个数"
+                android:textColor="@color/color_2b2b2b"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <EditText
+                android:id="@+id/etv_num"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_10"
+                android:layout_marginRight="@dimen/dimen_10"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:gravity="center_vertical|right"
+                android:hint="请填写红包个数"
+                android:inputType="number"
+                android:textColor="@color/color_2b2b2b"
+                android:textColorHint="@color/color_9b9b9b"
+                android:textSize="@dimen/dimen_14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dimen_16"
+                android:text="个"
+                android:textColor="@color/color_2b2b2b"
+                android:textSize="@dimen/dimen_14sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/etv_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_44"
+        android:layout_marginTop="@dimen/dimen_10"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:hint="恭喜发财，大吉大利！"
+        android:paddingLeft="@dimen/dimen_16"
+        android:textColor="@color/color_2b2b2b"
+        android:textColorHint="@color/color_9b9b9b"
+        android:textSize="@dimen/dimen_14sp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dimen_20"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="¥"
+            android:textColor="#F12405"
+            android:textSize="@dimen/dimen_26" />
+
+        <TextView
+            android:id="@+id/tv_red_packet_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.00"
+            android:textColor="#F12405"
+            android:textSize="@dimen/dimen_34sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/btn_send_red_packet"
+        android:layout_width="@dimen/dimen_343"
+        android:layout_height="@dimen/dimen_36"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dimen_10"
+        android:background="@drawable/select_send_red_packet"
+        android:gravity="center"
+        android:text="塞钱进红包"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dimen_14sp" />
+
+</LinearLayout>

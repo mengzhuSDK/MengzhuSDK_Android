@@ -57,7 +57,7 @@ public class PlayerChatRightWrap extends BaseViewObtion {
         ViewHolder holder = (ViewHolder) convertView.getTag();
         ChatTextDto textDto = dto.getText();
         holder.mPlayerChatRightUsername.setText(textDto.getUser_name() + ": ");
-        holder.mPlayerChatRightLayout.setOnClickListener(new OnItemtClick(textDto));
+        holder.mPlayerChatRightIcon.setOnClickListener(new ChatIconListener(textDto));
         ImageLoader.getInstance().displayImage(textDto.getAvatar() + String_Utils.getPictureSizeAvatar(), holder.mPlayerChatRightIcon, new DisplayImageOptions.Builder()
                 .showStubImage(R.mipmap.icon_default_avatar)
                 .showImageForEmptyUri(R.mipmap.icon_default_avatar)
@@ -70,6 +70,31 @@ public class PlayerChatRightWrap extends BaseViewObtion {
         ChatMegTxtDto megTxtDto = (ChatMegTxtDto) textDto.getBaseDto();
         mHolder.mPlayerGiftLayout.setVisibility(View.GONE);
         String_Utils.handlerContent(megTxtDto.getText(), holder.mPlayerChatRightContent, R.color.mz_at_name_color);
+    }
+
+
+    private PlayerChatLeltWrap.OnChatIconClickListener mOnChatIconClickListener;
+
+    public void setOnChatIconClickListener(PlayerChatLeltWrap.OnChatIconClickListener listener) {
+        mOnChatIconClickListener = listener;
+    }
+
+    class ChatIconListener implements View.OnClickListener {
+        private ChatTextDto mDto;
+
+        public ChatIconListener(ChatTextDto dto) {
+            this.mDto = dto;
+        }
+
+        @Override
+        public void onClick(View view) {
+
+            if (view.getId() == R.id.player_chat_right_icon) {
+                if (mOnChatIconClickListener != null) {
+                    mOnChatIconClickListener.onChatIconClick(mDto);
+                }
+            }
+        }
     }
 
     class ViewHolder {
@@ -93,17 +118,4 @@ public class PlayerChatRightWrap extends BaseViewObtion {
         isHalfPlayer = halfPlayer;
     }
 
-    class OnItemtClick implements View.OnClickListener {
-        private ChatTextDto mDto;
-
-        public OnItemtClick(ChatTextDto dto) {
-            mDto = dto;
-        }
-
-
-        @Override
-        public void onClick(View view) {
-
-        }
-    }
 }

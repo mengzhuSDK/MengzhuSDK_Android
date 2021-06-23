@@ -21,6 +21,7 @@ import com.mengzhu.live.sdk.business.dto.MZGoodsListExternalDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatMessageDto;
 import com.mengzhu.live.sdk.business.dto.chat.ChatTextDto;
 import com.mengzhu.live.sdk.business.dto.chat.ContentBean;
+import com.mengzhu.live.sdk.business.dto.chat.impl.ChatCmdDto;
 import com.mengzhu.live.sdk.business.dto.chat.impl.ChatCompleteDto;
 import com.mengzhu.live.sdk.business.dto.chat.impl.ChatOnlineDto;
 import com.mengzhu.live.sdk.business.dto.play.PlayInfoDto;
@@ -34,6 +35,7 @@ import com.mengzhu.live.sdk.ui.widgets.popupwindow.SignInWebFragment;
 import com.mengzhu.sdk.R;
 import com.mzmedia.IPlayerClickListener;
 import com.mzmedia.fragment.gift.SendGiftDialogFragment;
+import com.mzmedia.fragment.redpacket.MZRedPacketDialogFragment;
 import com.mzmedia.utils.ActivityUtils;
 import com.mzmedia.widgets.ChatOnlineView;
 import com.mzmedia.widgets.LoveLayout;
@@ -61,6 +63,7 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
     private ImageView mIvConfig; //配置
     private ImageView mIvGift; //礼物
     private ImageView mIvShare; //分享
+    private ImageView mIvRedPacket; //红包
     public ImageView mIvLike; //点赞
     private TextView mTvReport;
     private TextView mTvDanmakuSwtich;
@@ -159,6 +162,7 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
         mIvGift = (ImageView) findViewById(R.id.iv_playerfragment_gift);
         mIvShare = (ImageView) findViewById(R.id.iv_playerfragment_share);
         mIvLike = (ImageView) findViewById(R.id.iv_playerfragment_zan);
+        mIvRedPacket = (ImageView) findViewById(R.id.iv_playerfragment_red_packet);
         mConfigLayout = (LinearLayout) findViewById(R.id.iv_playerfragment_config_layout);
         mTvReport = (TextView) findViewById(R.id.tv_playerfragment_report);
         mTvDanmakuSwtich = (TextView) findViewById(R.id.tv_playerfragment_danmaku_switch);
@@ -235,6 +239,7 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
         mIvShare.setOnClickListener(this);
         mIvLike.setOnClickListener(this);
         mIvGift.setOnClickListener(this);
+        mIvRedPacket.setOnClickListener(this);
         mTvReport.setOnClickListener(this);
         mTvDanmakuSwtich.setOnClickListener(this);
         mRlSendChat.setOnClickListener(this);
@@ -308,6 +313,20 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
                         ChatOnlineDto mChatOnline = (ChatOnlineDto) mBase;
                         mChatOnlineView.startOnline(mActivity, mChatMessage);
                         break;
+                    case ChatCmdDto.DISABLE_CHAT:
+                        //禁言消息
+                        if (mPlayInfoDto.getChat_uid().equals(((ChatCmdDto) mBase).getUser_id())) {
+                            mPlayInfoDto.setUser_status(3);
+                            initBanChat(true);
+                        }
+                        break;
+                    case ChatCmdDto.PERMIT_CHAT:
+                        //取消禁言消息
+                        if (mPlayInfoDto.getChat_uid().equals(((ChatCmdDto) mBase).getUser_id())) {
+                            mPlayInfoDto.setUser_status(1);
+                            initBanChat(false);
+                        }
+                        break;
                     }
             }
 
@@ -316,6 +335,26 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
 
             }
         } , WatchBottomFragment.class.getSimpleName());
+
+        //红包消息点击事件回调
+        mChatFragment.setOnRedPacketClickListener(new RedPacketClickListener());
+    }
+
+    class RedPacketClickListener implements PlayerChatListFragment.OnRedPacketClickListener{
+
+        @Override
+        public void onRedPacketClick(ChatTextDto dto) {
+            MZRedPacketDialogFragment mzRedPacketDialogFragment = MZRedPacketDialogFragment.newInstance(dto);
+            mzRedPacketDialogFragment.setOnHistoryClickListener(new MZRedPacketDialogFragment.OnHistoryClickListener() {
+                @Override
+                public void onHistoryClick(ChatTextDto dto) {
+                    if (mListener != null){
+                        mListener.onRedPacketHistoryClick(dto);
+                    }
+                }
+            });
+            mzRedPacketDialogFragment.show(getChildFragmentManager() , "MZRedPacketDialogFragment");
+        }
     }
 
     class ChatAvatarClick implements PlayerChatListFragment.OnChatAvatarClickListener {
@@ -488,6 +527,10 @@ public class WatchBottomFragment extends BaseFragement implements View.OnClickLi
             if (mListener != null) {
                 mListener.onShareClick(mPlayInfoDto);
             }
+        }
+        if (view.getId() == R.id.iv_playerfragment_red_packet){ //点击创建红包
+            if (mListener != null)
+                mListener.onRedPacketClick(mPlayInfoDto);
         }
         if (view.getId() == R.id.iv_playerfragment_zan) { //点击点赞
             if (mListener != null) {
